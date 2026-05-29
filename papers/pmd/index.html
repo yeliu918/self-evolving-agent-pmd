@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Procedural Memory Distillation: Online Reflection for Self-Improving Language Models. A novel framework for training AI systems that learn from their own experiences.">
+    <meta name="keywords" content="procedural memory, AI self-improvement, reinforcement learning, memory distillation, machine learning">
+    <meta name="author" content="Ye Liu, Srijan Bansal, Bo Pang, and colleagues">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Procedural Memory Distillation">
+    <meta property="og:description" content="Online Reflection for Self-Improving Language Models">
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📄</text></svg>">
+
+    <title>Procedural Memory Distillation - Self-Evolving Agents</title>
+    <link rel="stylesheet" href="../../shared/css/styles.css">
+    <link rel="stylesheet" href="../../shared/css/enhancements.css">
+    <link rel="stylesheet" href="../../shared/css/performance.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-link">← Back to Collection</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="container">
+            <h1 class="project-title">Procedural Memory Distillation</h1>
+            <p class="tagline">Online Reflection for Self-Improving Language Models</p>
+
+            <div class="feature-badges">
+                <span class="badge badge-purple">Co-Evolution</span>
+                <span class="badge badge-orange">Memory Distillation</span>
+                <span class="badge badge-blue">Self-Improvement</span>
+                <span class="badge badge-green">Memory-Free Inference</span>
+            </div>
+
+            <div class="action-buttons">
+                <a href="Procedural_Memory_Distillation.pdf" class="btn btn-primary">📄 Read the Paper</a>
+                <a href="#" class="btn btn-secondary">💻 GitHub</a>
+                <a href="https://www.salesforce.com/blog/procedural-memory-distillation/" class="btn btn-secondary" target="_blank">📝 Blog Post</a>
+            </div>
+
+            <div class="announcements">
+                <div class="announcement">
+                    <span class="announcement-icon">📍</span>
+                    <span>Preprint 2026</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Authors Section -->
+    <section class="authors">
+        <div class="container">
+            <div class="authors-grid">
+                <div class="author">
+                    <div class="author-photo" style="background-image: url('../../shared/authors/ye_liu.png');"></div>
+                    <a href="#" class="author-name">Ye Liu</a>
+                </div>
+                <div class="author">
+                    <div class="author-photo" style="background-image: url('../../shared/authors/srijan_bansal.png');"></div>
+                    <a href="#" class="author-name">Srijan Bansal</a>
+                </div>
+                <div class="author">
+                    <div class="author-photo" style="background-image: url('../../shared/authors/bo_pang.png');"></div>
+                    <a href="#" class="author-name">Bo Pang</a>
+                </div>
+                <div class="author">
+                    <div class="author-photo" style="background-image: url('../../shared/authors/yang_li.png');"></div>
+                    <a href="#" class="author-name">Yang Li</a>
+                </div>
+                <div class="author">
+                    <div class="author-photo" style="background-image: url('../../shared/authors/zeyu_liu.png');"></div>
+                    <a href="#" class="author-name">Zeyu Leo Liu</a>
+                </div>
+                <div class="author">
+                    <div class="author-photo" style="background-image: url('../../shared/authors/yifei_ming.png');"></div>
+                    <a href="#" class="author-name">Yifei Ming</a>
+                </div>
+                <div class="author">
+                    <div class="author-photo" style="background-image: url('../../shared/authors/zixuan_ke.png');"></div>
+                    <a href="#" class="author-name">Zixuan Ke</a>
+                </div>
+                <div class="author">
+                    <div class="author-photo" style="background-image: url('../../shared/authors/shafiq_rayhan_joty.png');"></div>
+                    <a href="#" class="author-name">Shafiq Joty</a>
+                </div>
+                <div class="author">
+                    <div class="author-photo" style="background-image: url('../../shared/authors/semih_yavuz.png');"></div>
+                    <a href="#" class="author-name">Semih Yavuz</a>
+                </div>
+            </div>
+            <p class="affiliation">Salesforce AI Research</p>
+        </div>
+    </section>
+
+    <!-- Abstract Section -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-title">Abstract</h2>
+            <p class="section-text">
+                Reinforcement learning with verifiable rewards (RLVR), along with recent self-distillation
+                variants such as SDPO, evaluates each rollout against a verifier and updates the policy from
+                that episode-level signal. However, the richer procedural information in the rollout is rarely
+                retained or reused. We propose <strong>Procedural Memory Distillation (PMD)</strong>, which converts
+                cross-episode signals into reusable procedural memory and distills it into the policy's weights
+                during training. This memory functions as a training scaffold, absorbed into the policy itself,
+                yielding a <strong>memory-free model at inference</strong>. PMD organizes the memory at three levels:
+                raw trajectories, self-reflected strategies and lessons, and higher-level behavioral patterns.
+                A memory-conditioned self-teacher draws on accumulated experience to supervise the student,
+                enabling progressive internalization of procedural knowledge. The central design principle is
+                <strong>co-evolution</strong>: the policy generates rollouts that update memory, and memory shapes the
+                supervision that updates the policy.
+            </p>
+        </div>
+    </section>
+
+    <!-- Why PMD Section -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-title">Why PMD?</h2>
+            <p class="section-text">
+                RLVR and self-distillation methods such as SDPO usually learn from episode-local feedback:
+                a rollout is verified, the policy is updated, and the richer procedural information in that
+                rollout is discarded. PMD instead preserves cross-episode learning signals:
+            </p>
+
+            <div class="why-pmd-grid">
+                <div class="why-card">
+                    <div class="why-icon">✓</div>
+                    <h3 class="why-title">Consistent Strategies</h3>
+                    <p class="why-text">Which strategies consistently pass verification?</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon">⚠️</div>
+                    <h3 class="why-title">Recurring Mistakes</h3>
+                    <p class="why-text">Which mistakes recur across attempts?</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon">🔄</div>
+                    <h3 class="why-title">Transferable Behaviors</h3>
+                    <p class="why-text">Which reasoning behaviors transfer across related problems?</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon">🔗</div>
+                    <h3 class="why-title">Memory Evolution</h3>
+                    <p class="why-text">How should memory evolve as the policy itself changes?</p>
+                </div>
+            </div>
+
+            <div class="callout-box">
+                <strong>PMD treats memory as a training scaffold, not an inference-time dependency.</strong>
+                The final student model performs inference without external memory retrieval.
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Contributions Section -->
+    <section class="content-section bg-light">
+        <div class="container">
+            <h2 class="section-title">Key Contributions</h2>
+
+            <div class="contribution">
+                <h3 class="subsection-title">1. Procedural Memory Distillation Framework</h3>
+                <p class="section-text">
+                    We propose a self-distillation framework that turns episode-local supervision into
+                    cross-episode procedural memory, built online from the model's own rollouts and distilled
+                    into the policy's weights. The resulting model reasons natively at inference, with no
+                    external memory dependency.
+                </p>
+            </div>
+
+            <div class="contribution">
+                <h3 class="subsection-title">2. Co-Evolution as Design Principle</h3>
+                <p class="section-text">
+                    PMD updates policy and memory jointly: rollouts from the current policy refresh memory,
+                    and the refreshed memory shapes the supervision that trains the next policy. This online
+                    coupling distinguishes PMD from static or offline memory banks and powers the performance gains.
+                </p>
+            </div>
+
+            <div class="contribution">
+                <h3 class="subsection-title">3. Three-Level Memory Hierarchy</h3>
+                <p class="section-text">
+                    We propose experience, insight, and behavior memory, characterizing the fidelity-transfer
+                    trade-off across them. Experience memory preserves faithful evidence but remains local;
+                    behavior memory transfers broadly but can become coarse; insight memory strikes a balance
+                    by retaining problem-grounded lessons in compact form.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Approach Section -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-title">Approach at a Glance</h2>
+
+            <div class="approach-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3 class="step-title">Student Attempts & Verification</h3>
+                        <p class="step-description">
+                            The student policy makes multiple attempts at solving problems and receives
+                            verifier feedback on correctness. Each rollout provides rewards, feedback,
+                            and concrete evidence of reasoning patterns.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3 class="step-title">Self-Reflection & Memory Building</h3>
+                        <p class="step-description">
+                            Successes and failures are summarized into online procedural memory at three levels:
+                            raw trajectories (experience), strategies and lessons (insight), and cross-problem
+                            behavioral patterns (behavior).
+                        </p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3 class="step-title">Memory-Conditioned Supervision</h3>
+                        <p class="step-description">
+                            The teacher retrieves relevant memory to provide richer supervision. The student
+                            distills this guidance into its weights, progressively internalizing procedural
+                            knowledge for memory-free inference.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PMD Overview Illustration -->
+    <section class="content-section bg-light">
+        <div class="container">
+            <h2 class="section-title">PMD Overview</h2>
+            <div class="workflow-image-container">
+                <img src="images/pmd_main_figure.png" alt="PMD Overview" class="workflow-image">
+                <p class="caption">
+                    Figure 1: Overview of Procedural Memory Distillation. The student makes attempts and receives verification,
+                    self-reflection builds procedural memory at three levels, the memory-conditioned teacher provides supervision,
+                    and guidance is distilled into the student for the next epoch.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contrast with Existing Work -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-title">Comparison with Existing Approaches</h2>
+
+            <div class="comparison-table-wrapper">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Evolving Policy</th>
+                            <th>Memory-Free Inference</th>
+                            <th>Persistent Memory</th>
+                            <th>Evolving Memory</th>
+                            <th>Policy-Memory Co-Evolution</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Base Model</td>
+                            <td>✗</td>
+                            <td>✓</td>
+                            <td>✗</td>
+                            <td>✗</td>
+                            <td>✗</td>
+                        </tr>
+                        <tr>
+                            <td>GRPO / RLVR</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                            <td>✗</td>
+                            <td>✗</td>
+                            <td>✗</td>
+                        </tr>
+                        <tr>
+                            <td>SDPO / OPD</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                            <td>✗</td>
+                            <td>✗</td>
+                            <td>✗</td>
+                        </tr>
+                        <tr>
+                            <td>Inference-Time Memory Agents</td>
+                            <td>✗</td>
+                            <td>✗</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                            <td>✗</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td><strong>PMD (Ours)</strong></td>
+                            <td>✓</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="caption">
+                PMD uniquely combines evolving policy with persistent, evolving memory during training,
+                while maintaining memory-free inference through distillation into model weights.
+            </p>
+        </div>
+    </section>
+
+    <!-- Visual Workflow Section -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-title">Memory Hierarchy</h2>
+            <div class="workflow-container">
+                <div class="memory-levels">
+                    <div class="memory-level">
+                        <div class="level-badge">Level 0</div>
+                        <h3 class="level-title">Experience Memory</h3>
+                        <p class="level-description">Raw trajectories, rollouts, rewards, and verifier feedback for each problem. Faithful but local evidence.</p>
+                    </div>
+                    <div class="memory-arrow">→</div>
+                    <div class="memory-level">
+                        <div class="level-badge">Level 1</div>
+                        <h3 class="level-title">Insight Memory</h3>
+                        <p class="level-description">Self-reflected strategies from successful attempts and lessons from failures. Problem-grounded, compact, and reusable.</p>
+                    </div>
+                    <div class="memory-arrow">→</div>
+                    <div class="memory-level">
+                        <div class="level-badge">Level 2</div>
+                        <h3 class="level-title">Behavior Memory</h3>
+                        <p class="level-description">Cross-problem reasoning patterns distilled from clustered insights. Broadly transferable but more abstract.</p>
+                    </div>
+                </div>
+                <p class="caption">
+                    Figure 1: The three-level procedural memory hierarchy in PMD. Each level represents a
+                    different trade-off between fidelity and transferability.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-title">Main Results</h2>
+
+            <div class="results-summary">
+                <div class="result-card">
+                    <h3 class="result-title">SciKnowEval</h3>
+                    <div class="result-stats">
+                        <div class="stat">
+                            <span class="stat-label">Qwen3-8B Improvement</span>
+                            <span class="stat-value">+3.8%</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">OLMo3-Instruct-7B Improvement</span>
+                            <span class="stat-value">+5.5%</span>
+                        </div>
+                    </div>
+                    <p class="result-description">Over SDPO baseline on science reasoning tasks</p>
+                </div>
+
+                <div class="result-card">
+                    <h3 class="result-title">LiveCodeBench</h3>
+                    <div class="result-stats">
+                        <div class="stat">
+                            <span class="stat-label">Qwen3-8B Improvement</span>
+                            <span class="stat-value">+7.9%</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">OLMo3-Instruct-7B Improvement</span>
+                            <span class="stat-value">+13.6%</span>
+                        </div>
+                    </div>
+                    <p class="result-description">Over SDPO baseline on code generation tasks</p>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Biology</th>
+                            <th>Chemistry</th>
+                            <th>Physics</th>
+                            <th>Materials</th>
+                            <th>AVG</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Base Policy</td>
+                            <td>32.4</td>
+                            <td>41.6</td>
+                            <td>58.5</td>
+                            <td>59.2</td>
+                            <td>47.9</td>
+                        </tr>
+                        <tr>
+                            <td>GRPO</td>
+                            <td>63.2</td>
+                            <td>73.2</td>
+                            <td>70.6</td>
+                            <td>70.7</td>
+                            <td>69.4</td>
+                        </tr>
+                        <tr>
+                            <td>SDPO</td>
+                            <td>63.6</td>
+                            <td>80.6</td>
+                            <td>72.8</td>
+                            <td>80.4</td>
+                            <td>74.4</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td><strong>PMD (Ours)</strong></td>
+                            <td><strong>68.5</strong></td>
+                            <td><strong>82.8</strong></td>
+                            <td><strong>74.7</strong></td>
+                            <td><strong>82.9</strong></td>
+                            <td><strong>77.2</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="caption">
+                Table 1: SciKnowEval results with Qwen3-8B. PMD consistently outperforms GRPO and SDPO
+                across all scientific domains, achieving 3.8% improvement over SDPO on average.
+            </p>
+
+            <h3 class="subsection-title" style="margin-top: 3rem;">Comprehensive Comparison</h3>
+            <div class="table-container">
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Model</th>
+                            <th>Method</th>
+                            <th>SciKnowEval AVG</th>
+                            <th>LiveCodeBench v6</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="4"><strong>Qwen3-8B</strong></td>
+                            <td>Base Policy</td>
+                            <td>47.9</td>
+                            <td>27.1</td>
+                        </tr>
+                        <tr>
+                            <td>GRPO</td>
+                            <td>69.4</td>
+                            <td>41.2</td>
+                        </tr>
+                        <tr>
+                            <td>SDPO</td>
+                            <td>74.4</td>
+                            <td>47.9</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td><strong>PMD</strong></td>
+                            <td><strong>77.2</strong></td>
+                            <td><strong>51.7</strong></td>
+                        </tr>
+                        <tr>
+                            <td rowspan="4"><strong>OLMo3-Instruct-7B</strong></td>
+                            <td>Base Policy</td>
+                            <td>27.7</td>
+                            <td>27.7</td>
+                        </tr>
+                        <tr>
+                            <td>GRPO</td>
+                            <td>63.9</td>
+                            <td>36.1</td>
+                        </tr>
+                        <tr>
+                            <td>SDPO</td>
+                            <td>69.5</td>
+                            <td>45.0</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td><strong>PMD</strong></td>
+                            <td><strong>73.3</strong></td>
+                            <td><strong>51.1</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="caption">
+                Table 2: Comprehensive comparison across both model families and benchmarks.
+                PMD achieves consistent improvements over strong baselines.
+            </p>
+        </div>
+    </section>
+
+    <!-- Training Dynamics Analysis -->
+    <section class="content-section bg-light">
+        <div class="container">
+            <h2 class="section-title">Training Dynamics</h2>
+            <p class="section-text">
+                PMD demonstrates consistent performance improvement across training epochs. The co-evolution
+                of policy and memory enables the model to progressively internalize procedural knowledge,
+                resulting in steady gains throughout the training process.
+            </p>
+
+            <div class="workflow-image-container">
+                <img src="images/training_dynamics.png" alt="Training Dynamics" class="workflow-image">
+                <p class="caption">
+                    Figure 2: Training dynamics showing performance improvement across epochs for both
+                    Qwen3-8B and OLMo3-Instruct-7B models. PMD achieves consistent gains over SDPO baseline.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Co-Evolution Analysis -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-title">The Importance of Co-Evolution</h2>
+
+            <div class="finding-card" style="max-width: 800px; margin: 0 auto 2rem;">
+                <div class="finding-icon">🔄</div>
+                <h3 class="finding-title">Co-Evolution is Essential</h3>
+                <p class="finding-text">
+                    Freezing either memory or policy substantially underperforms full PMD, showing that
+                    memory must stay aligned with the changing policy. The tight coupling between policy
+                    evolution and memory updates is crucial for performance gains.
+                </p>
+            </div>
+
+            <div class="workflow-image-container">
+                <img src="images/internalization_all.png" alt="Memory Internalization" class="workflow-image">
+                <p class="caption">
+                    Figure 3: Memory internalization analysis across different ablations. Freezing either
+                    component (memory or policy) leads to significant performance degradation compared to
+                    full co-evolution.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Test-Time Scaling Analysis -->
+    <section class="content-section bg-light">
+        <div class="container">
+            <h2 class="section-title">Test-Time Compute Scaling</h2>
+
+            <div class="finding-card" style="max-width: 800px; margin: 0 auto 2rem;">
+                <div class="finding-icon">📈</div>
+                <h3 class="finding-title">Better Answer Coverage and Scaling</h3>
+                <p class="finding-text">
+                    PMD preserves broader answer-space coverage than SDPO, leaving more headroom for
+                    verifier reranking and best-of-N sampling. This enables better scaling with additional
+                    inference-time compute, opening 2-4× wider verifier headroom on SciKnowEval.
+                </p>
+            </div>
+
+            <div class="workflow-image-container">
+                <img src="images/coverage_passk_combined.png" alt="Coverage Analysis" class="workflow-image">
+                <p class="caption">
+                    Figure 4: Answer coverage and pass@k scaling behavior. PMD maintains higher diversity
+                    in generated answers while achieving better pass@k performance across different k values.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Takeaways Section -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-title">Key Takeaways</h2>
+
+            <div class="takeaways">
+                <div class="takeaway">
+                    <div class="takeaway-number">1</div>
+                    <p class="takeaway-text">
+                        <strong>Co-evolution is essential.</strong> PMD improves over SDPO by 3.8-5.5% on SciKnowEval
+                        and 7.9-13.6% on LiveCodeBench. Freezing either the memory or the policy trails PMD by
+                        more than 10% across domains, confirming that joint evolution of policy and memory is
+                        crucial for performance gains.
+                    </p>
+                </div>
+                <div class="takeaway">
+                    <div class="takeaway-number">2</div>
+                    <p class="takeaway-text">
+                        <strong>Memory-free inference with training-time scaffolding.</strong> Unlike memory-augmented
+                        agents that rely on external memory at inference time, PMD uses procedural memory only
+                        during training. The student progressively internalizes this knowledge, yielding a
+                        memory-free model that reasons natively without retrieval overhead.
+                    </p>
+                </div>
+                <div class="takeaway">
+                    <div class="takeaway-number">3</div>
+                    <p class="takeaway-text">
+                        <strong>Better test-time compute scaling.</strong> PMD continues to gain from additional
+                        rollouts where SDPO saturates, widening the gap with the rollout budget and opening
+                        2-4× wider verifier headroom on SciKnowEval. This demonstrates superior utilization of
+                        inference-time computation.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-contact">
+                <p class="footer-title">Contact</p>
+                <p>For questions, please contact <strong>Ye Liu</strong> at <a href="mailto:yeliu@salesforce.com">yeliu@salesforce.com</a>.</p>
+            </div>
+            <p style="margin-top: 2rem;">
+                This paper and website are licensed under a
+                <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License (CC BY 4.0)</a>.
+            </p>
+            <p class="footer-note">
+                You are free to share and adapt the material, provided that appropriate credit is given.
+            </p>
+        </div>
+    </footer>
+
+    <script src="../../shared/js/script.js"></script>
+</body>
+</html>

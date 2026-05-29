@@ -1,0 +1,75 @@
+/* ========================================
+   PERFORMANCE OPTIMIZATIONS
+   ======================================== */
+
+/* GPU acceleration for animations */
+.paper-card,
+.theme-card,
+.btn,
+.author-photo,
+.badge,
+.memory-level {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+/* Optimize font loading */
+@font-face {
+    font-family: 'System Font';
+    font-style: normal;
+    font-weight: 300 900;
+    font-display: swap;
+    src: local('System Font');
+}
+
+/* Optimize images */
+img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+.workflow-image,
+.analysis-image {
+    content-visibility: auto;
+    contain-intrinsic-size: 800px 600px;
+}
+
+/* Reduce paint areas */
+.paper-card::before,
+.btn::before,
+.btn::after {
+    will-change: opacity, transform;
+}
+
+/* Optimize heavy sections */
+.featured-research,
+.research-themes {
+    contain: layout style paint;
+}
+
+/* Defer non-critical animations */
+@media (max-width: 768px) {
+    .badge {
+        animation: none;
+    }
+
+    .hero-gradient {
+        animation-duration: 30s;
+    }
+}
+
+/* Optimize table rendering */
+.results-table {
+    contain: layout;
+}
+
+/* Reduce repaints */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Optimize scroll performance */
+.content-section {
+    contain: layout style;
+}

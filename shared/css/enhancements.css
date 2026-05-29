@@ -1,0 +1,383 @@
+/* Production-Ready Enhancements */
+
+/* Smooth page transitions */
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Enhanced Hero with particles effect */
+.index-hero::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+    opacity: 0.3;
+    animation: particles 20s linear infinite;
+}
+
+@keyframes particles {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-50px); }
+}
+
+/* Glass morphism for cards */
+.paper-card {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* Smooth scroll */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Enhanced focus states for accessibility */
+a:focus, button:focus {
+    outline: 3px solid var(--color-purple);
+    outline-offset: 2px;
+}
+
+/* Loading skeleton animation */
+@keyframes shimmer {
+    0% { background-position: -1000px 0; }
+    100% { background-position: 1000px 0; }
+}
+
+/* Improved shadow depths */
+.paper-card,
+.theme-card,
+.result-card,
+.finding-card {
+    box-shadow: 
+        0 1px 3px rgba(0, 0, 0, 0.05),
+        0 4px 12px rgba(0, 0, 0, 0.08),
+        0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+/* Enhanced hover states with scale and lift */
+.paper-card:hover,
+.theme-card:hover {
+    box-shadow: 
+        0 4px 12px rgba(0, 0, 0, 0.08),
+        0 12px 32px rgba(139, 92, 246, 0.15),
+        0 24px 48px rgba(139, 92, 246, 0.1);
+}
+
+/* Gradient text for headings */
+.section-header {
+    background: linear-gradient(135deg, var(--color-dark) 0%, var(--color-purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Animated underline for links */
+.nav-link {
+    position: relative;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--color-purple);
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+/* Floating animation for badges */
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+.badge {
+    animation: float 3s ease-in-out infinite;
+}
+
+.badge:nth-child(2) { animation-delay: 0.5s; }
+.badge:nth-child(3) { animation-delay: 1s; }
+.badge:nth-child(4) { animation-delay: 1.5s; }
+
+/* Enhanced author photos with ring */
+.author-photo {
+    position: relative;
+}
+
+.author-photo::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-purple), var(--color-blue));
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: -1;
+}
+
+.author:hover .author-photo::before {
+    opacity: 1;
+}
+
+/* Improved button interactions */
+.btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn:active::after {
+    width: 300px;
+    height: 300px;
+}
+
+/* Stagger animation for elements */
+.paper-highlights .highlight-item {
+    opacity: 0;
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.paper-highlights .highlight-item:nth-child(1) { animation-delay: 0.1s; }
+.paper-highlights .highlight-item:nth-child(2) { animation-delay: 0.2s; }
+.paper-highlights .highlight-item:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Section dividers */
+.content-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--color-purple), transparent);
+    opacity: 0.3;
+}
+
+/* Enhanced table styling */
+.results-table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.results-table thead tr {
+    background: linear-gradient(135deg, var(--color-dark), #374151);
+}
+
+.results-table tbody tr {
+    transition: all 0.3s;
+}
+
+.results-table tbody tr:hover {
+    transform: scale(1.01);
+}
+
+/* Scroll reveal animation */
+@keyframes scrollReveal {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.reveal {
+    animation: scrollReveal 0.8s ease-out;
+}
+
+/* Mobile menu improvements */
+@media (max-width: 768px) {
+    .nav-container {
+        padding: 0 1rem;
+    }
+    
+    .paper-card {
+        margin: 0 1rem;
+    }
+}
+
+/* Print styles */
+@media print {
+    .nav-link::after,
+    .btn::before,
+    .btn::after {
+        display: none;
+    }
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ========================================
+   MOBILE OPTIMIZATIONS
+   ======================================== */
+
+@media (max-width: 768px) {
+    /* Improve touch targets */
+    .btn,
+    .nav-link,
+    .author {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    /* Better spacing on mobile */
+    .paper-card {
+        margin: 0 0 2rem 0;
+        padding: 2rem 1.5rem;
+    }
+
+    /* Stack author photos */
+    .authors-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+    }
+
+    /* Larger text for readability */
+    .main-title {
+        font-size: 2.5rem;
+    }
+
+    .section-title {
+        font-size: 2rem;
+    }
+
+    /* Better table scrolling */
+    .table-container {
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Improve button layout */
+    .action-buttons {
+        flex-direction: column;
+        width: 100%;
+        padding: 0 1rem;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    /* Better badge wrapping */
+    .feature-badges {
+        gap: 0.5rem;
+    }
+
+    .badge {
+        font-size: 0.8rem;
+        padding: 0.5rem 0.875rem;
+    }
+
+    /* Optimize hero height */
+    .index-hero {
+        min-height: 60vh;
+    }
+
+    /* Better theme card sizing */
+    .theme-card {
+        padding: 2rem 1.5rem;
+    }
+}
+
+/* Tablet optimization */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .container {
+        max-width: 90%;
+    }
+
+    .authors-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Large desktop optimization */
+@media (min-width: 1440px) {
+    .container {
+        max-width: 1200px;
+    }
+
+    .main-title {
+        font-size: 4rem;
+    }
+
+    .section-header {
+        font-size: 3rem;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-dark: #f9fafb;
+        --color-light-gray: #1f2937;
+        --color-white: #111827;
+        --color-gray: #d1d5db;
+    }
+
+    .bg-light {
+        background: linear-gradient(180deg, #1f2937 0%, rgba(31, 41, 55, 0.5) 100%);
+    }
+
+    .paper-card,
+    .theme-card,
+    .result-card {
+        background-color: #1f2937;
+        border-color: #374151;
+    }
+
+    .results-table {
+        background-color: #1f2937;
+    }
+
+    .results-table th {
+        background: linear-gradient(135deg, #111827, #1f2937);
+    }
+
+    .results-table tbody tr:hover {
+        background-color: #374151;
+    }
+}
