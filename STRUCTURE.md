@@ -24,15 +24,28 @@ website-sea/
 │       └── ... (9 total)
 │
 └── papers/                            # Individual paper directories
-    └── pmd/                          # Procedural Memory Distillation
+    ├── pmd/                          # Procedural Memory Distillation
+    │   ├── index.html                # Paper presentation page
+    │   ├── Procedural_Memory_Distillation.pdf
+    │   └── images/                   # PMD-specific figures
+    │       ├── pmd_main_figure.png
+    │       ├── training_dynamics.png
+    │       ├── internalization_all.png
+    │       ├── coverage_passk_combined.png
+    │       └── ... (15 total figures)
+    │
+    └── vpd/                          # Variational Policy Distillation
         ├── index.html                # Paper presentation page
-        ├── Procedural_Memory_Distillation.pdf
-        └── images/                   # PMD-specific figures
-            ├── pmd_main_figure.png
-            ├── training_dynamics.png
-            ├── internalization_all.png
-            ├── coverage_passk_combined.png
-            └── ... (15 total figures)
+        ├── Variational_Policy_Distillation.pdf
+        └── images/                   # VPD-specific figures
+            ├── fig1_lcb_reward_margin.png
+            ├── fig2_biology.png / fig2_physics.png
+            ├── fig3_coldstart_material.png
+            ├── fig4_math500.png
+            ├── fig5_dynamic_vs_fixed_biology.png
+            ├── coldstart_{biology,chemistry,physics}.png
+            ├── aime24.png / aime25.png / amc23.png
+            └── dynamic_{chemistry,material,physics}.png
 ```
 
 ## 🎯 Design Principles

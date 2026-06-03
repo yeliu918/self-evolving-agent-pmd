@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Variational Policy Distillation (VPD): Learning from Language Feedback via a co-evolutionary EM framework that overcomes the limits of passive self-distillation.">
+    <meta name="keywords" content="variational policy distillation, VPD, RLVR, self-distillation, language feedback, EM, large language models, reasoning">
+    <meta name="author" content="Yang Li, Erik Nijkamp, Semih Yavuz, Shafiq Joty">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Variational Policy Distillation">
+    <meta property="og:description" content="Learning from Language Feedback via Variational Policy Distillation">
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧪</text></svg>">
+
+    <title>Variational Policy Distillation - Self-Evolving Agents</title>
+    <link rel="stylesheet" href="../../shared/css/styles.css">
+    <link rel="stylesheet" href="../../shared/css/enhancements.css">
+    <link rel="stylesheet" href="../../shared/css/performance.css">
+    <style>
+        /* VPD-specific tweaks layered on top of the shared theme */
+        .author-photo.no-photo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-white);
+            font-weight: 700;
+            font-size: 1.6rem;
+            letter-spacing: 0.05em;
+        }
+
+        .em-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .em-card {
+            background-color: var(--color-white);
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            border-top: 5px solid var(--color-purple);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .em-card.m-step {
+            border-top-color: var(--color-blue);
+        }
+
+        .em-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(139, 92, 246, 0.18);
+        }
+
+        .em-tag {
+            display: inline-block;
+            padding: 0.35rem 0.85rem;
+            background: linear-gradient(135deg, var(--color-purple), var(--color-blue));
+            color: var(--color-white);
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.03em;
+        }
+
+        .em-card.m-step .em-tag {
+            background: linear-gradient(135deg, var(--color-blue), var(--color-green));
+        }
+
+        .em-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-dark);
+            margin-bottom: 0.75rem;
+        }
+
+        .em-text {
+            color: var(--color-gray);
+            line-height: 1.7;
+            font-size: 0.97rem;
+        }
+
+        .em-formula {
+            margin-top: 1rem;
+            padding: 0.85rem 1rem;
+            background-color: var(--color-light-gray);
+            border-radius: 0.5rem;
+            font-family: var(--font-mono);
+            font-size: 0.88rem;
+            color: var(--color-dark);
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .feedback-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .feedback-card {
+            background-color: var(--color-white);
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .feedback-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .feedback-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feedback-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .feedback-sub {
+            font-size: 0.85rem;
+            color: var(--color-purple);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .feedback-text {
+            color: var(--color-gray);
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+
+        .image-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .image-grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .image-grid-2 img,
+        .image-grid-3 img {
+            width: 100%;
+            height: auto;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            background-color: var(--color-white);
+        }
+
+        @media (max-width: 768px) {
+            .em-grid,
+            .feedback-grid,
+            .image-grid-2,
+            .image-grid-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-link">← Back to Collection</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="container">
+            <h1 class="project-title">Variational Policy Distillation</h1>
+            <p class="tagline">Learning from Language Feedback via a Co-Evolutionary EM Framework</p>
+
+            <div class="feature-badges">
+                <span class="badge badge-purple">Variational EM</span>
+                <span class="badge badge-orange">Language Feedback</span>
+                <span class="badge badge-blue">Self-Distillation</span>
+                <span class="badge badge-green">RLVR</span>
+            </div>
+
+            <div class="action-buttons">
+                <a href="Variational_Policy_Distillation.pdf" class="btn btn-primary">📄 Read the Paper</a>
+                <a href="https://arxiv.org/abs/2605.15113" class="btn btn-secondary" target="_blank">📚 arXiv</a>
+                <a href="#" class="btn btn-secondary">💻 GitHub</a>
+            </div>
+
+            <div class="announcements">
+                <div class="announcement">
+                    <span class="announcement-icon">📍</span>
+                    <span>Preprint 2026 · arXiv:2605.15113</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Authors Section -->
+    <section class="authors">
+        <div class="container">
+            <div class="authors-grid" style="grid-template-columns: repeat(4, 1fr); max-width: 720px; margin-left: auto; margin-right: auto;">
+                <div class="author">
+                    <div class="author-photo" style="background-image: url('../../shared/authors/yang_li.png');"></div>
+                    <a href="#" class="author-name">Yang Li</a>
+                </div>
+                <div class="author">
+                    <div class="author-photo" style="background-image: url('../../shared/authors/erik_nijkamp.png');"></div>
+                    <a href="#" class="author-name">Erik Nijkamp</a>
+                </div>
+                <div class="author">
+                    <div class="author-photo" style="background-image: url('../../shared/authors/semih_yavuz.png');"></div>
+                    <a href="#" class="author-name">Semih Yavuz</a>
+                </div>
+                <div class="author">
+                    <div class="author-photo" style="background-image: url('../../shared/authors/shafiq_rayhan_joty.png');"></div>
+                    <a href="#" class="author-name">Shafiq Joty</a>
+                </div>
+            </div>
+            <p class="affiliation">Salesforce AI Research</p>
+        </div>
+    </section>
+
+    <!-- Abstract Section -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-title">Abstract</h2>
+            <p class="section-text">
+                Reinforcement learning from verifiable rewards (RLVR) suffers from sparse outcome signals,
+                creating severe exploration bottlenecks on complex reasoning tasks. Recent on-policy
+                self-distillation methods attempt to address this by utilizing language feedback to generate
+                dense, token-level supervision. However, these approaches rely on a fixed, passive teacher
+                to interpret the feedback. As the student policy improves, the teacher's zero-shot assessment
+                capabilities plateau, ultimately halting further learning.
+            </p>
+            <p class="section-text" style="margin-top: 1.25rem;">
+                We propose <strong>Variational Policy Distillation (VPD)</strong>, a framework that formalizes
+                learning from language feedback as a Variational Expectation-Maximization (EM) problem.
+                VPD <strong>co-evolves both policies</strong>: in the E-step, the teacher is actively refined on
+                trajectory outcomes via an adaptive trust-region update, translating textual feedback into a
+                dynamically improved target token distribution. In the M-step, the student internalizes this
+                dense distributional guidance on its own on-policy rollouts. By continuously improving the
+                teacher's ability to extract actionable signals from textual critique, VPD overcomes the
+                limitations of passive distillation, consistently outperforming both standard RLVR and existing
+                self-distillation baselines across scientific reasoning and code generation.
+            </p>
+        </div>
+    </section>
+
+    <!-- Why VPD Section -->
+    <section class="content-section bg-light">
+        <div class="container">
+            <h2 class="section-title">Why VPD?</h2>
+            <p class="section-text">
+                Standard RLVR optimizes against sparse, binary outcomes — wasting the latent diagnostic
+                information embedded in failed trajectories. Existing self-distillation methods such as SDPO
+                inject language feedback, but only through a <em>frozen, zero-shot</em> teacher. VPD reframes
+                this as a principled variational inference problem and asks four questions that prior work
+                cannot answer:
+            </p>
+
+            <div class="why-pmd-grid">
+                <div class="why-card">
+                    <div class="why-icon">📉</div>
+                    <h3 class="why-title">Sparse Rewards</h3>
+                    <p class="why-text">How can we densify binary outcome signals without losing the unbiased ground-truth they provide?</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon">🧊</div>
+                    <h3 class="why-title">Plateauing Teacher</h3>
+                    <p class="why-text">How do we prevent the passive teacher's zero-shot critique from saturating as the student improves?</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon">🎯</div>
+                    <h3 class="why-title">Stable Distillation</h3>
+                    <p class="why-text">How can the teacher's target distribution stay <em>reachable</em> for the active student policy?</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon">💾</div>
+                    <h3 class="why-title">No Extra Memory</h3>
+                    <p class="why-text">How do we co-evolve teacher and student without doubling VRAM with a second model?</p>
+                </div>
+            </div>
+
+            <div class="callout-box">
+                <strong>VPD's answer: a Variational EM loop on a single shared-weight network.</strong>
+                The teacher is the student conditioned on diagnostic feedback C, refined off-policy in the
+                E-step, then distilled into the unconditioned student in the M-step — all anchored to a
+                dynamic trust region around the current policy.
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Contributions Section -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-title">Key Contributions</h2>
+
+            <div class="contribution">
+                <h3 class="subsection-title">1. A Variational EM Framework for Self-Distillation</h3>
+                <p class="section-text">
+                    We formalize on-policy learning from language feedback as a Variational EM procedure.
+                    This introduces an explicit, feedback-aware <strong>teacher update</strong> (absent from prior
+                    self-distillation methods) implemented via unpaired preference optimization. By dynamically
+                    anchoring the teacher to the current student, we enforce an adaptive trust region that ensures
+                    highly stable on-policy KL distillation over a shared-weight network.
+                </p>
+            </div>
+
+            <div class="contribution">
+                <h3 class="subsection-title">2. Comprehensive Multi-Source Feedback Study</h3>
+                <p class="section-text">
+                    We instantiate VPD across <strong>three sources of diagnostic feedback</strong>: deterministic
+                    environment verifiers (compiler errors), contrastive sibling rollouts, and autonomous
+                    self-critique via an LLM judge. Evaluated on competitive programming and scientific
+                    reasoning benchmarks across Qwen3-1.7B, Qwen3-8B, and OLMo3-7B-Instruct, VPD consistently
+                    outperforms standard RLVR and self-distillation baselines.
+                </p>
+            </div>
+
+            <div class="contribution">
+                <h3 class="subsection-title">3. Characterizing the Bounds of Language-Feedback Distillation</h3>
+                <p class="section-text">
+                    We stress-test VPD on cold-start base models and rigid mathematical reasoning, empirically
+                    establishing the limits of language-driven self-distillation. VPD significantly <em>mitigates
+                    and delays</em> the training collapse typically observed in these settings, while clarifying
+                    where pure sparse RL ultimately remains the most effective paradigm.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- The EM Algorithm -->
+    <section class="content-section bg-light">
+        <div class="container">
+            <h2 class="section-title">The Variational EM Algorithm</h2>
+            <p class="section-text">
+                Rather than treating the feedback-conditioned model as a fixed heuristic, VPD treats it as
+                an <em>approximate posterior</em> <code>q<sub>ϕ</sub>(y | x, C)</code> over correct solutions
+                that must be actively optimized alongside the student policy <code>π<sub>θ</sub>(y | x)</code>.
+                This variational perspective naturally decomposes training into two alternating phases:
+            </p>
+
+            <div class="em-grid">
+                <div class="em-card e-step">
+                    <span class="em-tag">E-Step</span>
+                    <h3 class="em-title">Teacher Refinement</h3>
+                    <p class="em-text">
+                        We <strong>actively train</strong> the teacher's ability to interpret language feedback by
+                        optimizing it to distinguish successful from failed trajectories given the textual critique.
+                        Because preference pairs cannot be formed (feedback is unique per trajectory), we use
+                        <strong>Binary Classifier Optimization (BCO)</strong> — an unpaired preference loss with a
+                        moving reward shift δ.
+                    </p>
+                    <div class="em-formula">min<sub>ϕ</sub> D<sub>KL</sub>( q<sub>ϕ</sub>(y | x, C) ∥ π<sup>*</sup>(y | x) )</div>
+                </div>
+
+                <div class="em-card m-step">
+                    <span class="em-tag">M-Step</span>
+                    <h3 class="em-title">Student Distillation</h3>
+                    <p class="em-text">
+                        We project the refined teacher back into the student's unconditioned hypothesis space by
+                        minimizing the token-level KL divergence over the student's own on-policy rollouts.
+                        Because the E-step trust region keeps the teacher reachable, the M-step distillation
+                        is <strong>highly stable</strong> and avoids mode collapse.
+                    </p>
+                    <div class="em-formula">min<sub>θ</sub> D<sub>KL</sub>( π<sub>θ</sub>(y | x) ∥ q<sub>ϕ</sub>(y | x, C) )</div>
+                </div>
+            </div>
+
+            <div class="callout-box" style="margin-top: 2.5rem;">
+                <strong>Shared-weight architecture (ϕ = θ).</strong>
+                Although mathematically distinct, the teacher and student are instantiated within a
+                <em>single neural network</em>. The teacher is simply the same model conditionally prompted
+                with diagnostic feedback C — eliminating the VRAM overhead of dual-model paradigms.
+            </div>
+        </div>
+    </section>
+
+    <!-- Dynamic Trust Region -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-title">Dynamic Trust Region</h2>
+            <p class="section-text">
+                A naïve EM loop would anchor the teacher's implicit reward to a static base model. In a
+                co-evolutionary setting, this causes severe distribution shift between teacher and student.
+                VPD instead frames the E-step as an <strong>iterative trust-region update</strong> by anchoring the
+                reference prior to the <em>current</em> student policy:
+            </p>
+
+            <div class="em-formula" style="margin-top: 1.5rem; max-width: 720px; margin-left: auto; margin-right: auto; text-align: center; padding: 1.25rem;">
+                r̃<sub>ϕ</sub>(x, y, C) = β · log [ q<sub>ϕ</sub>(y | x, C) / π<sub>θ</sub>(y | x) ]
+            </div>
+
+            <p class="section-text" style="margin-top: 1.5rem;">
+                This sliding trust region restricts the teacher to a <strong>safely reachable</strong> target
+                distribution around the student's current support, ensuring the dense distributional guidance
+                provided during the M-step is always a viable "next step". The result is monotonic ELBO
+                improvement under generalized EM — and dramatic empirical stability over static-prior baselines.
+            </p>
+
+            <div class="workflow-image-container">
+                <img src="images/fig5_dynamic_vs_fixed_biology.png" alt="Dynamic vs fixed reference prior on SciKnowEval Biology" class="workflow-image">
+                <p class="caption">
+                    Figure 5: Reverting to a static reference prior on Qwen3-1.7B Biology (pink) causes severe
+                    training instability. VPD's dynamic prior (brown) yields a stable, monotonically improving
+                    trajectory.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison with Existing Approaches -->
+    <section class="content-section bg-light">
+        <div class="container">
+            <h2 class="section-title">How VPD Differs</h2>
+
+            <div class="comparison-table-wrapper">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Dense Feedback</th>
+                            <th>Active Teacher</th>
+                            <th>Trust-Region Constrained</th>
+                            <th>Shared-Weight</th>
+                            <th>Co-Evolution</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>GRPO / RLVR</td>
+                            <td>✗</td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td>✗</td>
+                        </tr>
+                        <tr>
+                            <td>SDPO / OPSD</td>
+                            <td>✓</td>
+                            <td>✗</td>
+                            <td>✗</td>
+                            <td>✓</td>
+                            <td>✗</td>
+                        </tr>
+                        <tr>
+                            <td>SDPO + RL (hybrid)</td>
+                            <td>✓</td>
+                            <td>✗</td>
+                            <td>✗</td>
+                            <td>✓</td>
+                            <td>✗</td>
+                        </tr>
+                        <tr>
+                            <td>π-Distill</td>
+                            <td>✓</td>
+                            <td>✓ (off-policy)</td>
+                            <td>✗</td>
+                            <td>✗</td>
+                            <td>partial</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td><strong>VPD (Ours)</strong></td>
+                            <td>✓</td>
+                            <td>✓ (on-policy)</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="caption">
+                VPD is the only method to combine an actively optimized teacher, a dynamic trust region,
+                and a shared-weight architecture inside a single co-evolutionary EM loop.
+            </p>
+        </div>
+    </section>
+
+    <!-- Algorithm at a Glance -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-title">Algorithm at a Glance</h2>
+
+            <div class="approach-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3 class="step-title">On-Policy Rollout</h3>
+                        <p class="step-description">
+                            Sample a batch of prompts and generate N student trajectories per prompt
+                            from the current policy <code>π<sub>θ</sub></code>.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3 class="step-title">Environment Critique</h3>
+                        <p class="step-description">
+                            For each trajectory, the verifier returns a binary outcome <code>r(x, y)</code> and
+                            diagnostic feedback <code>C</code> — compiler errors, contrastive sibling rollouts,
+                            or self-generated critique.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3 class="step-title">E-Step · Teacher Refinement</h3>
+                        <p class="step-description">
+                            Update the teacher via unpaired preference optimization (BCO) against the dynamic
+                            implicit reward. Partition trajectories into successes and failures, compute the
+                            moving reward shift δ, and minimize the binary cross-entropy loss.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3 class="step-title">M-Step · Student Distillation</h3>
+                        <p class="step-description">
+                            Distill the refined teacher into the student by minimizing token-level KL divergence
+                            on the student's own rollouts, with stop-gradient on the teacher logits.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="callout-box" style="margin-top: 2rem;">
+                <strong>Asymmetric updates (F = 5).</strong>
+                VPD natively supports multiple M-steps per E-step. Updating the student more frequently
+                stabilizes the target distribution and ensures the student internalizes guidance before the
+                teacher advances — the empirical sweet spot is one E-step per five M-steps.
+            </div>
+        </div>
+    </section>
+
+    <!-- Feedback Sources -->
+    <section class="content-section bg-light">
+        <div class="container">
+            <h2 class="section-title">Three Sources of Diagnostic Feedback</h2>
+            <p class="section-text">
+                A core strength of VPD is its versatility across diverse feedback channels. We evaluate
+                three instantiations that span the spectrum from deterministic environment signals to
+                self-generated critique.
+            </p>
+
+            <div class="feedback-grid">
+                <div class="feedback-card">
+                    <div class="feedback-icon">🛠️</div>
+                    <div class="feedback-sub">Environment</div>
+                    <h3 class="feedback-title">Compiler Errors</h3>
+                    <p class="feedback-text">
+                        LiveCodeBench provides natural, deterministic textual diagnostics — runtime errors and
+                        failed unit-test assertions — that VPD distills directly into the policy.
+                    </p>
+                </div>
+
+                <div class="feedback-card">
+                    <div class="feedback-icon">👥</div>
+                    <div class="feedback-sub">Contrastive Sibling</div>
+                    <h3 class="feedback-title">Successful Rollouts</h3>
+                    <p class="feedback-text">
+                        When the environment is a sparse verifier (SciKnowEval), we synthesize C from a
+                        successful sibling rollout sampled from the same prompt group.
+                    </p>
+                </div>
+
+                <div class="feedback-card">
+                    <div class="feedback-icon">🪞</div>
+                    <div class="feedback-sub">Self-Critique</div>
+                    <h3 class="feedback-title">LLM Judge</h3>
+                    <p class="feedback-text">
+                        When all sibling rollouts fail, the model acts as its own judge — generating
+                        autonomous critiques that the E-step then refines and the M-step distills.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Results -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-title">Main Results</h2>
+
+            <div class="results-summary">
+                <div class="result-card">
+                    <h3 class="result-title">LiveCodeBench v6 (Qwen3-8B)</h3>
+                    <div class="result-stats">
+                        <div class="stat">
+                            <span class="stat-label">Base</span>
+                            <span class="stat-value">28.1</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">GRPO</span>
+                            <span class="stat-value">45.6</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">SDPO</span>
+                            <span class="stat-value">47.3</span>
+                        </div>
+                        <div class="stat" style="background-color: #faf5ff;">
+                            <span class="stat-label"><strong>VPD (Ours)</strong></span>
+                            <span class="stat-value">49.6</span>
+                        </div>
+                    </div>
+                    <p class="result-description">Pass-rate on held-out private unit tests; +2.3 over SDPO, +4.0 over GRPO.</p>
+                </div>
+
+                <div class="result-card">
+                    <h3 class="result-title">SciKnowEval AVG</h3>
+                    <div class="result-stats">
+                        <div class="stat">
+                            <span class="stat-label">Qwen3-1.7B (vs GRPO)</span>
+                            <span class="stat-value">+4.5</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Qwen3-8B (vs SDPO)</span>
+                            <span class="stat-value">+2.7</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">OLMo3-7B (vs SDPO)</span>
+                            <span class="stat-value">+4.7</span>
+                        </div>
+                        <div class="stat" style="background-color: #faf5ff;">
+                            <span class="stat-label"><strong>Qwen3-8B Self-Critique</strong></span>
+                            <span class="stat-value">+3.3</span>
+                        </div>
+                    </div>
+                    <p class="result-description">Consistent gains across model families, scales, and feedback sources.</p>
+                </div>
+            </div>
+
+            <h3 class="subsection-title" style="margin-top: 3rem;">SciKnowEval (Contrastive Sibling Feedback)</h3>
+            <div class="table-container">
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Model</th>
+                            <th>Method</th>
+                            <th>Bio.</th>
+                            <th>Chem.</th>
+                            <th>Mat.</th>
+                            <th>Phys.</th>
+                            <th>AVG</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="4"><strong>Qwen3-1.7B</strong></td>
+                            <td>Base</td>
+                            <td>33.6</td><td>41.0</td><td>50.1</td><td>49.9</td><td>43.6</td>
+                        </tr>
+                        <tr>
+                            <td>GRPO</td>
+                            <td>61.3</td><td>75.7</td><td>74.9</td><td>67.4</td><td>69.8</td>
+                        </tr>
+                        <tr>
+                            <td>SDPO</td>
+                            <td>61.5</td><td>72.4</td><td>71.5</td><td>59.9</td><td>66.3</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td><strong>VPD</strong></td>
+                            <td><strong>64.8</strong></td><td><strong>81.9</strong></td><td><strong>77.1</strong></td><td><strong>73.7</strong></td><td><strong>74.3</strong></td>
+                        </tr>
+                        <tr>
+                            <td rowspan="4"><strong>Qwen3-8B</strong></td>
+                            <td>Base</td>
+                            <td>31.1</td><td>42.1</td><td>59.2</td><td>59.1</td><td>47.9</td>
+                        </tr>
+                        <tr>
+                            <td>GRPO</td>
+                            <td>62.5</td><td>76.6</td><td>77.3</td><td>76.1</td><td>73.1</td>
+                        </tr>
+                        <tr>
+                            <td>SDPO</td>
+                            <td>61.6</td><td>82.3</td><td><strong>79.6</strong></td><td>74.3</td><td>74.4</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td><strong>VPD</strong></td>
+                            <td><strong>68.0</strong></td><td><strong>82.4</strong></td><td>77.7</td><td><strong>80.6</strong></td><td><strong>77.2</strong></td>
+                        </tr>
+                        <tr>
+                            <td rowspan="4"><strong>OLMo3-7B-Instruct</strong></td>
+                            <td>Base</td>
+                            <td>16.1</td><td>22.8</td><td>34.7</td><td>37.3</td><td>27.7</td>
+                        </tr>
+                        <tr>
+                            <td>GRPO</td>
+                            <td>52.9</td><td>69.9</td><td>74.0</td><td>66.1</td><td>65.7</td>
+                        </tr>
+                        <tr>
+                            <td>SDPO</td>
+                            <td>50.0</td><td><strong>80.2</strong></td><td>70.2</td><td>63.9</td><td>66.1</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td><strong>VPD</strong></td>
+                            <td><strong>55.6</strong></td><td>80.3</td><td><strong>76.1</strong></td><td><strong>71.2</strong></td><td><strong>70.8</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="caption">
+                Table 2: VPD consistently outperforms GRPO, SDPO, and SDPO+RL hybrids across three model
+                families and four scientific domains.
+            </p>
+        </div>
+    </section>
+
+    <!-- Reward Margin Figure -->
+    <section class="content-section bg-light">
+        <div class="container">
+            <h2 class="section-title">Sustained Discriminative Power</h2>
+            <p class="section-text">
+                As training progresses, SDPO's reward margin between correct and incorrect responses
+                rapidly collapses — a clear signature of the passive teacher saturating. VPD's E-step
+                <strong>continually sharpens</strong> the teacher's critique, opening a widening gap that powers
+                downstream M-step distillation.
+            </p>
+
+            <div class="workflow-image-container">
+                <img src="images/fig1_lcb_reward_margin.png" alt="Reward margin between correct and incorrect responses on LiveCodeBench" class="workflow-image">
+                <p class="caption">
+                    Figure 1: Reward margin r̃(x, y<sup>+</sup>, C<sup>+</sup>) − r̃(x, y<sup>−</sup>, C<sup>−</sup>)
+                    during LCB training. SDPO (orange) stays near zero; VPD (brown) steadily grows, confirming
+                    the E-step continually refines the teacher.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Training Dynamics -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-title">Training Stability on SciKnowEval</h2>
+            <p class="section-text">
+                Single-phase hybrid methods (SDPO+RL Adv-Reshape / Reweight / Joint-Loss) suffer from
+                catastrophic scale mismatches between unbounded log-ratios and high-variance RL advantages.
+                Plain SDPO degrades late in training. VPD's decoupled EM formulation eliminates both
+                pathologies and exhibits a stable, monotonic convergence curve.
+            </p>
+
+            <div class="image-grid-2">
+                <div>
+                    <img src="images/fig2_biology.png" alt="Qwen3-8B Biology training dynamics">
+                    <p class="caption">Qwen3-8B · SciKnowEval Biology</p>
+                </div>
+                <div>
+                    <img src="images/fig2_physics.png" alt="Qwen3-8B Physics: SDPO vs VPD">
+                    <p class="caption">Qwen3-8B · Physics (SDPO collapses, VPD stays stable)</p>
+                </div>
+            </div>
+            <p class="caption" style="margin-top: 1.5rem;">
+                Figure 2: VPD avoids both the late-stage degradation of plain SDPO and the catastrophic
+                instability of single-phase hybrid baselines.
+            </p>
+        </div>
+    </section>
+
+    <!-- Self-Critique Results -->
+    <section class="content-section bg-light">
+        <div class="container">
+            <h2 class="section-title">Self-Critique: VPD Without Positive Pairs</h2>
+            <p class="section-text">
+                When all sampled trajectories for a prompt are incorrect, contrastive siblings provide no
+                guidance. In the self-critique setting, the model acts as its own judge — generating
+                diagnostic critique against only the ground-truth final answer. VPD still significantly
+                outperforms SDPO, pointing to a compelling future direction: co-evolving the judge alongside
+                the reasoning policy.
+            </p>
+
+            <div class="table-container">
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Model</th>
+                            <th>Method</th>
+                            <th>Bio.</th>
+                            <th>Chem.</th>
+                            <th>Mat.</th>
+                            <th>Phys.</th>
+                            <th>AVG</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="2"><strong>Qwen3-1.7B</strong></td>
+                            <td>SDPO</td>
+                            <td>62.1</td><td>78.7</td><td>71.2</td><td>58.1</td><td>67.5</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td><strong>VPD</strong></td>
+                            <td><strong>64.8</strong></td><td><strong>79.4</strong></td><td><strong>73.5</strong></td><td><strong>70.3</strong></td><td><strong>72.0</strong></td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2"><strong>Qwen3-8B</strong></td>
+                            <td>SDPO</td>
+                            <td>61.4</td><td>82.3</td><td>83.7</td><td>72.0</td><td>74.9</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td><strong>VPD</strong></td>
+                            <td><strong>65.4</strong></td><td><strong>83.5</strong></td><td><strong>84.2</strong></td><td><strong>79.5</strong></td><td><strong>78.1</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="caption">
+                Table 3: VPD with autonomous self-critique outperforms SDPO across architectures, hinting
+                at fully self-improving feedback loops.
+            </p>
+        </div>
+    </section>
+
+    <!-- Limits Section -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-title">The Bounds of Self-Distillation</h2>
+            <p class="section-text">
+                We stress-test VPD on two settings where <em>all</em> self-distillation methods struggle relative
+                to pure RL: cold-start base models and rigid mathematical reasoning. In both regimes, VPD
+                significantly <strong>delays</strong> training collapse — but pure GRPO remains the most effective
+                strategy, illuminating an inherent limit of unstructured textual feedback for strict logical
+                derivation.
+            </p>
+
+            <div class="image-grid-2">
+                <div>
+                    <img src="images/fig3_coldstart_material.png" alt="Cold-start training on Qwen3-4B-Base">
+                    <p class="caption">Figure 3 · Cold start: VPD delays the SDPO collapse on a base model.</p>
+                </div>
+                <div>
+                    <img src="images/fig4_math500.png" alt="Math500 training">
+                    <p class="caption">Figure 4 · Math500: VPD substantially delays collapse but GRPO still wins.</p>
+                </div>
+            </div>
+
+            <h3 class="subsection-title" style="margin-top: 2.5rem;">Additional cold-start curves</h3>
+            <div class="image-grid-3">
+                <div>
+                    <img src="images/coldstart_biology.png" alt="Qwen3-4B-Base Biology">
+                    <p class="caption">Biology</p>
+                </div>
+                <div>
+                    <img src="images/coldstart_chemistry.png" alt="Qwen3-4B-Base Chemistry">
+                    <p class="caption">Chemistry</p>
+                </div>
+                <div>
+                    <img src="images/coldstart_physics.png" alt="Qwen3-4B-Base Physics">
+                    <p class="caption">Physics</p>
+                </div>
+            </div>
+
+            <h3 class="subsection-title" style="margin-top: 2.5rem;">Additional mathematical reasoning curves</h3>
+            <div class="image-grid-3">
+                <div>
+                    <img src="images/aime24.png" alt="Qwen3-8B AIME24">
+                    <p class="caption">AIME 2024</p>
+                </div>
+                <div>
+                    <img src="images/aime25.png" alt="Qwen3-8B AIME25">
+                    <p class="caption">AIME 2025</p>
+                </div>
+                <div>
+                    <img src="images/amc23.png" alt="Qwen3-8B AMC23">
+                    <p class="caption">AMC 23</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ablations -->
+    <section class="content-section bg-light">
+        <div class="container">
+            <h2 class="section-title">Ablations</h2>
+
+            <h3 class="subsection-title">E-Step Update Frequency</h3>
+            <p class="section-text">
+                Updating the teacher too often (F = 1) creates a volatile target distribution; updating too
+                rarely (F = 10) yields stale guidance. The empirical sweet spot is <strong>F = 5</strong>.
+            </p>
+            <div class="table-container" style="max-width: 540px; margin-left: auto; margin-right: auto;">
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Frequency</th>
+                            <th>Bio.</th><th>Chem.</th><th>Mat.</th><th>Phys.</th><th>AVG</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>VPD (F1)</td><td>61.1</td><td>78.5</td><td>72.5</td><td>68.8</td><td>70.2</td></tr>
+                        <tr class="highlight-row"><td><strong>VPD (F5)</strong></td><td><strong>64.8</strong></td><td><strong>81.9</strong></td><td><strong>77.1</strong></td><td><strong>73.7</strong></td><td><strong>74.3</strong></td></tr>
+                        <tr><td>VPD (F10)</td><td>59.5</td><td>79.5</td><td>71.6</td><td>66.5</td><td>69.3</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="subsection-title" style="margin-top: 2.5rem;">Dynamic vs. Fixed Reference Prior</h3>
+            <p class="section-text">
+                A fixed reference prior decouples the teacher's guidance from the student's exploration
+                space, destabilizing the M-step. VPD's dynamic prior tracks the student and yields a
+                +6.5 average improvement on Qwen3-1.7B.
+            </p>
+
+            <div class="image-grid-3">
+                <div>
+                    <img src="images/dynamic_chemistry.png" alt="Dynamic vs Fixed Chemistry">
+                    <p class="caption">Chemistry</p>
+                </div>
+                <div>
+                    <img src="images/dynamic_material.png" alt="Dynamic vs Fixed Material">
+                    <p class="caption">Material Science</p>
+                </div>
+                <div>
+                    <img src="images/dynamic_physics.png" alt="Dynamic vs Fixed Physics">
+                    <p class="caption">Physics</p>
+                </div>
+            </div>
+            <p class="caption" style="margin-top: 1.5rem;">
+                Figure C.3: Across all SciKnowEval domains, the dynamic prior (brown) is markedly more
+                stable than the fixed prior (pink).
+            </p>
+        </div>
+    </section>
+
+    <!-- Key Takeaways -->
+    <section class="content-section">
+        <div class="container">
+            <h2 class="section-title">Key Takeaways</h2>
+
+            <div class="takeaways">
+                <div class="takeaway">
+                    <div class="takeaway-number">1</div>
+                    <p class="takeaway-text">
+                        <strong>Co-evolution beats passive distillation.</strong> Actively refining the teacher
+                        via a Variational E-step yields a <em>widening</em> reward margin where SDPO's saturates,
+                        translating into +2-8% gains across LiveCodeBench, SciKnowEval, and self-critique
+                        settings.
+                    </p>
+                </div>
+                <div class="takeaway">
+                    <div class="takeaway-number">2</div>
+                    <p class="takeaway-text">
+                        <strong>The dynamic trust region is essential.</strong> Anchoring the teacher to the
+                        current student (rather than a static πref) keeps the M-step target reachable and
+                        eliminates the late-stage collapse that plagues plain SDPO and single-phase hybrids.
+                    </p>
+                </div>
+                <div class="takeaway">
+                    <div class="takeaway-number">3</div>
+                    <p class="takeaway-text">
+                        <strong>Memory-efficient by design.</strong> A shared-weight network (ϕ = θ) means VPD
+                        adds no VRAM and no extra sampling cost over SDPO — only a modest 30-55% runtime
+                        overhead, controlled by asymmetric update frequencies.
+                    </p>
+                </div>
+                <div class="takeaway">
+                    <div class="takeaway-number">4</div>
+                    <p class="takeaway-text">
+                        <strong>Honest limits.</strong> On cold-start base models and rigid math reasoning,
+                        even VPD lags pure RLVR. Self-distillation needs a baseline of instruction-following
+                        competence and forgiving feedback — sparse outcome-driven RL still wins where every
+                        intermediate token must be precisely correct.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BibTeX -->
+    <section class="content-section bg-light">
+        <div class="container">
+            <h2 class="section-title">Citation</h2>
+            <div class="bibtex-block">
+<code>@article{li2026vpd,
+  title   = {Learning from Language Feedback via Variational Policy Distillation},
+  author  = {Li, Yang and Nijkamp, Erik and Yavuz, Semih and Joty, Shafiq},
+  journal = {arXiv preprint arXiv:2605.15113},
+  year    = {2026}
+}</code>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-contact">
+                <p class="footer-title">Contact</p>
+                <p>For questions, please contact <strong>Yang Li</strong> at <a href="mailto:yli2@salesforce.com">yli2@salesforce.com</a>.</p>
+            </div>
+            <p style="margin-top: 2rem;">
+                This paper and website are licensed under a
+                <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License (CC BY 4.0)</a>.
+            </p>
+            <p class="footer-note">
+                You are free to share and adapt the material, provided that appropriate credit is given.
+            </p>
+        </div>
+    </footer>
+
+    <script src="../../shared/js/script.js"></script>
+</body>
+</html>
