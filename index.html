@@ -3,230 +3,247 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Self-Evolving Agents research showcase featuring cutting-edge AI research in self-improvement, memory learning, and reinforcement learning.">
-    <meta name="keywords" content="AI research, self-evolving agents, procedural memory, machine learning, reinforcement learning">
-    <meta name="author" content="Self-Evolving Agents Research">
-
-    <!-- Open Graph / Social Media -->
+    <meta name="description" content="Self-Evolving Agents — a Salesforce AI Research program on agents that improve from their own experience.">
+    <meta name="keywords" content="AI research, self-evolving agents, procedural memory, Salesforce, reinforcement learning">
+    <meta name="author" content="Salesforce AI Research">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Self-Evolving Agents - Research Showcase">
-    <meta property="og:description" content="Exploring the frontiers of self-improving AI systems">
-
-    <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>">
-
-    <title>Self-Evolving Agents - Research Showcase</title>
+    <meta property="og:title" content="Self-Evolving Agents — Salesforce AI Research">
+    <meta property="og:description" content="Research on agents that improve from their own experience.">
+    <link rel="icon" type="image/svg+xml" href="shared/assets/salesforce.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Self-Evolving Agents</title>
     <link rel="stylesheet" href="shared/css/styles.css">
     <link rel="stylesheet" href="shared/css/index-styles.css">
-    <link rel="stylesheet" href="shared/css/enhancements.css">
-    <link rel="stylesheet" href="shared/css/performance.css">
+    <script>
+        (function () {
+            var h = (location.hash || '').replace('#', '').toLowerCase();
+            document.documentElement.dataset.hub =
+                (h === 'publications' || h === 'papers') ? 'publications' : 'playground';
+        })();
+    </script>
 </head>
-<body>
-    <!-- Hero Section -->
-    <section class="index-hero">
-        <div class="hero-gradient"></div>
-        <div class="container">
-            <div class="hero-content">
-                <h1 class="main-title">Self-Evolving Agents</h1>
-                <p class="main-subtitle">Research Showcase</p>
-            </div>
-        </div>
-    </section>
+<body class="landing-page" id="top">
+    <a class="skip-link" href="#main-content">Skip to content</a>
 
-    <!-- Featured Research Section -->
-    <section class="featured-research">
-        <div class="container">
-            <h2 class="section-header">Featured Research</h2>
-
-            <!-- PMD Paper Card -->
-            <a href="papers/pmd/index.html" class="paper-card featured">
-                <div class="paper-badge">New</div>
-                <div class="paper-content">
-                    <div class="paper-header">
-                        <h3 class="paper-title">Procedural Memory Distillation</h3>
-                        <p class="paper-subtitle">Online Reflection for Self-Improving Language Models</p>
-                    </div>
-
-                    <p class="paper-description">
-                        A novel framework that converts cross-episode signals into reusable procedural memory
-                        and distills it into the policy's weights during training. Memory functions as a training
-                        scaffold, enabling memory-free inference while achieving significant improvements over
-                        existing methods.
-                    </p>
-
-                    <div class="paper-highlights">
-                        <div class="highlight-item">
-                            <span class="highlight-icon">🎯</span>
-                            <div class="highlight-text">
-                                <strong>3.8-5.5%</strong> improvement on SciKnowEval
-                            </div>
-                        </div>
-                        <div class="highlight-item">
-                            <span class="highlight-icon">💻</span>
-                            <div class="highlight-text">
-                                <strong>7.9-13.6%</strong> improvement on LiveCodeBench
-                            </div>
-                        </div>
-                        <div class="highlight-item">
-                            <span class="highlight-icon">🚀</span>
-                            <div class="highlight-text">
-                                <strong>Memory-free</strong> inference with training-time scaffolding
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="paper-tags">
-                        <span class="tag tag-purple">Self-Improvement</span>
-                        <span class="tag tag-orange">Memory Distillation</span>
-                        <span class="tag tag-blue">Co-Evolution</span>
-                        <span class="tag tag-green">Reinforcement Learning</span>
-                    </div>
-
-                    <div class="paper-meta">
-                        <div class="authors-preview">
-                            <div class="author-avatar-stack">
-                                <div class="author-avatar" style="background-image: url('shared/authors/ye_liu.png');"></div>
-                                <div class="author-avatar" style="background-image: url('shared/authors/srijan_bansal.png');"></div>
-                                <div class="author-avatar" style="background-image: url('shared/authors/bo_pang.png');"></div>
-                            </div>
-                            <span class="author-count">Liu, Bansal, Pang, Li, and 5 others</span>
-                        </div>
-                        <div class="paper-year">2026</div>
-                    </div>
-
-                    <div class="paper-cta">
-                        <span class="cta-text">Read the paper</span>
-                        <span class="cta-arrow">→</span>
-                    </div>
-                </div>
+    <div class="topbar">
+        <div class="landing-wrap top">
+            <a class="brand" href="#top">
+                <img src="shared/assets/salesforce.svg" alt="Salesforce">
+                <span>
+                    <strong>Self-Evolving Agents</strong>
+                    <small>Salesforce AI Research</small>
+                </span>
             </a>
+            <nav class="tabs-row" role="tablist" aria-label="Site sections">
+                <button
+                    type="button"
+                    class="site-tab is-active"
+                    role="tab"
+                    id="tab-playground"
+                    aria-selected="true"
+                    aria-controls="panel-playground"
+                    data-tab="playground">
+                    Evolution Playground
+                </button>
+                <button
+                    type="button"
+                    class="site-tab"
+                    role="tab"
+                    id="tab-publications"
+                    aria-selected="false"
+                    aria-controls="panel-publications"
+                    data-tab="publications">
+                    Publications
+                </button>
+            </nav>
+        </div>
+    </div>
 
-            <!-- VPD Paper Card -->
-            <a href="papers/vpd/index.html" class="paper-card featured">
-                <div class="paper-badge">New</div>
-                <div class="paper-content">
-                    <div class="paper-header">
-                        <h3 class="paper-title">Variational Policy Distillation</h3>
-                        <p class="paper-subtitle">Learning from Language Feedback via a Co-Evolutionary EM Framework</p>
-                    </div>
+    <header class="hero">
+        <div class="landing-wrap">
+            <span class="eyebrow">Salesforce AI Research · Research program</span>
+            <h1>Self-Evolving Agents</h1>
+            <p class="sub">
+                We study agents that improve from their own experience — memory, language feedback, and policy updates that accumulate over time. <b>The goal is self-improvement; distillation is the means.</b>
+            </p>
+        </div>
+    </header>
 
-                    <p class="paper-description">
-                        VPD reframes on-policy self-distillation as a Variational Expectation-Maximization
-                        problem. The teacher is actively refined on trajectory outcomes (E-step) and then
-                        distilled into the student's own rollouts (M-step), with a dynamic trust region
-                        anchored to the current policy — co-evolving teacher and student inside a single
-                        shared-weight network.
+    <main id="main-content">
+        <section
+            id="panel-playground"
+            class="tab-panel is-active"
+            role="tabpanel"
+            aria-labelledby="tab-playground"
+            tabindex="0">
+            <div class="landing-wrap">
+                <div class="sec-head">
+                    <h2><span class="pre">Evolution Playground</span>an ALFWorld gating loop</h2>
+                    <p>
+                        One household task, run through the loop. The executor skips the microwave, the verifier fails it, the curator writes a rule, and the gate keeps only what generalizes. Click a stage, or play the example.
                     </p>
+                </div>
 
-                    <div class="paper-highlights">
-                        <div class="highlight-item">
-                            <span class="highlight-icon">💻</span>
-                            <div class="highlight-text">
-                                <strong>49.6%</strong> on LiveCodeBench v6 (+2.3 vs SDPO)
-                            </div>
+                <div class="example-bar">
+                    <span class="example-chip">ALFWorld · Heat &amp; Place</span>
+                    <span class="example-goal">put a hot apple in fridge</span>
+                    <button type="button" class="play-loop" id="play-loop">Play example</button>
+                </div>
+
+                <figure class="loop-fig" aria-label="ALFWorld self-evolving loop: task, executor, verifier, curator, gating">
+                    <div class="pipeline" role="list">
+                        <button type="button" class="stage is-active" role="listitem" data-stage="task" aria-pressed="true">
+                            <span class="k">01 Task</span>
+                            <h3>Task</h3>
+                            <p>hot apple → fridge</p>
+                        </button>
+                        <div class="ar" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M5 12h12M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </div>
-                        <div class="highlight-item">
-                            <span class="highlight-icon">🧪</span>
-                            <div class="highlight-text">
-                                <strong>+2.7–4.7%</strong> SciKnowEval AVG across Qwen3 & OLMo3
-                            </div>
+                        <button type="button" class="stage" role="listitem" data-stage="executor" aria-pressed="false">
+                            <span class="k">02 Executor</span>
+                            <h3>Executor</h3>
+                            <p>places it cold</p>
+                        </button>
+                        <div class="ar" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M5 12h12M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </div>
-                        <div class="highlight-item">
-                            <span class="highlight-icon">🔁</span>
-                            <div class="highlight-text">
-                                <strong>Shared-weight</strong> EM with adaptive trust region
-                            </div>
+                        <button type="button" class="stage" role="listitem" data-stage="verifier" aria-pressed="false">
+                            <span class="k">03 Verifier</span>
+                            <h3>Verifier</h3>
+                            <p>in fridge, not hot</p>
+                        </button>
+                        <div class="ar" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M5 12h12M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </div>
+                        <button type="button" class="stage" role="listitem" data-stage="curator" aria-pressed="false">
+                            <span class="k">04 Curator</span>
+                            <h3>Curator</h3>
+                            <p>heat before placing</p>
+                        </button>
+                        <div class="ar" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M5 12h12M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </div>
+                        <button type="button" class="stage tint" role="listitem" data-stage="gating" aria-pressed="false">
+                            <span class="k">05 Gating</span>
+                            <h3>Gating loop</h3>
+                            <p>keep the rule, retry</p>
+                        </button>
                     </div>
 
-                    <div class="paper-tags">
-                        <span class="tag tag-purple">Variational EM</span>
-                        <span class="tag tag-orange">Language Feedback</span>
-                        <span class="tag tag-blue">Self-Distillation</span>
-                        <span class="tag tag-green">RLVR</span>
+                    <div class="loop-back" aria-hidden="true">
+                        <svg viewBox="0 0 1000 56" preserveAspectRatio="none">
+                            <path class="loop-path" d="M920 4 v18 H80 v-18" fill="none" stroke="#0176d3" stroke-width="1.6" marker-end="url(#loop-arrow)"/>
+                            <defs>
+                                <marker id="loop-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+                                    <path d="M0,0.5 L9,5 L0,9.5" fill="none" stroke="#0176d3" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                                </marker>
+                            </defs>
+                        </svg>
+                        <span class="loop-label">gating loop · persistent state carried across</span>
                     </div>
+                    <p class="loop-label-mobile">gating loop · persistent state carried back to the executor</p>
+                </figure>
 
+                <div class="box stage-detail" id="stage-detail">
+                    <div class="tag" id="stage-kicker">01 Task</div>
+                    <h3 id="stage-title">Put a hot apple in the fridge</h3>
+                    <p id="stage-body">An ALFWorld Heat &amp; Place episode. The environment is a kitchen. Success requires the apple both in the fridge and heated — placing it cold is not enough.</p>
+                    <pre class="trace" id="stage-trace"></pre>
+                </div>
+
+                <div class="box playground-soon">
+                    <div class="tag">Coming soon</div>
+                    <h3>Live demo on the way</h3>
+                    <p class="muted">An interactive run of this loop — watch an executor, verifier, and curator adapt under the gate. Until then, Publications collects the papers behind it.</p>
+                </div>
+            </div>
+        </section>
+
+        <section
+            id="panel-publications"
+            class="tab-panel"
+            role="tabpanel"
+            aria-labelledby="tab-publications"
+            tabindex="0">
+            <div class="landing-wrap">
+                <div class="sec-head">
+                    <h2><span class="pre">Publications</span>papers on self-improving agents</h2>
+                    <p>Procedural memory, language feedback, and policy distillation.</p>
+                </div>
+
+                <a href="papers/pmd/index.html" class="box paper-card">
+                    <div class="tag">New · 2026</div>
+                    <h3>Procedural Memory Distillation</h3>
+                    <p class="paper-subtitle">Online Reflection for Self-Improving Language Models</p>
+                    <p>
+                        Converts cross-episode signals into reusable procedural memory and distills it into the policy’s weights during training. Memory is a training scaffold, so inference is memory-free.
+                    </p>
+                    <div class="stat-row">
+                        <div><b>3.8–5.5%</b><span>SciKnowEval</span></div>
+                        <div><b>7.9–13.6%</b><span>LiveCodeBench</span></div>
+                        <div><b>Memory-free</b><span>inference after training</span></div>
+                    </div>
                     <div class="paper-meta">
-                        <div class="authors-preview">
-                            <div class="author-avatar-stack">
-                                <div class="author-avatar" style="background-image: url('shared/authors/yang_li.png');"></div>
-                                <div class="author-avatar" style="background-image: url('shared/authors/erik_nijkamp.png');"></div>
-                                <div class="author-avatar" style="background-image: url('shared/authors/semih_yavuz.png');"></div>
-                                <div class="author-avatar" style="background-image: url('shared/authors/shafiq_rayhan_joty.png');"></div>
-                            </div>
-                            <span class="author-count">Li, Nijkamp, Yavuz, Joty</span>
-                        </div>
-                        <div class="paper-year">2026</div>
+                        <span>Liu, Bansal, Pang, Li, and 5 others</span>
+                        <span class="cta">Read the paper →</span>
                     </div>
+                </a>
 
-                    <div class="paper-cta">
-                        <span class="cta-text">Read the paper</span>
-                        <span class="cta-arrow">→</span>
+                <a href="papers/vpd/index.html" class="box paper-card">
+                    <div class="tag">New · 2026</div>
+                    <h3>Variational Policy Distillation</h3>
+                    <p class="paper-subtitle">Learning from Language Feedback via a Co-Evolutionary EM Framework</p>
+                    <p>
+                        Reframes on-policy self-distillation as variational EM: the teacher is refined on trajectory outcomes, then distilled into the student’s rollouts, with a dynamic trust region inside a shared-weight network.
+                    </p>
+                    <div class="stat-row">
+                        <div><b>49.6%</b><span>LiveCodeBench v6</span></div>
+                        <div><b>+2.7–4.7%</b><span>SciKnowEval AVG</span></div>
+                        <div><b>Shared-weight</b><span>EM with adaptive trust region</span></div>
+                    </div>
+                    <div class="paper-meta">
+                        <span>Li, Nijkamp, Yavuz, Joty</span>
+                        <span class="cta">Read the paper →</span>
+                    </div>
+                </a>
+
+                <div class="grid3 themes">
+                    <div class="box">
+                        <div class="tag">Theme</div>
+                        <h3>Self-improving systems</h3>
+                        <p class="muted">AI that learns from its own experience and continuously improves over time.</p>
+                    </div>
+                    <div class="box">
+                        <div class="tag">Theme</div>
+                        <h3>Memory &amp; learning</h3>
+                        <p class="muted">How agents store, retrieve, and use knowledge to reason and decide.</p>
+                    </div>
+                    <div class="box">
+                        <div class="tag">Theme</div>
+                        <h3>Reinforcement learning</h3>
+                        <p class="muted">RL from verifiable rewards and language feedback, with distillation into the policy.</p>
                     </div>
                 </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="landing-wrap">
+            <a class="brand" href="#top">
+                <img src="shared/assets/salesforce.svg" alt="Salesforce">
+                <span>
+                    <strong>Self-Evolving Agents</strong>
+                    <small>Salesforce AI Research · 2026</small>
+                </span>
             </a>
-
-            <!-- Placeholder for Future Papers -->
-            <div class="coming-soon-grid">
-                <div class="paper-card coming-soon">
-                    <div class="coming-soon-badge">Coming Soon</div>
-                    <div class="paper-content">
-                        <h3 class="paper-title">More Research Coming Soon</h3>
-                        <p class="paper-description">
-                            Stay tuned for more groundbreaking research in artificial intelligence,
-                            machine learning, and natural language processing.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Research Themes Section -->
-    <section class="research-themes">
-        <div class="container">
-            <h2 class="section-header">Research Themes</h2>
-
-            <div class="themes-grid">
-                <div class="theme-card">
-                    <div class="theme-icon">🧠</div>
-                    <h3 class="theme-title">Self-Improving Systems</h3>
-                    <p class="theme-description">
-                        Developing AI systems that learn from their own experiences and
-                        continuously improve their capabilities over time.
-                    </p>
-                </div>
-
-                <div class="theme-card">
-                    <div class="theme-icon">💡</div>
-                    <h3 class="theme-title">Memory & Learning</h3>
-                    <p class="theme-description">
-                        Exploring how AI can effectively store, retrieve, and utilize
-                        knowledge to enhance reasoning and decision-making.
-                    </p>
-                </div>
-
-                <div class="theme-card">
-                    <div class="theme-icon">🔄</div>
-                    <h3 class="theme-title">Reinforcement Learning</h3>
-                    <p class="theme-description">
-                        Advancing RL techniques to enable more efficient and effective
-                        learning from verifiable rewards and feedback.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-bottom">
-                <p>
-                    This website is licensed under a
-                    <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
-                </p>
-            </div>
+            <nav>
+                <button type="button" class="footer-tab" data-tab="playground">Evolution Playground</button>
+                <button type="button" class="footer-tab" data-tab="publications">Publications</button>
+            </nav>
         </div>
     </footer>
 
