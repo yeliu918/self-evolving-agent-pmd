@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="RISE: Recursive Improvement via Self-Extrapolating Policy Distillation. Yang Li, Semih Yavuz, Shafiq Joty — Salesforce AI Research.">
+    <meta name="author" content="Yang Li, Semih Yavuz, Shafiq Joty">
+    <meta property="og:title" content="RISE: Recursive Improvement via Self-Extrapolating Policy Distillation">
+    <meta property="og:description" content="Construct a synthetic teacher from the model’s own RLVR trajectory via self-extrapolation — no external teacher required.">
+    <link rel="icon" type="image/svg+xml" href="../../shared/assets/salesforce.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>RISE - Self-Evolving Agents</title>
+    <link rel="stylesheet" href="../../shared/css/styles.css?v=60">
+    <link rel="stylesheet" href="../../shared/css/enhancements.css">
+    <link rel="stylesheet" href="../../shared/css/blog.css">
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="../../index.html#vision" class="nav-brand">
+                <img src="../../shared/assets/salesforce.svg" alt="Salesforce">
+                Self-Evolving Agents
+            </a>
+            <div class="nav-links">
+                <a href="../../index.html#vision" class="nav-link">Vision</a>
+                <a href="../../index.html#playground" class="nav-link">Evolution Playground</a>
+                <a href="../../index.html#publications" class="nav-link is-active">Publications</a>
+            </div>
+        </div>
+    </nav>
+
+    <article class="blog">
+        <header class="blog-hero">
+            <div class="container">
+                <div class="tag">New · 2026 · Policy Distillation</div>
+                <h1>RISE: Recursive Improvement via Self-Extrapolating Policy Distillation</h1>
+                <p class="blog-lede">
+                    Build a synthetic future teacher from the model’s own RLVR trajectory — then distill dense token-level targets back into the student, with no external model or privileged context.
+                </p>
+                <p class="blog-authors">Yang Li, Semih Yavuz, Shafiq Joty · Salesforce AI Research</p>
+                <div class="blog-actions">
+                    <a class="btn btn-primary" href="https://arxiv.org/pdf/2609.05295" target="_blank" rel="noopener">📄 Read the PDF</a>
+                    <a class="btn btn-secondary" href="https://arxiv.org/abs/2609.05295" target="_blank" rel="noopener">arXiv abstract</a>
+                    <a class="btn btn-secondary" href="../../index.html#publications">← Publications</a>
+                </div>
+            </div>
+        </header>
+
+        <div class="container blog-body">
+            <figure class="blog-figure">
+                <img src="images/hero.svg" alt="RISE paper banner">
+            </figure>
+
+            <div class="authors" style="padding: 0 0 1.5rem;">
+                <div class="authors-grid" style="justify-content: flex-start;">
+                    <div class="author">
+                        <div class="author-photo" style="background-image: url('../../shared/authors/yang_li.png');"></div>
+                        <span class="author-name">Yang Li</span>
+                    </div>
+                    <div class="author">
+                        <div class="author-photo" style="background-image: url('../../shared/authors/semih_yavuz.png');"></div>
+                        <span class="author-name">Semih Yavuz</span>
+                    </div>
+                    <div class="author">
+                        <div class="author-photo" style="background-image: url('../../shared/authors/shafiq_rayhan_joty.png');"></div>
+                        <span class="author-name">Shafiq Joty</span>
+                    </div>
+                </div>
+            </div>
+
+            <h2>Abstract</h2>
+            <p>
+                On-policy distillation (OPD) provides dense, per-token supervision for language model post-training, but its effectiveness is bottlenecked by teacher quality: external teachers suffer from distribution mismatch, while self-distillation with privileged conditioning is limited by in-context learning capacity. We propose <strong>RISE</strong> (Recursive Improvement via Self-Extrapolating Policy Distillation), which constructs a synthetic teacher directly from the model’s own RLVR training trajectory. By extrapolating the displacement between the current checkpoint and a trailing anchor — in parameter space or output logit space — RISE converts a sparse outcome-induced parameter update into a dense token-level target, without any external model or privileged conditioning.
+            </p>
+            <p>
+                RISE combines RLVR and OPD in a complementary loop: outcome rewards ground the extrapolation toward correct reasoning, while the extrapolated teacher refines token-level decisions. Because the teacher is refreshed every iteration as the student improves, distillation becomes a recursive improvement mechanism rather than a one-shot compression step. Experiments spanning mathematical reasoning, multi-domain STEM, code generation, and multi-turn agentic tasks show that RISE outperforms RLVR-only training and on-policy self-distillation across all settings.
+            </p>
+
+            <h2>Highlights</h2>
+            <ul class="blog-highlights inline">
+                <li>No external teacher or privileged conditioning</li>
+                <li>Logit-space and weight-space extrapolation</li>
+                <li>~1.3–1.6× GRPO wall time, no extra sampling</li>
+                <li>Gains on math, STEM, code, and agentic tasks</li>
+            </ul>
+
+            <h2>Cite</h2>
+            <pre class="blog-cite">@misc{li2026rise,
+  title         = {RISE: Recursive Improvement via Self-Extrapolating Policy Distillation},
+  author        = {Yang Li and Semih Yavuz and Shafiq Joty},
+  year          = {2026},
+  eprint        = {2609.05295},
+  archivePrefix = {arXiv},
+  url           = {https://arxiv.org/abs/2609.05295}
+}</pre>
+        </div>
+    </article>
+</body>
+</html>

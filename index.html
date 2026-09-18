@@ -14,13 +14,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <title>Self-Evolving Agents</title>
-    <link rel="stylesheet" href="shared/css/styles.css">
-    <link rel="stylesheet" href="shared/css/index-styles.css">
+    <link rel="stylesheet" href="shared/css/styles.css?v=60">
+    <link rel="stylesheet" href="shared/css/index-styles.css?v=61">
     <script>
         (function () {
             var h = (location.hash || '').replace('#', '').toLowerCase();
-            document.documentElement.dataset.hub =
-                (h === 'publications' || h === 'papers') ? 'publications' : 'playground';
+            var hub = 'publications';
+            if (h === 'publications' || h === 'papers' || h === 'vision' || h === 'playground' || h === 'evolution-playground' || !h) hub = 'publications';
+            document.documentElement.dataset.hub = hub;
         })();
     </script>
 </head>
@@ -29,7 +30,7 @@
 
     <div class="topbar">
         <div class="landing-wrap top">
-            <a class="brand" href="#top">
+            <a class="brand" href="#publications">
                 <img src="shared/assets/salesforce.svg" alt="Salesforce">
                 <span>
                     <strong>Self-Evolving Agents</strong>
@@ -39,20 +40,32 @@
             <nav class="tabs-row" role="tablist" aria-label="Site sections">
                 <button
                     type="button"
-                    class="site-tab is-active"
+                    class="site-tab"
+                    role="tab"
+                    id="tab-vision"
+                    hidden
+                    aria-selected="false"
+                    aria-controls="panel-vision"
+                    data-tab="vision">
+                    Vision
+                </button>
+                <button
+                    type="button"
+                    class="site-tab"
                     role="tab"
                     id="tab-playground"
-                    aria-selected="true"
+                    hidden
+                    aria-selected="false"
                     aria-controls="panel-playground"
                     data-tab="playground">
                     Evolution Playground
                 </button>
                 <button
                     type="button"
-                    class="site-tab"
+                    class="site-tab is-active"
                     role="tab"
                     id="tab-publications"
-                    aria-selected="false"
+                    aria-selected="true"
                     aria-controls="panel-publications"
                     data-tab="publications">
                     Publications
@@ -61,192 +74,274 @@
         </div>
     </div>
 
-    <header class="hero">
-        <div class="landing-wrap">
-            <span class="eyebrow">Salesforce AI Research · Research program</span>
-            <h1>Self-Evolving Agents</h1>
-            <p class="sub">
-                We study agents that improve from their own experience — memory, language feedback, and policy updates that accumulate over time. <b>The goal is self-improvement; distillation is the means.</b>
-            </p>
-        </div>
-    </header>
-
     <main id="main-content">
         <section
+            id="panel-vision"
+            class="tab-panel"
+            role="tabpanel"
+            aria-labelledby="tab-vision"
+            tabindex="0">
+            <header class="hero">
+                <div class="landing-wrap">
+                    <span class="eyebrow">Salesforce AI Research · Research program</span>
+                    <h1>Self-Evolving Agents</h1>
+                    <p class="sub">
+                        We study agents that improve from their own experience — memory, language feedback, and policy updates that accumulate over time. <b>The goal is self-improvement; distillation is the means.</b>
+                    </p>
+                </div>
+            </header>
+        </section>
+
+        <section
             id="panel-playground"
-            class="tab-panel is-active"
+            class="tab-panel"
             role="tabpanel"
             aria-labelledby="tab-playground"
             tabindex="0">
             <div class="landing-wrap">
                 <div class="sec-head">
-                    <h2><span class="pre">Evolution Playground</span>an ALFWorld gating loop</h2>
+                    <h2><span class="pre">Evolution Playground</span>test-time evolution</h2>
                     <p>
-                        One household task, run through the loop. The executor skips the microwave, the verifier fails it, the curator writes a rule, and the gate keeps only what generalizes. Click a stage, or play the example.
+                        The model weights stay frozen. What changes is the experience the agent carries:
+                        each attempt is checked, curated into memory, gated for what generalizes, and reused on the next task.
+                        That loop is test-time evolution — improvement without retraining.
                     </p>
                 </div>
 
-                <div class="example-bar">
-                    <span class="example-chip">ALFWorld · Heat &amp; Place</span>
-                    <span class="example-goal">put a hot apple in fridge</span>
-                    <button type="button" class="play-loop" id="play-loop">Play example</button>
-                </div>
-
-                <figure class="loop-fig" aria-label="ALFWorld self-evolving loop: task, executor, verifier, curator, gating">
-                    <div class="pipeline" role="list">
-                        <button type="button" class="stage is-active" role="listitem" data-stage="task" aria-pressed="true">
-                            <span class="k">01 Task</span>
-                            <h3>Task</h3>
-                            <p>hot apple → fridge</p>
-                        </button>
-                        <div class="ar" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M5 12h12M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        </div>
-                        <button type="button" class="stage" role="listitem" data-stage="executor" aria-pressed="false">
-                            <span class="k">02 Executor</span>
-                            <h3>Executor</h3>
-                            <p>places it cold</p>
-                        </button>
-                        <div class="ar" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M5 12h12M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        </div>
-                        <button type="button" class="stage" role="listitem" data-stage="verifier" aria-pressed="false">
-                            <span class="k">03 Verifier</span>
-                            <h3>Verifier</h3>
-                            <p>in fridge, not hot</p>
-                        </button>
-                        <div class="ar" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M5 12h12M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        </div>
-                        <button type="button" class="stage" role="listitem" data-stage="curator" aria-pressed="false">
-                            <span class="k">04 Curator</span>
-                            <h3>Curator</h3>
-                            <p>heat before placing</p>
-                        </button>
-                        <div class="ar" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M5 12h12M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        </div>
-                        <button type="button" class="stage tint" role="listitem" data-stage="gating" aria-pressed="false">
-                            <span class="k">05 Gating</span>
-                            <h3>Gating loop</h3>
-                            <p>keep the rule, retry</p>
-                        </button>
+                <div class="tte-overview" id="tte-overview" aria-label="Test-time evolution overview">
+                    <div class="tte-cast" aria-label="Building blocks">
+                        <div class="tte-cast-item"><b>Task</b><span>the problem the agent faces right now</span></div>
+                        <div class="tte-cast-item"><b>Memory</b><span>skills, notes, or traces that survived gating</span></div>
+                        <div class="tte-cast-item"><b>Executor</b><span>frozen policy that acts — weights never update</span></div>
+                        <div class="tte-cast-item"><b>Trajectory</b><span>the attempt: what was seen and done</span></div>
+                        <div class="tte-cast-item"><b>Verifier</b><span>outcome signal — success, failure, or reward</span></div>
+                        <div class="tte-cast-item"><b>Curator</b><span>turns the attempt into a candidate memory update</span></div>
+                        <div class="tte-cast-item"><b>Gate</b><span>keeps what generalizes; drops what doesn’t</span></div>
                     </div>
 
-                    <div class="loop-back" aria-hidden="true">
-                        <svg viewBox="0 0 1000 56" preserveAspectRatio="none">
-                            <path class="loop-path" d="M920 4 v18 H80 v-18" fill="none" stroke="#0176d3" stroke-width="1.6" marker-end="url(#loop-arrow)"/>
-                            <defs>
-                                <marker id="loop-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto">
-                                    <path d="M0,0.5 L9,5 L0,9.5" fill="none" stroke="#0176d3" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-                                </marker>
-                            </defs>
-                        </svg>
-                        <span class="loop-label">gating loop · persistent state carried across</span>
+                    <div class="tte-stage">
+                        <div class="tte-canvas">
+                            <svg id="tte-pipeline" viewBox="0 0 1120 400" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Test-time evolution pipeline"></svg>
+                            <div class="tte-chip" id="tte-chip" hidden></div>
+                        </div>
+                        <aside class="tte-panel">
+                            <div class="tte-pillars" id="tte-pillars" aria-hidden="true"></div>
+                            <div class="tte-frame-count" id="tte-frame-count"></div>
+                            <h3 id="tte-frame-title"></h3>
+                            <p id="tte-frame-body"></p>
+                            <div class="tte-transport">
+                                <button type="button" class="tte-btn" id="tte-prev" aria-label="Previous step">‹ Prev</button>
+                                <button type="button" class="tte-btn primary" id="tte-play" aria-label="Play">▶ Play</button>
+                                <button type="button" class="tte-btn" id="tte-next" aria-label="Next step">Next ›</button>
+                            </div>
+                        </aside>
                     </div>
-                    <p class="loop-label-mobile">gating loop · persistent state carried back to the executor</p>
-                </figure>
+                </div>
+            </div>
 
-                <div class="box stage-detail" id="stage-detail">
-                    <div class="tag" id="stage-kicker">01 Task</div>
-                    <h3 id="stage-title">Put a hot apple in the fridge</h3>
-                    <p id="stage-body">An ALFWorld Heat &amp; Place episode. The environment is a kitchen. Success requires the apple both in the fridge and heated — placing it cold is not enough.</p>
-                    <pre class="trace" id="stage-trace"></pre>
+            <div class="playground-demo" id="playground-dashboard">
+                <div class="landing-wrap">
+                    <div class="sec-head">
+                        <h2><span class="pre">Run dashboard</span>MemCurator on ALFWorld</h2>
+                        <p>
+                            Scrub the timeline across tasks: trajectory bank, memory curator, success-rate charts, and a fail→success case study.
+                            Full page: <a href="memcurator.html">memcurator.html</a>.
+                        </p>
+                    </div>
                 </div>
 
-                <div class="box playground-soon">
-                    <div class="tag">Coming soon</div>
-                    <h3>Live demo on the way</h3>
-                    <p class="muted">An interactive run of this loop — watch an executor, verifier, and curator adapt under the gate. Until then, Publications collects the papers behind it.</p>
+                <div class="memcurator-frame-wrap dashboard-frame-wrap">
+                    <iframe
+                        id="playground-dashboard-frame"
+                        class="memcurator-frame dashboard-frame"
+                        title="MemCurator run dashboard"
+                        src="memcurator.html?embed=1"
+                        loading="eager"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        allow="fullscreen"></iframe>
                 </div>
             </div>
         </section>
 
         <section
             id="panel-publications"
-            class="tab-panel"
+            class="tab-panel is-active"
             role="tabpanel"
             aria-labelledby="tab-publications"
             tabindex="0">
             <div class="landing-wrap">
-                <div class="sec-head">
-                    <h2><span class="pre">Publications</span>papers on self-improving agents</h2>
-                    <p>Procedural memory, language feedback, and policy distillation.</p>
+                <div class="pubs-hero">
+                    <div class="sec-head">
+                        <h2>Publications</h2>
+                        <p>Papers on self-improving agents, newest first.</p>
+                    </div>
+                    <div class="pubs-hero-side">
+                        <div class="pubs-themes" data-pubs-themes role="listbox" aria-label="Filter publications by theme">
+                            <span class="pubs-themes-label">Themes</span>
+                            <button type="button" class="pubs-theme" role="option" aria-selected="false" data-theme="memory">Procedural Memory</button>
+                            <button type="button" class="pubs-theme" role="option" aria-selected="false" data-theme="distillation">Policy Distillation</button>
+                            <button type="button" class="pubs-theme" role="option" aria-selected="false" data-theme="post-training">Post Training</button>
+                        </div>
+                        <div class="pubs-hero-art">
+                            <img src="shared/assets/publications-hero.jpg" alt="Illustration of a curious researcher learning from books and scientific ideas">
+                        </div>
+                    </div>
                 </div>
 
-                <a href="papers/pmd/index.html" class="box paper-card">
-                    <div class="tag">New · 2026</div>
-                    <h3>Procedural Memory Distillation</h3>
-                    <p class="paper-subtitle">Online Reflection for Self-Improving Language Models</p>
-                    <p>
-                        Converts cross-episode signals into reusable procedural memory and distills it into the policy’s weights during training. Memory is a training scaffold, so inference is memory-free.
-                    </p>
-                    <div class="stat-row">
-                        <div><b>3.8–5.5%</b><span>SciKnowEval</span></div>
-                        <div><b>7.9–13.6%</b><span>LiveCodeBench</span></div>
-                        <div><b>Memory-free</b><span>inference after training</span></div>
-                    </div>
-                    <div class="paper-meta">
-                        <span>Liu, Bansal, Pang, Li, and 5 others</span>
-                        <span class="cta">Read the paper →</span>
-                    </div>
-                </a>
+                <!-- Temporarily disabled: coming-soon cards. Remove `hidden` to restore. -->
+                <div class="upcoming-list" data-upcoming-list hidden>
+                    <article class="box upcoming-card" data-themes="distillation post-training">
+                        <span class="tag tag-soon">Coming soon</span>
+                        <h3>Efficiency of On-Policy Distillation</h3>
+                        <p>Making on-policy distillation cheaper and faster while preserving teacher quality and student gains.</p>
+                    </article>
+                    <article class="box upcoming-card" data-themes="memory distillation post-training">
+                        <span class="tag tag-soon">Coming soon</span>
+                        <h3>PMD+</h3>
+                        <p>Next-generation procedural memory distillation with richer memory abstractions and stronger co-evolution.</p>
+                    </article>
+                    <article class="box upcoming-card" data-themes="distillation post-training">
+                        <span class="tag tag-soon">Coming soon</span>
+                        <h3>RL, SFT, and On-Policy Distillation Interplay</h3>
+                        <p>How reinforcement learning, supervised fine-tuning, and on-policy distillation interact — and when to combine them.</p>
+                    </article>
+                </div>
 
-                <a href="papers/vpd/index.html" class="box paper-card">
-                    <div class="tag">New · 2026</div>
-                    <h3>Variational Policy Distillation</h3>
-                    <p class="paper-subtitle">Learning from Language Feedback via a Co-Evolutionary EM Framework</p>
-                    <p>
-                        Reframes on-policy self-distillation as variational EM: the teacher is refined on trajectory outcomes, then distilled into the student’s rollouts, with a dynamic trust region inside a shared-weight network.
-                    </p>
-                    <div class="stat-row">
-                        <div><b>49.6%</b><span>LiveCodeBench v6</span></div>
-                        <div><b>+2.7–4.7%</b><span>SciKnowEval AVG</span></div>
-                        <div><b>Shared-weight</b><span>EM with adaptive trust region</span></div>
-                    </div>
-                    <div class="paper-meta">
-                        <span>Li, Nijkamp, Yavuz, Joty</span>
-                        <span class="cta">Read the paper →</span>
-                    </div>
-                </a>
+                <div class="paper-list" data-paper-list>
+                    <a href="papers/memcurator/index.html" class="box paper-card" data-published="2026-09-15" data-themes="memory post-training" hidden>
+                        <div class="paper-card-media">
+                            <img src="papers/memcurator/images/hero.svg" alt="MemCurator paper figure">
+                        </div>
+                        <div class="paper-card-body">
+                            <div class="paper-card-top">
+                                <span class="tag">Draft · Sep 2026</span>
+                                <span class="paper-id">Interactive demo</span>
+                            </div>
+                            <h3>MemCurator</h3>
+                            <p class="paper-subtitle">Just-in-Time Memory for LLM Agents</p>
+                            <p class="paper-blurb">
+                                Keeps past experience whole and curates a short, task-adaptive briefing at read time — when the next task is known — instead of compressing memory too early.
+                            </p>
+                            <div class="stat-row">
+                                <div><b>77.4%</b><span>ALFWorld · RL</span></div>
+                                <div><b>3</b><span>benchmarks</span></div>
+                                <div><b>Read-time</b><span>curation</span></div>
+                            </div>
+                            <div class="paper-meta">
+                                <span class="paper-authors">Salesforce AI Research</span>
+                                <span class="cta">Read the paper →</span>
+                            </div>
+                        </div>
+                    </a>
 
-                <div class="grid3 themes">
-                    <div class="box">
-                        <div class="tag">Theme</div>
-                        <h3>Self-improving systems</h3>
-                        <p class="muted">AI that learns from its own experience and continuously improves over time.</p>
-                    </div>
-                    <div class="box">
-                        <div class="tag">Theme</div>
-                        <h3>Memory &amp; learning</h3>
-                        <p class="muted">How agents store, retrieve, and use knowledge to reason and decide.</p>
-                    </div>
-                    <div class="box">
-                        <div class="tag">Theme</div>
-                        <h3>Reinforcement learning</h3>
-                        <p class="muted">RL from verifiable rewards and language feedback, with distillation into the policy.</p>
-                    </div>
+                    <a href="papers/rise/index.html" class="box paper-card" data-published="2026-09-04" data-themes="distillation post-training" hidden>
+                        <div class="paper-card-media">
+                            <img src="papers/rise/images/hero.svg" alt="RISE paper figure">
+                        </div>
+                        <div class="paper-card-body">
+                            <div class="paper-card-top">
+                                <span class="tag">Sep 2026</span>
+                                <span class="paper-id">arXiv:2609.05295</span>
+                            </div>
+                            <h3>RISE</h3>
+                            <p class="paper-subtitle">Recursive Improvement via Self-Extrapolating Policy Distillation</p>
+                            <p class="paper-blurb">
+                                Builds a synthetic future teacher from the model’s own RLVR trajectory via self-extrapolation, then distills dense token-level targets — no external teacher required.
+                            </p>
+                            <div class="stat-row">
+                                <div><b>No external</b><span>teacher</span></div>
+                                <div><b>1.3–1.6×</b><span>GRPO wall time</span></div>
+                                <div><b>Math→Agents</b><span>task suite</span></div>
+                            </div>
+                            <div class="paper-meta">
+                                <span class="paper-authors">Yang Li, Semih Yavuz, Shafiq Joty</span>
+                                <span class="cta">Read the paper →</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="papers/river/index.html" class="box paper-card" data-published="2026-08-23" data-themes="post-training">
+                        <div class="paper-card-media">
+                            <img src="papers/river/images/behavior_transfer.png" alt="RIVER paper figure">
+                        </div>
+                        <div class="paper-card-body">
+                            <div class="paper-card-top">
+                                <span class="tag">Aug 2026</span>
+                                <span class="paper-id">arXiv:2608.22631</span>
+                            </div>
+                            <h3>RIVER</h3>
+                            <p class="paper-subtitle">Learning Generalizable Behaviors for Terminal Agents</p>
+                            <p class="paper-blurb">
+                                Filters noisy synthetic terminal environments and shapes rewards so RL reinforces transferable multi-turn behaviors — using &lt;30% of TMax data for larger gains.
+                            </p>
+                            <div class="stat-row">
+                                <div><b>&lt;30%</b><span>TMax envs used</span></div>
+                                <div><b>+106%</b><span>RL gain · TB-Lite</span></div>
+                                <div><b>19.4</b><span>River-8B avg</span></div>
+                            </div>
+                            <div class="paper-meta">
+                                <span class="paper-authors">Yihang Yao, Bo Pang, Xuan Phi Nguyen, Ding Zhao, Shafiq Joty, Semih Yavuz</span>
+                                <span class="cta">Read the paper →</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="papers/pmd/index.html" class="box paper-card" data-published="2026-07-01" data-themes="memory distillation post-training">
+                        <div class="paper-card-media">
+                            <img src="papers/pmd/images/illustration_pmd.png" alt="PMD paper figure">
+                        </div>
+                        <div class="paper-card-body">
+                            <div class="paper-card-top">
+                                <span class="tag">Jul 2026</span>
+                                <span class="paper-id">arXiv:2607.01480</span>
+                            </div>
+                            <h3>PMD</h3>
+                            <p class="paper-subtitle">Procedural Memory Distillation: Online Reflection for Self-Improving Language Models</p>
+                            <p class="paper-blurb">
+                                Converts cross-episode signals into reusable procedural memory and distills it into the policy’s weights during training. Memory is a training scaffold, so inference is memory-free.
+                            </p>
+                            <div class="stat-row">
+                                <div><b>3.8–5.5%</b><span>SciKnowEval</span></div>
+                                <div><b>7.9–13.6%</b><span>LiveCodeBench</span></div>
+                                <div><b>Memory-free</b><span>inference</span></div>
+                            </div>
+                            <div class="paper-meta">
+                                <span class="paper-authors">Ye Liu, Srijan Bansal, Bo Pang, Yang Li, Zeyu Leo Liu, Yifei Ming, Zixuan Ke, Shafiq Joty, Semih Yavuz</span>
+                                <span class="cta">Read the paper →</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="papers/vpd/index.html" class="box paper-card" data-published="2026-05-14" data-themes="distillation post-training">
+                        <div class="paper-card-media">
+                            <img src="papers/vpd/images/fig1_lcb_reward_margin.png" alt="VPD paper figure">
+                        </div>
+                        <div class="paper-card-body">
+                            <div class="paper-card-top">
+                                <span class="tag">May 2026</span>
+                                <span class="paper-id">arXiv:2605.15113</span>
+                            </div>
+                            <h3>VPD</h3>
+                            <p class="paper-subtitle">Learning from Language Feedback via Variational Policy Distillation</p>
+                            <p class="paper-blurb">
+                                Reframes on-policy self-distillation as variational EM: the teacher is refined on trajectory outcomes, then distilled into the student’s rollouts, with a dynamic trust region inside a shared-weight network.
+                            </p>
+                            <div class="stat-row">
+                                <div><b>49.6%</b><span>LiveCodeBench v6</span></div>
+                                <div><b>+2.7–4.7%</b><span>SciKnowEval AVG</span></div>
+                                <div><b>Shared-weight</b><span>adaptive trust region</span></div>
+                            </div>
+                            <div class="paper-meta">
+                                <span class="paper-authors">Yang Li, Erik Nijkamp, Semih Yavuz, Shafiq Joty</span>
+                                <span class="cta">Read the paper →</span>
+                            </div>
+                        </div>
+                    </a>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer>
-        <div class="landing-wrap">
-            <a class="brand" href="#top">
-                <img src="shared/assets/salesforce.svg" alt="Salesforce">
-                <span>
-                    <strong>Self-Evolving Agents</strong>
-                    <small>Salesforce AI Research · 2026</small>
-                </span>
-            </a>
-            <nav>
-                <button type="button" class="footer-tab" data-tab="playground">Evolution Playground</button>
-                <button type="button" class="footer-tab" data-tab="publications">Publications</button>
-            </nav>
-        </div>
-    </footer>
-
-    <script src="shared/js/index-script.js"></script>
+    <script src="shared/js/index-script.js?v=60"></script>
 </body>
 </html>

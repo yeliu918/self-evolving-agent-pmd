@@ -1,0 +1,47 @@
+[
+  {
+    "step": 0,
+    "action": "go to sidetable 1",
+    "reasoning": "The room contains several possible supporting surfaces. I should inspect the sidetables to locate the desklamp and statue, beginning with sidetable 1.",
+    "model_response": "<think>The room contains several possible supporting surfaces. I should inspect the sidetables to locate the desklamp and statue, beginning with sidetable 1.</think>\n<action>go to sidetable 1</action>",
+    "observation": "-= Welcome to TextWorld, ALFRED! =-\n\nYou are in the middle of a room. Looking quickly around you, you see a armchair 1, a diningtable 1, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a garbagecan 1, a shelf 1, a sidetable 3, a sidetable 2, a sidetable 1, and a sofa 1.\n\nYour task is to: examine the statue with the desklamp.",
+    "env_feedback": "You arrive at sidetable 1. On the sidetable 1, you see a desklamp 1, and a statue 2.",
+    "reward": 0.0,
+    "done": false,
+    "prompt_tokens": 767,
+    "reasoning_tokens": 36,
+    "output_tokens": 56,
+    "completion_tokens": 92,
+    "total_tokens": 859
+  },
+  {
+    "step": 1,
+    "action": "use desklamp 1",
+    "reasoning": "The desk lamp is on sidetable 1, which is its supporting surface, and statue 2 is also on that surface. I should turn on the lamp first, then take the statue, place it back on sidetable 1, and explicitly examine it.",
+    "model_response": "<think>The desk lamp is on sidetable 1, which is its supporting surface, and statue 2 is also on that surface. I should turn on the lamp first, then take the statue, place it back on sidetable 1, and explicitly examine it.</think>\n<action>use desklamp 1</action>",
+    "observation": "You arrive at sidetable 1. On the sidetable 1, you see a desklamp 1, and a statue 2.",
+    "env_feedback": "You turn on the desklamp 1.",
+    "reward": 0.0,
+    "done": false,
+    "prompt_tokens": 831,
+    "reasoning_tokens": 34,
+    "output_tokens": 78,
+    "completion_tokens": 112,
+    "total_tokens": 943
+  },
+  {
+    "step": 2,
+    "action": "take statue 2 from sidetable 1",
+    "reasoning": "The desklamp is on and supported by sidetable 1. The target is statue 2 on the same sidetable. I will pick up the statue, then place it back on sidetable 1 and explicitly examine it.",
+    "model_response": "<think>The desklamp is on and supported by sidetable 1. The target is statue 2 on the same sidetable. I will pick up the statue, then place it back on sidetable 1 and explicitly examine it.</think>\n<action>take statue 2 from sidetable 1</action>",
+    "observation": "You turn on the desklamp 1.",
+    "env_feedback": "You pick up the statue 2 from the sidetable 1.",
+    "reward": 10.0,
+    "done": true,
+    "prompt_tokens": 859,
+    "reasoning_tokens": 44,
+    "output_tokens": 75,
+    "completion_tokens": 119,
+    "total_tokens": 978
+  }
+]
