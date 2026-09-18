@@ -63,8 +63,8 @@ a:focus, button:focus {
 .theme-card:hover {
     box-shadow: 
         0 4px 12px rgba(0, 0, 0, 0.08),
-        0 12px 32px rgba(139, 92, 246, 0.15),
-        0 24px 48px rgba(139, 92, 246, 0.1);
+        0 12px 32px rgba(1, 118, 211, 0.15),
+        0 24px 48px rgba(1, 118, 211, 0.1);
 }
 
 /* Gradient text for headings */

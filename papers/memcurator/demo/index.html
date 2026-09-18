@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en" data-palette="#26b0d0,#9370e8,#f0a53c">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Interactive research demo for MemCurator: read-time, task-adaptive memory curation for LLM agents.">
+  <title>MemCurator · Interactive Demo</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b1120'/%3E%3Cpath d='M6 10h7l3 4h10' fill='none' stroke='%2334c7e6' stroke-width='2'/%3E%3Ccircle cx='16' cy='14' r='3' fill='%23f0a53c'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css?v=55">
+</head>
+<body>
+  <div class="ambient a"></div>
+  <div class="ambient b"></div>
+
+  <header class="topbar">
+    <nav class="main-nav" aria-label="Primary">
+      <button class="nav-btn" data-route="overview">Overview</button>
+      <button class="nav-btn" data-route="mechanisms">Mechanisms</button>
+      <button class="nav-btn" data-route="results">Results</button>
+      <button class="nav-btn" data-route="memguide">Future work</button>
+      <button class="nav-btn lab-btn" data-route="lab">▶ Live demo</button>
+    </nav>
+  </header>
+
+  <main>
+   <div id="page-main">
+    <!-- ============================ OVERVIEW ============================ -->
+    <section class="page-section" id="overview" aria-labelledby="ov-title">
+      <!-- hero -->
+      <div class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">READ-TIME, TASK-ADAPTIVE MEMORY FOR LLM AGENTS</p>
+          <h1 id="ov-title">An agent shouldn't compress its experience <em>before it knows what it will need.</em></h1>
+          <p class="lead">Most memory systems decide what to remember the moment a task ends — long before the next task is known. <b>MemCurator</b> keeps past experience whole and does its thinking later: when a new task actually arrives, it writes a short, tailored briefing for <em>that</em> task from the raw history.</p>
+          <div class="intro-actions">
+            <button class="btn primary" data-jump="mechanisms">See how it works <span>→</span></button>
+            <button class="btn ghost" data-jump="lab">Walk through a real task</button>
+            <!-- TODO: replace href with the real arXiv URL when available -->
+            <a class="btn ghost" href="#">Read the paper (arXiv) <span>↗</span></a>
+          </div>
+        </div>
+        <aside class="hero-side">
+          <div class="hero-stat" id="hero-stat"><!-- filled by app.js --></div>
+          <div class="counters">
+            <div><b>3</b><span>benchmarks</span></div>
+            <div><b>5</b><span>mechanisms compared</span></div>
+            <div><b>3</b><span>frozen executor models</span></div>
+          </div>
+        </aside>
+      </div>
+
+      <!-- narrative -->
+      <div class="ov-narrative">
+        <article class="ov-block">
+          <p class="kicker">BACKGROUND</p>
+          <h2>What is "agentic memory"?</h2>
+          <p>LLM agents are increasingly asked to handle a <b>stream</b> of tasks over time — resolving support tickets, navigating websites, operating tools — rather than one isolated problem. An agent that starts from a blank slate on every task throws away its single most valuable asset: everything it just learned doing the last one.</p>
+          <p><b>Agentic memory</b> is the machinery that fixes this. It keeps something from past experience — a note, a reusable skill, a full transcript — and pulls it back up on future tasks so the agent gets better as it goes, without retraining the underlying model. The open question isn't <i>whether</i> to remember. It's <b>when</b>, in the agent's lifecycle, to decide what a memory should say.</p>
+        </article>
+
+        <article class="ov-block timing-block">
+          <p class="kicker">THE DESIGN SPACE</p>
+          <h2>Three moments to shape memory</h2>
+          <p class="ov-sub">There are really only three moments in an agent's lifecycle where it can decide what a memory should say. Almost every prior system picks the first — <b>MemCurator moves to the second</b>.</p>
+          <div class="timeline">
+            <div class="tl-line" aria-hidden="true"></div>
+            <div class="tl-cards">
+              <article class="tl-card write">
+                <span class="tl-dot"></span>
+                <div class="tl-tag">WRITE-TIME</div>
+                <h3>Before the task</h3>
+                <div class="tl-methods">ReasoningBank · SkillOS · MemP</div>
+                <p>The agent distills a note the instant a task ends and files it away for whatever comes next.</p>
+              </article>
+              <article class="tl-card read">
+                <span class="tl-badge">★ MemCurator</span>
+                <span class="tl-dot"></span>
+                <div class="tl-tag">READ-TIME</div>
+                <h3>When the task arrives</h3>
+                <div class="tl-methods">MemCurator</div>
+                <p>Raw experience is kept whole; a learned curator distills it only once the new task is known.</p>
+              </article>
+              <article class="tl-card turn">
+                <span class="tl-badge wip">WIP</span>
+                <span class="tl-dot"></span>
+                <div class="tl-tag">TURN-LEVEL</div>
+                <h3>When the state demands</h3>
+                <div class="tl-methods">MemGuide</div>
+                <p>Guidance is re-decided at each step, against the agent's live state.</p>
+              </article>
+            </div>
+            <div class="tl-axis-label">the agent's timeline &rarr;</div>
+          </div>
+        </article>
+
+        <article class="ov-block">
+          <p class="kicker">THE PROBLEM</p>
+          <h2>Curating in the blind</h2>
+          <p>Almost every system today picks that first moment — <b>write time</b> — committing a note <em>before anyone knows what the next task will be</em>. It is guessing which fragments of today's experience will matter tomorrow, and two costs follow directly.</p>
+          <p>First, <b>information loss is premature and permanent</b> — whatever gets dropped is gone, and a later task that needed it can't recover it. Second, a single stored note has to be <b>one-size-fits-all</b>: the same web-browsing trace might teach one task a shortcut and warn another about an error, but a write-time note can only say one of those things. And because a stored note is only "graded" much later — if and when a matching task ever shows up — the signal for learning good curation is delayed and hard to attribute.</p>
+        </article>
+
+        <article class="ov-block">
+          <p class="kicker">THE IDEA</p>
+          <h2>Curate just in time</h2>
+          <p>The fix is to wait for the second moment. <b>MemCurator</b> does its curation at <b>read time</b>: past task transcripts are kept whole — nothing is thrown away up front — in a passive store. When a new task arrives, a small learned model called the <b>curator</b> reads the most relevant past transcripts <em>together with the task in hand</em> and writes a compact briefing tailored to exactly that task. The same stored experience becomes a different briefing depending on who's asking — the property we call <b>task-adaptive</b>.</p>
+          <p>Two things fall out of this one move. Nothing is lost prematurely, because curation happens after the task is known. And the learning signal becomes <b>immediate</b>: the briefing is judged on the very task it was written for, so the curator can be trained on whether it just helped — no waiting many tasks for a delayed reward. Strikingly, even an <b>untrained</b> curator already beats the write-time baselines; training it on that immediate signal then compounds the gain.</p>
+        </article>
+      </div>
+
+      <!-- explore -->
+      <section class="explore">
+        <h2>Explore the demo</h2>
+        <p class="ov-sub">Jump into any part below.</p>
+        <div class="explore-cards">
+          <button class="explore-card" data-jump="mechanisms">
+            <span class="ec-num">01</span><b>Mechanisms</b>
+            <span>Step through how each memory method moves information — from a fixed note to a task-adaptive briefing — on one animated pipeline.</span>
+            <span class="ec-go">Open →</span>
+          </button>
+          <button class="explore-card" data-jump="lab">
+            <span class="ec-num">02</span><b>Trajectory Lab</b>
+            <span>Walk a real recorded task turn by turn and watch what each method injects, and when it changes the outcome.</span>
+            <span class="ec-go">Open →</span>
+          </button>
+          <button class="explore-card" data-jump="results">
+            <span class="ec-num">03</span><b>Results</b>
+            <span>The numbers behind the claims: success rate across three benchmarks and three frozen executor models.</span>
+            <span class="ec-go">Open →</span>
+          </button>
+          <button class="explore-card wip" data-jump="memguide">
+            <span class="ec-num">04</span><b>MemGuide <i>· WIP</i></b>
+            <span>The next step we're building: moving curation from one read-time briefing to guidance at every turn.</span>
+            <span class="ec-go">Open →</span>
+          </button>
+        </div>
+      </section>
+    </section>
+
+    <!-- ============================ MECHANISMS ============================ -->
+    <section class="page-section" id="mechanisms" aria-labelledby="mech-title">
+      <div class="section-head">
+        <h2 id="mech-title">How each mechanism moves memory</h2>
+        <p>All the methods below use the same few building blocks, just wired differently. Pick one and step through its pipeline — the <b>payload chip</b> under the diagram shows the actual text handed to the model, so you can watch a fixed note turn into a task-adaptive briefing.</p>
+      </div>
+      <div class="cast" aria-label="Glossary of pipeline parts">
+        <div class="cast-item"><b>Task</b><span>the new problem the agent has to solve right now.</span></div>
+        <div class="cast-item"><b>Memory Bank</b><span>the store of past experience — notes, skills, or full transcripts.</span></div>
+        <div class="cast-item"><b>Retriever</b><span>looks up the entries from the bank most relevant to the situation.</span></div>
+        <div class="cast-item"><b>Curator</b><span>the learned model that decides what the memory should <i>say</i>.</span></div>
+        <div class="cast-item"><b>Executor</b><span>the frozen model that actually acts on the task. Never changes.</span></div>
+        <div class="cast-item"><b>Trajectory</b><span>the transcript of a finished attempt — what was seen and done.</span></div>
+      </div>
+      <div class="method-cards" id="method-cards" role="tablist" aria-label="Memory mechanisms"></div>
+
+      <div class="mech-stage">
+        <div class="canvas-wrap">
+          <div class="canvas-head">
+            <div class="method-title" id="mech-method-title"></div>
+          </div>
+          <svg id="pipeline" viewBox="0 0 1200 460" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Memory pipeline diagram"></svg>
+          <div class="payload-chip" id="payload-chip" hidden></div>
+        </div>
+
+        <aside class="frame-panel">
+          <div class="principle" id="principle"></div>
+          <div class="frame-body">
+            <div class="frame-count" id="frame-count"></div>
+            <h3 id="frame-title"></h3>
+            <p id="frame-caption"></p>
+          </div>
+          <div class="transport">
+            <button class="btn tiny" id="prev-frame" aria-label="Previous step">‹ Prev</button>
+            <button class="btn tiny primary" id="play-frames" aria-label="Play">▶ Play</button>
+            <button class="btn tiny" id="next-frame" aria-label="Next step">Next ›</button>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ============================ COMPARE ============================ -->
+    <section class="page-section" id="compare" aria-labelledby="compare-title">
+      <div class="section-head">
+        <h2 id="compare-title">One trajectory, two tasks — why read time matters</h2>
+        <p>This is the payoff of curating at read time. A single stored trajectory becomes a <b>different</b> briefing depending on the task that retrieves it — something a fixed write-time note can't do.</p>
+      </div>
+      <div class="compare-body">
+        <div class="compare-wrap" id="compare-wrap"></div>
+      </div>
+    </section>
+
+    <!-- ============================ RESULTS ============================ -->
+    <section class="page-section" id="results" aria-labelledby="res-title">
+      <div class="section-head">
+        <h2 id="res-title">Results</h2>
+        <p>Success rate across three benchmarks and three frozen executor models.</p>
+      </div>
+      <div class="results-controls">
+        <div class="seg" id="res-benchmark" role="group" aria-label="Benchmark"></div>
+        <div class="seg" id="res-executor" role="group" aria-label="Executor"></div>
+      </div>
+      <figure class="chart-card">
+        <figcaption id="chart-caption"></figcaption>
+        <div id="chart" class="chart"></div>
+        <div class="chart-legend" id="chart-legend"></div>
+        <p class="chart-note" id="chart-note"></p>
+      </figure>
+      <div class="callouts" id="callouts"></div>
+      <details class="drawer">
+        <summary>Secondary evidence — transfer, efficiency, ablations</summary>
+        <div class="drawer-body" id="drawer-body"></div>
+      </details>
+    </section>
+
+    <!-- ============================ FUTURE WORK / MEMGUIDE ============================ -->
+    <section class="page-section" id="memguide" aria-labelledby="mg-title">
+      <p class="kicker">FUTURE WORK</p>
+      <div class="wip-banner">WORK IN PROGRESS · no headline results yet — this is the direction we're building next</div>
+      <div class="section-head">
+        <h2 id="mg-title">MemGuide — curation at the <em>right</em> read times</h2>
+        <p>MemCurator does its curation once, at the start of a task. But on long, multi-step tasks the agent's needs change as it goes — the briefing written at step&nbsp;0 was conditioned on nothing that happened since. <b>MemGuide</b> extends the same idea along the time axis: instead of one briefing up front, a learned policy decides at every turn whether fresh guidance is needed, what to pull from memory based on the live situation, and how to phrase it.</p>
+      </div>
+      <div class="mg-grid">
+        <div class="panel">
+          <p class="kicker">THE GAP</p>
+          <p class="mg-lead">One briefing, fixed at the task's start, decays three ways as the episode unfolds:</p>
+          <div class="heads">
+            <div class="head"><b>Staleness</b><span>it was conditioned on zero observations</span></div>
+            <div class="head"><b>Decay</b><span>it loses influence as the trajectory grows</span></div>
+            <div class="head"><b>Mismatch</b><span>the useful memory is <i>state</i>-similar, not task-similar</span></div>
+          </div>
+        </div>
+        <div class="panel">
+          <p class="kicker">THE METHOD</p>
+          <p class="mg-lead">So MemGuide replaces that one briefing with a policy that re-decides at every turn, across three heads:</p>
+          <div class="heads">
+            <div class="head"><b>GATE</b><span>whether to intervene now</span></div>
+            <div class="head"><b>QUERY</b><span>what to retrieve, keyed on the live state</span></div>
+            <div class="head"><b>CURATE</b><span>how to phrase it — or stay silent</span></div>
+          </div>
+        </div>
+        <div class="panel prize">
+          <p class="kicker">WHY IT MATTERS</p>
+          <p class="mg-lead">Same briefing, different turn — on τ²-bench telecom, timing alone moves success:</p>
+          <div class="ceilings">
+            <div><b>0.404</b><span>at task start</span></div>
+            <div class="arrow">→</div>
+            <div><b>0.600</b><span>at the best turn</span></div>
+          </div>
+          <p class="prize-body">A start-only briefing — what MemCurator does — can't reach that best turn. On a long task the moment guidance matters most is somewhere in the middle, and a learned per-turn gate is what lets memory arrive there.</p>
+          <p class="tiny-note"><b>+0.20 from timing alone</b> — the content is identical; only the turn it arrives on changed.</p>
+        </div>
+      </div>
+
+      <div class="mg-explain">
+        <p><b>How to read these numbers.</b> Both inject the <em>same</em> MemCurator briefing on τ²-bench telecom; the only thing that changes is <b>when</b> it arrives. <b>At task start</b> (0.404) is MemCurator's read-time injection — once, on the opening turn. <b>At the best turn</b> (0.600) is an oracle that delivers the identical briefing at the single most useful turn of each episode. Because the content is held fixed, the gap between them isolates one thing: the value of <b>timing</b>.</p>
+        <p>And timing is worth a lot — more, here, than the content itself. For reference, no memory at all scores <b>0.290</b>: so injecting the briefing at the start helps (+0.11 → 0.404), but delivering that same briefing at the right turn helps even more (+0.20 → 0.600). On a long task, <em>when</em> guidance arrives matters as much as <em>what</em> it says — and a start-only briefing, which is what MemCurator does, leaves that timing headroom on the table. Capturing it is exactly what MemGuide's learned per-turn gate is built to do.</p>
+      </div>
+    </section>
+   </div><!-- /#page-main -->
+
+   <!-- ============================ LIVE DEMO / TRAJECTORY LAB ============================ -->
+   <div id="page-lab" hidden>
+    <section class="page-section" id="lab" aria-labelledby="lab-title">
+      <button class="back-link" data-route="overview">← Back to the walkthrough</button>
+      <div class="section-head">
+        <h2 id="lab-title">Live demo — Trajectory Lab <span class="tag recorded">recorded</span></h2>
+        <p>Pick a task, then compare memory methods on it. Each method's real recorded run plays out below — the curated memory it received, then the agent's turns and the outcome. Switch methods to see where task-adaptive memory changes the result.</p>
+      </div>
+      <div class="lab-controls">
+        <div class="seg-group"><span class="seg-label">Benchmark</span>
+          <div class="seg" id="lab-benchmark" role="group" aria-label="Benchmark">
+            <button data-bench="webshop">WebShop</button>
+            <button data-bench="alfworld">ALFWorld</button>
+            <button data-bench="tau2">τ²-bench</button>
+          </div>
+        </div>
+        <div class="seg-group"><span class="seg-label">Example</span>
+          <select id="lab-example" class="lab-select" aria-label="Example task"></select>
+        </div>
+        <div class="seg-group"><span class="seg-label">Memory method</span>
+          <div class="seg" id="lab-method" role="group" aria-label="Method"></div>
+        </div>
+      </div>
+      <div class="lab-userreq" id="lab-userreq"></div>
+      <div class="lab-layout">
+        <div class="panel lab-convo">
+          <p class="kicker">THE CONVERSATION · <span id="lab-convo-meta"></span></p>
+          <div class="thread" id="lab-thread"></div>
+          <div class="transport lab-transport">
+            <button class="btn tiny primary" id="lab-play">▶ Play</button>
+            <button class="btn tiny" id="lab-restart">↻ Restart</button>
+            <div class="lab-scrub" id="lab-scrub"></div>
+          </div>
+        </div>
+        <aside class="lab-analysis">
+          <div class="panel"><p class="kicker">WHAT'S HAPPENING</p><div id="lab-note-body"></div></div>
+          <div class="panel"><p class="kicker">OUTCOME</p><div id="lab-out-body"></div></div>
+        </aside>
+      </div>
+    </section>
+   </div><!-- /#page-lab -->
+  </main>
+
+  <script src="data.js?v=50"></script>
+  <script src="app.js?v=50"></script>
+</body>
+</html>

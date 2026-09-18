@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MemCurator Demo - Just-in-Time Memory for LLM Agents</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/demo.css">
+    <script>
+        (function () {
+            var params = new URLSearchParams(location.search);
+            var embed = params.get('embed') === '1' || window.self !== window.top;
+            if (embed) document.documentElement.classList.add('is-embed');
+        })();
+    </script>
+</head>
+<body>
+    <header class="demo-header">
+        <div class="header-content">
+            <a class="back-link" href="index.html">← Self-Evolving Agents</a>
+            <h1>MemCurator: Just-in-Time Memory</h1>
+            <p class="subtitle">Learning to Curate Task-Adaptive Memory for LLM Agents</p>
+        </div>
+    </header>
+
+    <main class="demo-container">
+        <!-- Timeline Controls -->
+        <section class="timeline-section">
+            <div class="timeline-controls">
+                <button id="playBtn" class="control-btn">▶ Play</button>
+                <button id="resetBtn" class="control-btn">⟲ Reset</button>
+                <div class="timeline-slider-container">
+                    <input type="range" id="timelineSlider" min="0" max="110" value="0">
+                    <div class="timeline-labels">
+                        <span>Task 0</span>
+                        <span id="currentTaskLabel">Current: 0</span>
+                        <span>Task 110</span>
+                    </div>
+                </div>
+                <select id="speedSelect" class="speed-select">
+                    <option value="1000">1x Speed</option>
+                    <option value="500">2x Speed</option>
+                    <option value="250">4x Speed</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- Main Panels Grid -->
+        <div class="panels-grid">
+            <!-- Panel A: Trajectory Bank -->
+            <section class="panel trajectory-panel">
+                <h2 class="panel-title">
+                    <span class="panel-icon">📚</span>
+                    Trajectory Bank
+                </h2>
+                <div class="panel-content">
+                    <div class="task-tree" id="taskTree">
+                        <!-- Populated by JS -->
+                    </div>
+                    <div class="trajectory-viewer" id="trajectoryViewer">
+                        <div class="placeholder-text">Select a task to view trajectory</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Panel B: Skill Panel -->
+            <section class="panel skill-panel">
+                <h2 class="panel-title">
+                    <span class="panel-icon">🎯</span>
+                    Memory Curator
+                </h2>
+                <div class="panel-content">
+                    <div class="skill-section">
+                        <h3>Current Query</h3>
+                        <div class="query-box" id="currentQuery">
+                            <span class="placeholder-text">Select a task</span>
+                        </div>
+                    </div>
+                    <div class="skill-section">
+                        <h3>Retrieved Skills</h3>
+                        <div class="retrieved-skills" id="retrievedSkills">
+                            <span class="placeholder-text">No skills retrieved</span>
+                        </div>
+                    </div>
+                    <div class="skill-section">
+                        <h3>Curation Operation</h3>
+                        <div class="curation-op" id="curationOp">
+                            <span class="placeholder-text">-</span>
+                        </div>
+                    </div>
+                    <div class="skill-section">
+                        <h3>Result</h3>
+                        <div class="result-badge" id="resultBadge">
+                            <span class="placeholder-text">-</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Panel C: Evaluation -->
+        <section class="panel evaluation-panel">
+            <h2 class="panel-title">
+                <span class="panel-icon">📊</span>
+                Evaluation
+            </h2>
+            <div class="eval-grid">
+                <!-- C1: Reward Chart -->
+                <div class="eval-section chart-section">
+                    <h3>Success Rate Over Time</h3>
+                    <div class="chart-container">
+                        <canvas id="rewardChart"></canvas>
+                    </div>
+                    <div class="chart-controls">
+                        <label><input type="radio" name="chartMode" value="cumulative" checked> Cumulative</label>
+                        <label><input type="radio" name="chartMode" value="rolling"> Rolling (10)</label>
+                        <label><input type="radio" name="chartMode" value="byType"> By Type</label>
+                    </div>
+                </div>
+
+                <!-- C2: Stats -->
+                <div class="eval-section stats-section">
+                    <h3>Tasks Summary</h3>
+                    <div class="stats-grid" id="statsGrid">
+                        <div class="stat-item">
+                            <span class="stat-value" id="totalTasks">0</span>
+                            <span class="stat-label">Total</span>
+                        </div>
+                        <div class="stat-item success">
+                            <span class="stat-value" id="successTasks">0</span>
+                            <span class="stat-label">Success</span>
+                        </div>
+                        <div class="stat-item failure">
+                            <span class="stat-value" id="failedTasks">0</span>
+                            <span class="stat-label">Failed</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="skillBankSize">0</span>
+                            <span class="stat-label">Skills</span>
+                        </div>
+                    </div>
+                    <div class="task-type-breakdown" id="taskTypeBreakdown">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- C3: Skill Bank Evolution -->
+                <div class="eval-section bank-section">
+                    <h3>Skill Bank Evolution</h3>
+                    <div class="chart-container">
+                        <canvas id="bankChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Case Study Section -->
+        <section class="panel case-study-panel">
+            <h2 class="panel-title">
+                <span class="panel-icon">💡</span>
+                Case Study: Learning from Failure
+            </h2>
+            <div class="case-study-content">
+                <div class="case-study-header">
+                    <p class="case-description">
+                        This sequence shows how MemCurator learns: <strong>val:0000</strong> (cold start success) →
+                        <strong>val:0001</strong> (failure due to spatial mismatch) → <strong>val:0002</strong>
+                        (success with updated skill). Same task, different outcomes.
+                    </p>
+                    <button id="showCaseStudy" class="case-study-btn">Show Case Study</button>
+                </div>
+                <div class="case-study-cards" id="caseStudyCards">
+                    <!-- Populated by JS -->
+                </div>
+                <div class="case-study-insight" id="caseStudyInsight">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="demo-footer">
+        <p>MemCurator Demo | ALFWorld Benchmark | GPT-5.6-luna Executor</p>
+    </footer>
+
+    <script src="js/demo.js"></script>
+</body>
+</html>
