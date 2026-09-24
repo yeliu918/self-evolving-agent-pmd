@@ -17,6 +17,9 @@ let currentSkillBankRecords = [];
 let utilitySkillRecords = [];
 let trajectorySplit = 'seen';
 let selectedUnseenKey = null;
+const DATA_ROOT = (new URLSearchParams(location.search).get('data') || 'expt_data').replace(/\/$/, '');
+const trajectoryIndexes = new Map();
+const trajectoryShards = new Map();
 
 const RUN_TITLES = {
     'no-skill': ['No-skill', 'Frozen executor, no memory write'],
@@ -185,7 +188,7 @@ async function loadSplitResults(run) {
     if (na !== run) tries.push(na);
     for (let i = 0; i < tries.length; i++) {
         try {
-            const response = await fetch('expt_data/' + tries[i] + '/results.jsonl');
+            const response = await fetch(DATA_ROOT + '/' + tries[i] + '/results.jsonl');
             if (!response.ok) continue;
             return parseResultsJsonl(await response.text());
         } catch (err) {
@@ -237,9 +240,29 @@ async function loadTrajectory(id, runPath) {
     if (demoData.trajectories && demoData.trajectories[cacheKey]) {
         return demoData.trajectories[cacheKey];
     }
-    const base = runPath ? ('expt_data/' + runPath) : runBase;
+    const base = runPath ? (DATA_ROOT + '/' + runPath) : runBase;
     if (!base) return [];
     try {
+        if (!trajectoryIndexes.has(base)) {
+            const indexResponse = await fetch(base + '/trajectory-index.json');
+            trajectoryIndexes.set(base, indexResponse.ok ? await indexResponse.json() : null);
+        }
+        const trajectoryIndex = trajectoryIndexes.get(base);
+        const shardPath = trajectoryIndex && trajectoryIndex[id];
+        if (shardPath) {
+            const shardUrl = base + '/' + shardPath;
+            if (!trajectoryShards.has(shardUrl)) {
+                const shardResponse = await fetch(shardUrl);
+                trajectoryShards.set(shardUrl, shardResponse.ok ? await shardResponse.json() : null);
+            }
+            const shard = trajectoryShards.get(shardUrl);
+            if (shard && Array.isArray(shard[id])) {
+                demoData.trajectories[cacheKey] = shard[id];
+                return shard[id];
+            }
+        }
+
+        // Keep the original per-trajectory layout as a local-development fallback.
         const response = await fetch(base + '/predictions/' + id + '/conversation.json');
         if (!response.ok) {
             demoData.trajectories[cacheKey] = [];
@@ -398,7 +421,7 @@ async function init() {
         if (run) {
             const chain = (params.get('runs') || run).split('|').map((s) => s.trim()).filter(Boolean);
             demoData = chain.length > 1 ? await loadRunChain(chain) : await loadRunLeaf(chain[0] || run);
-            runBase = 'expt_data/' + (chain[chain.length - 1] || run);
+            runBase = DATA_ROOT + '/' + (chain[chain.length - 1] || run);
             applyRunChrome(chain[chain.length - 1] || run);
             const last = chain[chain.length - 1] || run;
             const split = runSplit(last) === 'test' ? 'test' : 'valid_seen';

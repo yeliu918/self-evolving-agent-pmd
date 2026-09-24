@@ -1,5 +1,6 @@
 // Landing page: tabbed hub (Vision | Evolution Playground | Publications)
 document.addEventListener('DOMContentLoaded', function() {
+    const PLAYGROUND_DATA_ROOT = 'https://huggingface.co/datasets/srijanbansal/skillevo-trajectories/resolve/main/playground/v1';
     const VALID_TABS = ['vision', 'playground', 'publications'];
     const tabs = Array.from(document.querySelectorAll('.site-tab'));
     const panels = {
@@ -211,6 +212,7 @@ document.addEventListener('DOMContentLoaded', function() {
             q.set('v', '120');
             q.set('run', res.run);
             q.set('runs', res.runs.join('|'));
+            q.set('data', PLAYGROUND_DATA_ROOT);
             frame.src = 'playground-dashboard.html?' + q.toString();
         }
     };
@@ -1193,7 +1195,7 @@ document.addEventListener('DOMContentLoaded', function() {
             try {
                 const parts = [];
                 for (const leaf of chain) {
-                    const res = await fetch('expt_data/' + leaf + '/results.jsonl');
+                    const res = await fetch(PLAYGROUND_DATA_ROOT + '/' + leaf + '/results.jsonl');
                     if (!res.ok) throw new Error('missing');
                     parts.push(parseResultsJsonl(await res.text()));
                 }
@@ -1492,7 +1494,7 @@ document.addEventListener('DOMContentLoaded', function() {
         clearButton.addEventListener('click', () => { saved = []; panel.hidden = true; render(); });
     })();
 
-    fetch('expt_data/manifest.json')
+    fetch(PLAYGROUND_DATA_ROOT + '/manifest.json')
         .then((res) => (res.ok ? res.json() : { leaves: [] }))
         .then((manifest) => {
             pgExpt.leaves = manifest.leaves || [];
