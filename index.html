@@ -297,7 +297,7 @@
                         </button>
                         <div class="pg-wip-body" id="pg-wip-body">
                         <div class="pg-mech-tabs" role="tablist" aria-label="Memory mechanism">
-                            <button type="button" class="pg-mech-tab" role="tab" aria-selected="false" data-mech="no-skill" disabled hidden>No-skill</button>
+                            <button type="button" class="pg-mech-tab" role="tab" aria-selected="false" data-mech="no-skill">No-skill</button>
                             <button type="button" class="pg-mech-tab is-active" role="tab" aria-selected="true" data-mech="skillos">SkillOS</button>
                             <button type="button" class="pg-mech-tab" role="tab" aria-selected="false" data-mech="memcurator" disabled hidden>JitMem</button>
                         </div>
@@ -330,6 +330,11 @@
                             <div class="story-frame is-dim" data-node="retriever">
                                 <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="5.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M14.5 14.5L20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
                                 <b data-node-label>Retriever</b>
+                                <i class="chip" data-chip></i>
+                            </div>
+                            <div class="story-frame is-dim" data-node="judge">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-2.8 8-7 10-4.2-2-7-5.5-7-10V6z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8.5 12l2.2 2.2 4.8-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <b data-node-label>Self-judge</b>
                                 <i class="chip" data-chip></i>
                             </div>
                         </div>
@@ -745,6 +750,6 @@
         </section>
     </main>
 
-    <script src="shared/js/index-script.js?v=244"></script>
+    <script src="shared/js/index-script.js?v=246"></script>
 </body>
 </html>

@@ -641,20 +641,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 caption: 'No memory path — experience ends with the episode.'
             },
             skillos: {
-                on: ['task', 'retriever', 'executor', 'trajectory', 'curator', 'bank'],
-                layout: { task: [1, 1], retriever: [1, 3], executor: [1, 7], trajectory: [3, 7], curator: [3, 5], bank: [3, 3] },
-                edges: [['right', 1, 2], ['long-right', 1, 4, 7], ['down', 2, 7], ['left', 3, 6], ['left', 3, 4], ['vertical-bidirectional', 2, 3]],
-                labels: { bank: 'Skill bank', retriever: 'Skill retriever', curator: 'Skill Curator' },
+                on: ['task', 'retriever', 'executor', 'trajectory', 'judge', 'curator', 'bank'],
+                layout: { task: [1, 1], retriever: [1, 3], executor: [1, 9], trajectory: [3, 9], judge: [3, 7], curator: [3, 5], bank: [3, 3] },
+                edges: [['right', 1, 2], ['long-right', 1, 4, 9], ['down', 2, 9], ['left', 3, 8], ['left', 3, 6], ['left', 3, 4], ['vertical-bidirectional', 2, 3]],
+                labels: { bank: 'Skill bank', retriever: 'Skill retriever', curator: 'Skill Curator', judge: 'Self-judge' },
                 chips: {
                     task: 'current task',
                     retriever: 'top-K skills',
                     executor: 'frozen',
                     trajectory: 'completed episode',
+                    judge: 'success / failure',
                     curator: 'no-op · create · update · delete',
                     bank: 'reusable skills'
                 },
-                flow: ['node:task', 'edge:0', ['node:bank', 'edge:5', 'node:retriever'], 'edge:1', 'node:executor', 'edge:2', 'node:trajectory', 'edge:3', 'node:curator', 'edge:4', 'node:bank'],
-                caption: 'SkillOS — retrieve reusable skills before acting; after the episode, distill the new trajectory into the skill bank for later tasks.'
+                flow: ['node:task', 'edge:0', ['node:bank', 'edge:6', 'node:retriever'], 'edge:1', 'node:executor', 'edge:2', 'node:trajectory', 'edge:3', 'node:judge', 'edge:4', 'node:curator', 'edge:5', 'node:bank'],
+                caption: 'SkillOS — retrieve reusable skills before acting; after the episode, the self-judge assesses the outcome and the Skill Curator updates the bank for later tasks.'
             },
             memcurator: {
                 on: ['task', 'bank', 'retriever', 'curator', 'executor', 'trajectory'],
@@ -730,7 +731,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 el.style.gridRow = position ? String(position[0]) : '';
                 el.style.gridColumn = position ? String(position[1]) : '';
                 const label = el.querySelector('[data-node-label]');
-                const defaults = { task: 'Task', executor: 'Executor', trajectory: 'Trajectory', curator: 'Curator', bank: 'Memory bank', retriever: 'Retriever' };
+                const defaults = { task: 'Task', executor: 'Executor', trajectory: 'Trajectory', judge: 'Self-judge', curator: 'Curator', bank: 'Memory bank', retriever: 'Retriever' };
                 if (label) label.textContent = (cfg.labels && cfg.labels[id]) || defaults[id] || id;
                 const chip = el.querySelector('[data-chip]');
                 if (chip) {
@@ -839,9 +840,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
             tabs.forEach((tab) => {
                 const on = tab.dataset.mech === diagramMechanism(mech);
+                const available = allowedMechanisms.includes(tab.dataset.mech);
                 tab.classList.toggle('is-active', on);
                 tab.setAttribute('aria-selected', on ? 'true' : 'false');
-                tab.disabled = !allowedMechanisms.includes(tab.dataset.mech);
+                tab.disabled = !available;
+                tab.hidden = !available;
             });
             paintBoard(mech);
         }

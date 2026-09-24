@@ -2279,7 +2279,7 @@ html[data-hub="publications"] #panel-publications {
 
 .pg-mech-board {
     display: grid;
-    grid-template-columns: minmax(98px, 1fr) 28px minmax(98px, 1fr) 28px minmax(98px, 1fr) 28px minmax(98px, 1fr);
+    grid-template-columns: minmax(88px, 1fr) 24px minmax(88px, 1fr) 24px minmax(88px, 1fr) 24px minmax(88px, 1fr) 24px minmax(88px, 1fr);
     grid-template-rows: auto 28px auto;
     align-items: center;
     gap: 8px 4px;
@@ -2289,6 +2289,10 @@ html[data-hub="publications"] #panel-publications {
 
 .pg-mech-board[data-active-mech="no-skill"] {
     grid-template-columns: minmax(98px, 1fr) 28px minmax(98px, 1fr) 28px minmax(98px, 1fr);
+}
+
+.pg-mech-board[data-active-mech="memcurator"] {
+    grid-template-columns: minmax(98px, 1fr) 28px minmax(98px, 1fr) 28px minmax(98px, 1fr) 28px minmax(98px, 1fr);
 }
 
 .pg-flow-edge {
@@ -2386,6 +2390,13 @@ html[data-hub="publications"] #panel-publications {
     .pg-flow-edge {
         display: none;
     }
+    .story-frame[data-node="task"] { order: 1; }
+    .story-frame[data-node="bank"] { order: 2; }
+    .story-frame[data-node="retriever"] { order: 3; }
+    .story-frame[data-node="executor"] { order: 4; }
+    .story-frame[data-node="trajectory"] { order: 5; }
+    .story-frame[data-node="judge"] { order: 6; }
+    .story-frame[data-node="curator"] { order: 7; }
 }
 
 .story-frame svg {
