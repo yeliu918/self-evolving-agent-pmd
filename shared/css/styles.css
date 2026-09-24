@@ -102,12 +102,6 @@ body {
     transition: color 0.2s, background 0.2s;
 }
 
-/* Temporarily hide Vision and Evolution Playground links on paper pages */
-a.nav-link[href$="#vision"],
-a.nav-link[href$="#playground"] {
-    display: none !important;
-}
-
 .nav-links {
     display: flex;
     flex-wrap: wrap;

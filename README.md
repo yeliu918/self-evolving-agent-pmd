@@ -1,8 +1,8 @@
-# Self-Evolving Agents site + MemCurator demo
+# Self-Evolving Agents site + JitMem demo
 
 Landing page (`index.html`) keeps the **Evolution Playground** and **Publications**
-tabs (PMD, VPD). The MemCurator interactive demo is embedded in the Playground
-tab. A full-page demo is also at `memcurator.html`.
+tabs (PMD, VPD). The experiment dashboard is embedded directly in the Playground
+tab; there is no separate public demo route.
 
 ## Quick Start
 
@@ -11,13 +11,26 @@ tab. A full-page demo is also at `memcurator.html`.
 cd ui
 
 # Start a local server
-python3 -m http.server 8080
+python3 serve.py
 
 # Open in browser
 open http://localhost:8080/            # landing + tabs + embedded demo
 open http://localhost:8080/#publications
-open http://localhost:8080/memcurator.html
 open http://localhost:8080/papers/pmd/
+```
+
+`serve.py` materializes `expt_data/` from the tracked `expt_data.zip` archive
+when needed. To audit every configured run and the data used by the plots:
+
+```bash
+python3 validate_expt_data.py
+```
+
+The Overview panel reads a compact summary generated from all manifest leaves.
+Rebuild it after experiment data changes:
+
+```bash
+python3 generate_overview_data.py
 ```
 
 Or with Node.js:
@@ -39,15 +52,15 @@ npx serve .
 - Click individual task to view its trajectory
 - Shows step-by-step: action → env_feedback → reward
 
-### Panel B: Memory Curator (Right)
+### Panel B: Skill Panel (Right)
 - **Current Query**: The task description
 - **Retrieved Skills**: What the RAG system found (or "cold start" if empty)
 - **Curation Operation**: INSERT / UPDATE / DELETE badges
 - **Result**: Success or failure with step count
 
-### Panel C: Evaluation (Bottom)
-- **Success Rate Chart**: Toggle between cumulative, rolling average (10), or by task type
-- **Task Summary**: Total/success/failed counts + breakdown by type
+### Panel C: Evaluation (Top)
+- **Success Rate Charts**: Toggle between cumulative/checkpoints and by task type
+- **Task Summary**: Counts, success rate, step efficiency, budget hits, tokens, and breakdown by type
 - **Skill Bank Evolution**: How the skill count changes over time
 
 ### Case Study Section
@@ -190,7 +203,7 @@ ui/
 ├── css/
 │   └── demo.css        # Dark theme styling
 ├── js/
-│   └── demo.js         # Visualization logic + Chart.js
+│   └── demo.js         # Visualization logic + inline SVG charts
 ├── data/
 │   └── demo_data.json  # Preprocessed experiment data
 └── README.md           # This file
@@ -198,8 +211,7 @@ ui/
 
 ## Dependencies
 
-- **Chart.js** (loaded via CDN) — for success rate and skill bank charts
-- No build step required — vanilla HTML/CSS/JS
+- No chart runtime or build step required — vanilla HTML/CSS/JS with inline SVG charts
 
 ## Notes
 

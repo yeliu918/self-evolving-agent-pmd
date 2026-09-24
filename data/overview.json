@@ -1,0 +1,5677 @@
+{
+  "metric": "environment success",
+  "epoch0_baseline": "alfworld/no-skill/none/trial1",
+  "task_types": [
+    "look_at_obj_in_light",
+    "pick_and_place",
+    "pick_clean_then_place_in_recep",
+    "pick_cool_then_place_in_recep",
+    "pick_heat_then_place_in_recep",
+    "pick_two_obj_and_place"
+  ],
+  "task_types_by_benchmark": {
+    "alfworld": [
+      "look_at_obj_in_light",
+      "pick_and_place",
+      "pick_clean_then_place_in_recep",
+      "pick_cool_then_place_in_recep",
+      "pick_heat_then_place_in_recep",
+      "pick_two_obj_and_place"
+    ],
+    "tau2": [
+      "airline",
+      "retail",
+      "telecom",
+      "telecom-workflow",
+      "banking_knowledge"
+    ],
+    "enterpriseops": [
+      "csm"
+    ],
+    "bird": []
+  },
+  "experiments": [
+    {
+      "id": "alfworld/no-skill/none/trial1",
+      "benchmark": "alfworld",
+      "mechanism": "no-skill",
+      "pair": "none",
+      "trial": "trial1",
+      "label": "No-skill \u00b7 trial 1",
+      "epochs": {
+        "0": {
+          "test": {
+            "ok": 75,
+            "n": 134,
+            "pct": 55.97,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 13,
+                "n": 18,
+                "pct": 72.22
+              },
+              "pick_and_place": {
+                "ok": 20,
+                "n": 24,
+                "pct": 83.33
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 13,
+                "n": 31,
+                "pct": 41.94
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 12,
+                "n": 21,
+                "pct": 57.14
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 12,
+                "n": 23,
+                "pct": 52.17
+              },
+              "pick_two_obj_and_place": {
+                "ok": 5,
+                "n": 17,
+                "pct": 29.41
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 69,
+            "n": 140,
+            "pct": 49.29,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 9,
+                "n": 13,
+                "pct": 69.23
+              },
+              "pick_and_place": {
+                "ok": 26,
+                "n": 35,
+                "pct": 74.29
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 8,
+                "n": 27,
+                "pct": 29.63
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 9,
+                "n": 25,
+                "pct": 36.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 6,
+                "n": 16,
+                "pct": 37.5
+              },
+              "pick_two_obj_and_place": {
+                "ok": 11,
+                "n": 24,
+                "pct": 45.83
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "alfworld/skillos/luna-luna/trial1",
+      "benchmark": "alfworld",
+      "mechanism": "skillos",
+      "pair": "luna-luna",
+      "trial": "trial1",
+      "label": "SkillOS \u00b7 luna/luna \u00b7 trial 1",
+      "epochs": {
+        "1": {
+          "test": {
+            "ok": 90,
+            "n": 134,
+            "pct": 67.16,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 15,
+                "n": 18,
+                "pct": 83.33
+              },
+              "pick_and_place": {
+                "ok": 20,
+                "n": 24,
+                "pct": 83.33
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 10,
+                "n": 31,
+                "pct": 32.26
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 18,
+                "n": 21,
+                "pct": 85.71
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 18,
+                "n": 23,
+                "pct": 78.26
+              },
+              "pick_two_obj_and_place": {
+                "ok": 9,
+                "n": 17,
+                "pct": 52.94
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 96,
+            "n": 140,
+            "pct": 68.57,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 7,
+                "n": 13,
+                "pct": 53.85
+              },
+              "pick_and_place": {
+                "ok": 32,
+                "n": 35,
+                "pct": 91.43
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 23,
+                "n": 27,
+                "pct": 85.19
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 15,
+                "n": 25,
+                "pct": 60.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 6,
+                "n": 16,
+                "pct": 37.5
+              },
+              "pick_two_obj_and_place": {
+                "ok": 13,
+                "n": 24,
+                "pct": 54.17
+              }
+            }
+          }
+        },
+        "2": {
+          "test": {
+            "ok": 107,
+            "n": 134,
+            "pct": 79.85,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 15,
+                "n": 18,
+                "pct": 83.33
+              },
+              "pick_and_place": {
+                "ok": 21,
+                "n": 24,
+                "pct": 87.5
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 25,
+                "n": 31,
+                "pct": 80.65
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 18,
+                "n": 21,
+                "pct": 85.71
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 17,
+                "n": 23,
+                "pct": 73.91
+              },
+              "pick_two_obj_and_place": {
+                "ok": 11,
+                "n": 17,
+                "pct": 64.71
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 98,
+            "n": 140,
+            "pct": 70.0,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 12,
+                "n": 13,
+                "pct": 92.31
+              },
+              "pick_and_place": {
+                "ok": 26,
+                "n": 35,
+                "pct": 74.29
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 21,
+                "n": 27,
+                "pct": 77.78
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 16,
+                "n": 25,
+                "pct": 64.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 10,
+                "n": 16,
+                "pct": 62.5
+              },
+              "pick_two_obj_and_place": {
+                "ok": 13,
+                "n": 24,
+                "pct": 54.17
+              }
+            }
+          }
+        },
+        "3": {
+          "test": {
+            "ok": 99,
+            "n": 134,
+            "pct": 73.88,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 15,
+                "n": 18,
+                "pct": 83.33
+              },
+              "pick_and_place": {
+                "ok": 19,
+                "n": 24,
+                "pct": 79.17
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 25,
+                "n": 31,
+                "pct": 80.65
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 17,
+                "n": 21,
+                "pct": 80.95
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 13,
+                "n": 23,
+                "pct": 56.52
+              },
+              "pick_two_obj_and_place": {
+                "ok": 10,
+                "n": 17,
+                "pct": 58.82
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 105,
+            "n": 140,
+            "pct": 75.0,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 10,
+                "n": 13,
+                "pct": 76.92
+              },
+              "pick_and_place": {
+                "ok": 33,
+                "n": 35,
+                "pct": 94.29
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 23,
+                "n": 27,
+                "pct": 85.19
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 17,
+                "n": 25,
+                "pct": 68.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 9,
+                "n": 16,
+                "pct": 56.25
+              },
+              "pick_two_obj_and_place": {
+                "ok": 13,
+                "n": 24,
+                "pct": 54.17
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "alfworld/skillos/luna-luna/trial2",
+      "benchmark": "alfworld",
+      "mechanism": "skillos",
+      "pair": "luna-luna",
+      "trial": "trial2",
+      "label": "SkillOS \u00b7 luna/luna \u00b7 trial 2",
+      "epochs": {
+        "1": {
+          "test": {
+            "ok": 79,
+            "n": 134,
+            "pct": 58.96,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 14,
+                "n": 18,
+                "pct": 77.78
+              },
+              "pick_and_place": {
+                "ok": 17,
+                "n": 24,
+                "pct": 70.83
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 10,
+                "n": 31,
+                "pct": 32.26
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 17,
+                "n": 21,
+                "pct": 80.95
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 13,
+                "n": 23,
+                "pct": 56.52
+              },
+              "pick_two_obj_and_place": {
+                "ok": 8,
+                "n": 17,
+                "pct": 47.06
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 69,
+            "n": 140,
+            "pct": 49.29,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 8,
+                "n": 13,
+                "pct": 61.54
+              },
+              "pick_and_place": {
+                "ok": 25,
+                "n": 35,
+                "pct": 71.43
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 12,
+                "n": 27,
+                "pct": 44.44
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 8,
+                "n": 25,
+                "pct": 32.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 6,
+                "n": 16,
+                "pct": 37.5
+              },
+              "pick_two_obj_and_place": {
+                "ok": 10,
+                "n": 24,
+                "pct": 41.67
+              }
+            }
+          }
+        },
+        "2": {
+          "test": {
+            "ok": 86,
+            "n": 134,
+            "pct": 64.18,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 15,
+                "n": 18,
+                "pct": 83.33
+              },
+              "pick_and_place": {
+                "ok": 19,
+                "n": 24,
+                "pct": 79.17
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 10,
+                "n": 31,
+                "pct": 32.26
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 16,
+                "n": 21,
+                "pct": 76.19
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 16,
+                "n": 23,
+                "pct": 69.57
+              },
+              "pick_two_obj_and_place": {
+                "ok": 10,
+                "n": 17,
+                "pct": 58.82
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 90,
+            "n": 140,
+            "pct": 64.29,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 12,
+                "n": 13,
+                "pct": 92.31
+              },
+              "pick_and_place": {
+                "ok": 29,
+                "n": 35,
+                "pct": 82.86
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 15,
+                "n": 27,
+                "pct": 55.56
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 13,
+                "n": 25,
+                "pct": 52.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 10,
+                "n": 16,
+                "pct": 62.5
+              },
+              "pick_two_obj_and_place": {
+                "ok": 11,
+                "n": 24,
+                "pct": 45.83
+              }
+            }
+          }
+        },
+        "3": {
+          "test": {
+            "ok": 94,
+            "n": 134,
+            "pct": 70.15,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 14,
+                "n": 18,
+                "pct": 77.78
+              },
+              "pick_and_place": {
+                "ok": 18,
+                "n": 24,
+                "pct": 75.0
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 26,
+                "n": 31,
+                "pct": 83.87
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 18,
+                "n": 21,
+                "pct": 85.71
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 14,
+                "n": 23,
+                "pct": 60.87
+              },
+              "pick_two_obj_and_place": {
+                "ok": 4,
+                "n": 17,
+                "pct": 23.53
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 89,
+            "n": 140,
+            "pct": 63.57,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 11,
+                "n": 13,
+                "pct": 84.62
+              },
+              "pick_and_place": {
+                "ok": 29,
+                "n": 35,
+                "pct": 82.86
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 12,
+                "n": 27,
+                "pct": 44.44
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 16,
+                "n": 25,
+                "pct": 64.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 9,
+                "n": 16,
+                "pct": 56.25
+              },
+              "pick_two_obj_and_place": {
+                "ok": 12,
+                "n": 24,
+                "pct": 50.0
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "alfworld/skillos/luna-luna/trial3",
+      "benchmark": "alfworld",
+      "mechanism": "skillos",
+      "pair": "luna-luna",
+      "trial": "trial3",
+      "label": "SkillOS \u00b7 luna/luna \u00b7 trial 3",
+      "epochs": {
+        "1": {
+          "test": {
+            "ok": 80,
+            "n": 134,
+            "pct": 59.7,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 15,
+                "n": 18,
+                "pct": 83.33
+              },
+              "pick_and_place": {
+                "ok": 18,
+                "n": 24,
+                "pct": 75.0
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 12,
+                "n": 31,
+                "pct": 38.71
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 12,
+                "n": 21,
+                "pct": 57.14
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 14,
+                "n": 23,
+                "pct": 60.87
+              },
+              "pick_two_obj_and_place": {
+                "ok": 9,
+                "n": 17,
+                "pct": 52.94
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 96,
+            "n": 140,
+            "pct": 68.57,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 8,
+                "n": 13,
+                "pct": 61.54
+              },
+              "pick_and_place": {
+                "ok": 30,
+                "n": 35,
+                "pct": 85.71
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 15,
+                "n": 27,
+                "pct": 55.56
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 17,
+                "n": 25,
+                "pct": 68.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 12,
+                "n": 16,
+                "pct": 75.0
+              },
+              "pick_two_obj_and_place": {
+                "ok": 14,
+                "n": 24,
+                "pct": 58.33
+              }
+            }
+          }
+        },
+        "2": {
+          "test": {
+            "ok": 71,
+            "n": 134,
+            "pct": 52.99,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 10,
+                "n": 18,
+                "pct": 55.56
+              },
+              "pick_and_place": {
+                "ok": 20,
+                "n": 24,
+                "pct": 83.33
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 11,
+                "n": 31,
+                "pct": 35.48
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 11,
+                "n": 21,
+                "pct": 52.38
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 12,
+                "n": 23,
+                "pct": 52.17
+              },
+              "pick_two_obj_and_place": {
+                "ok": 7,
+                "n": 17,
+                "pct": 41.18
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 92,
+            "n": 140,
+            "pct": 65.71,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 8,
+                "n": 13,
+                "pct": 61.54
+              },
+              "pick_and_place": {
+                "ok": 32,
+                "n": 35,
+                "pct": 91.43
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 16,
+                "n": 27,
+                "pct": 59.26
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 16,
+                "n": 25,
+                "pct": 64.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 7,
+                "n": 16,
+                "pct": 43.75
+              },
+              "pick_two_obj_and_place": {
+                "ok": 13,
+                "n": 24,
+                "pct": 54.17
+              }
+            }
+          }
+        },
+        "3": {
+          "test": {
+            "ok": 104,
+            "n": 134,
+            "pct": 77.61,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 15,
+                "n": 18,
+                "pct": 83.33
+              },
+              "pick_and_place": {
+                "ok": 19,
+                "n": 24,
+                "pct": 79.17
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 24,
+                "n": 31,
+                "pct": 77.42
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 20,
+                "n": 21,
+                "pct": 95.24
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 17,
+                "n": 23,
+                "pct": 73.91
+              },
+              "pick_two_obj_and_place": {
+                "ok": 9,
+                "n": 17,
+                "pct": 52.94
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 90,
+            "n": 140,
+            "pct": 64.29,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 6,
+                "n": 13,
+                "pct": 46.15
+              },
+              "pick_and_place": {
+                "ok": 29,
+                "n": 35,
+                "pct": 82.86
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 14,
+                "n": 27,
+                "pct": 51.85
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 17,
+                "n": 25,
+                "pct": 68.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 10,
+                "n": 16,
+                "pct": 62.5
+              },
+              "pick_two_obj_and_place": {
+                "ok": 14,
+                "n": 24,
+                "pct": 58.33
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "alfworld/skillos/luna-sol/trial1",
+      "benchmark": "alfworld",
+      "mechanism": "skillos",
+      "pair": "luna-sol",
+      "trial": "trial1",
+      "label": "SkillOS \u00b7 luna/sol \u00b7 trial 1",
+      "epochs": {
+        "1": {
+          "test": {
+            "ok": 100,
+            "n": 134,
+            "pct": 74.63,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 13,
+                "n": 18,
+                "pct": 72.22
+              },
+              "pick_and_place": {
+                "ok": 19,
+                "n": 24,
+                "pct": 79.17
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 23,
+                "n": 31,
+                "pct": 74.19
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 19,
+                "n": 21,
+                "pct": 90.48
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 16,
+                "n": 23,
+                "pct": 69.57
+              },
+              "pick_two_obj_and_place": {
+                "ok": 10,
+                "n": 17,
+                "pct": 58.82
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 90,
+            "n": 140,
+            "pct": 64.29,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 10,
+                "n": 13,
+                "pct": 76.92
+              },
+              "pick_and_place": {
+                "ok": 27,
+                "n": 35,
+                "pct": 77.14
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 13,
+                "n": 27,
+                "pct": 48.15
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 17,
+                "n": 25,
+                "pct": 68.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 9,
+                "n": 16,
+                "pct": 56.25
+              },
+              "pick_two_obj_and_place": {
+                "ok": 14,
+                "n": 24,
+                "pct": 58.33
+              }
+            }
+          }
+        },
+        "2": {
+          "test": {
+            "ok": 102,
+            "n": 134,
+            "pct": 76.12,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 16,
+                "n": 18,
+                "pct": 88.89
+              },
+              "pick_and_place": {
+                "ok": 19,
+                "n": 24,
+                "pct": 79.17
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 27,
+                "n": 31,
+                "pct": 87.1
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 18,
+                "n": 21,
+                "pct": 85.71
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 16,
+                "n": 23,
+                "pct": 69.57
+              },
+              "pick_two_obj_and_place": {
+                "ok": 6,
+                "n": 17,
+                "pct": 35.29
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 107,
+            "n": 140,
+            "pct": 76.43,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 8,
+                "n": 13,
+                "pct": 61.54
+              },
+              "pick_and_place": {
+                "ok": 30,
+                "n": 35,
+                "pct": 85.71
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 25,
+                "n": 27,
+                "pct": 92.59
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 18,
+                "n": 25,
+                "pct": 72.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 13,
+                "n": 16,
+                "pct": 81.25
+              },
+              "pick_two_obj_and_place": {
+                "ok": 13,
+                "n": 24,
+                "pct": 54.17
+              }
+            }
+          }
+        },
+        "3": {
+          "test": {
+            "ok": 104,
+            "n": 134,
+            "pct": 77.61,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 16,
+                "n": 18,
+                "pct": 88.89
+              },
+              "pick_and_place": {
+                "ok": 19,
+                "n": 24,
+                "pct": 79.17
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 25,
+                "n": 31,
+                "pct": 80.65
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 20,
+                "n": 21,
+                "pct": 95.24
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 17,
+                "n": 23,
+                "pct": 73.91
+              },
+              "pick_two_obj_and_place": {
+                "ok": 7,
+                "n": 17,
+                "pct": 41.18
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 109,
+            "n": 140,
+            "pct": 77.86,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 10,
+                "n": 13,
+                "pct": 76.92
+              },
+              "pick_and_place": {
+                "ok": 31,
+                "n": 35,
+                "pct": 88.57
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 22,
+                "n": 27,
+                "pct": 81.48
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 21,
+                "n": 25,
+                "pct": 84.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 12,
+                "n": 16,
+                "pct": 75.0
+              },
+              "pick_two_obj_and_place": {
+                "ok": 13,
+                "n": 24,
+                "pct": 54.17
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "alfworld/skillos/luna-sol/trial2",
+      "benchmark": "alfworld",
+      "mechanism": "skillos",
+      "pair": "luna-sol",
+      "trial": "trial2",
+      "label": "SkillOS \u00b7 luna/sol \u00b7 trial 2",
+      "epochs": {
+        "1": {
+          "test": {
+            "ok": 67,
+            "n": 134,
+            "pct": 50.0,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 11,
+                "n": 18,
+                "pct": 61.11
+              },
+              "pick_and_place": {
+                "ok": 14,
+                "n": 24,
+                "pct": 58.33
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 14,
+                "n": 31,
+                "pct": 45.16
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 9,
+                "n": 21,
+                "pct": 42.86
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 13,
+                "n": 23,
+                "pct": 56.52
+              },
+              "pick_two_obj_and_place": {
+                "ok": 6,
+                "n": 17,
+                "pct": 35.29
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 79,
+            "n": 140,
+            "pct": 56.43,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 8,
+                "n": 13,
+                "pct": 61.54
+              },
+              "pick_and_place": {
+                "ok": 30,
+                "n": 35,
+                "pct": 85.71
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 16,
+                "n": 27,
+                "pct": 59.26
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 8,
+                "n": 25,
+                "pct": 32.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 7,
+                "n": 16,
+                "pct": 43.75
+              },
+              "pick_two_obj_and_place": {
+                "ok": 10,
+                "n": 24,
+                "pct": 41.67
+              }
+            }
+          }
+        },
+        "2": {
+          "test": {
+            "ok": 92,
+            "n": 134,
+            "pct": 68.66,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 13,
+                "n": 18,
+                "pct": 72.22
+              },
+              "pick_and_place": {
+                "ok": 17,
+                "n": 24,
+                "pct": 70.83
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 21,
+                "n": 31,
+                "pct": 67.74
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 19,
+                "n": 21,
+                "pct": 90.48
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 15,
+                "n": 23,
+                "pct": 65.22
+              },
+              "pick_two_obj_and_place": {
+                "ok": 7,
+                "n": 17,
+                "pct": 41.18
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 80,
+            "n": 140,
+            "pct": 57.14,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 10,
+                "n": 13,
+                "pct": 76.92
+              },
+              "pick_and_place": {
+                "ok": 23,
+                "n": 35,
+                "pct": 65.71
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 16,
+                "n": 27,
+                "pct": 59.26
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 16,
+                "n": 25,
+                "pct": 64.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 8,
+                "n": 16,
+                "pct": 50.0
+              },
+              "pick_two_obj_and_place": {
+                "ok": 7,
+                "n": 24,
+                "pct": 29.17
+              }
+            }
+          }
+        },
+        "3": {
+          "test": {
+            "ok": 99,
+            "n": 134,
+            "pct": 73.88,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 15,
+                "n": 18,
+                "pct": 83.33
+              },
+              "pick_and_place": {
+                "ok": 17,
+                "n": 24,
+                "pct": 70.83
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 27,
+                "n": 31,
+                "pct": 87.1
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 16,
+                "n": 21,
+                "pct": 76.19
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 16,
+                "n": 23,
+                "pct": 69.57
+              },
+              "pick_two_obj_and_place": {
+                "ok": 8,
+                "n": 17,
+                "pct": 47.06
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 80,
+            "n": 140,
+            "pct": 57.14,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 10,
+                "n": 13,
+                "pct": 76.92
+              },
+              "pick_and_place": {
+                "ok": 22,
+                "n": 35,
+                "pct": 62.86
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 16,
+                "n": 27,
+                "pct": 59.26
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 11,
+                "n": 25,
+                "pct": 44.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 8,
+                "n": 16,
+                "pct": 50.0
+              },
+              "pick_two_obj_and_place": {
+                "ok": 13,
+                "n": 24,
+                "pct": 54.17
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "alfworld/skillos/luna-sol/trial3",
+      "benchmark": "alfworld",
+      "mechanism": "skillos",
+      "pair": "luna-sol",
+      "trial": "trial3",
+      "label": "SkillOS \u00b7 luna/sol \u00b7 trial 3",
+      "epochs": {
+        "1": {
+          "test": {
+            "ok": 84,
+            "n": 134,
+            "pct": 62.69,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 15,
+                "n": 18,
+                "pct": 83.33
+              },
+              "pick_and_place": {
+                "ok": 18,
+                "n": 24,
+                "pct": 75.0
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 13,
+                "n": 31,
+                "pct": 41.94
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 14,
+                "n": 21,
+                "pct": 66.67
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 14,
+                "n": 23,
+                "pct": 60.87
+              },
+              "pick_two_obj_and_place": {
+                "ok": 10,
+                "n": 17,
+                "pct": 58.82
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 88,
+            "n": 140,
+            "pct": 62.86,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 9,
+                "n": 13,
+                "pct": 69.23
+              },
+              "pick_and_place": {
+                "ok": 28,
+                "n": 35,
+                "pct": 80.0
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 12,
+                "n": 27,
+                "pct": 44.44
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 18,
+                "n": 25,
+                "pct": 72.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 11,
+                "n": 16,
+                "pct": 68.75
+              },
+              "pick_two_obj_and_place": {
+                "ok": 10,
+                "n": 24,
+                "pct": 41.67
+              }
+            }
+          }
+        },
+        "2": {
+          "test": {
+            "ok": 96,
+            "n": 134,
+            "pct": 71.64,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 15,
+                "n": 18,
+                "pct": 83.33
+              },
+              "pick_and_place": {
+                "ok": 17,
+                "n": 24,
+                "pct": 70.83
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 15,
+                "n": 31,
+                "pct": 48.39
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 20,
+                "n": 21,
+                "pct": 95.24
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 16,
+                "n": 23,
+                "pct": 69.57
+              },
+              "pick_two_obj_and_place": {
+                "ok": 13,
+                "n": 17,
+                "pct": 76.47
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 97,
+            "n": 140,
+            "pct": 69.29,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 7,
+                "n": 13,
+                "pct": 53.85
+              },
+              "pick_and_place": {
+                "ok": 29,
+                "n": 35,
+                "pct": 82.86
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 22,
+                "n": 27,
+                "pct": 81.48
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 13,
+                "n": 25,
+                "pct": 52.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 13,
+                "n": 16,
+                "pct": 81.25
+              },
+              "pick_two_obj_and_place": {
+                "ok": 13,
+                "n": 24,
+                "pct": 54.17
+              }
+            }
+          }
+        },
+        "3": {
+          "test": {
+            "ok": 106,
+            "n": 134,
+            "pct": 79.1,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 15,
+                "n": 18,
+                "pct": 83.33
+              },
+              "pick_and_place": {
+                "ok": 20,
+                "n": 24,
+                "pct": 83.33
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 26,
+                "n": 31,
+                "pct": 83.87
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 20,
+                "n": 21,
+                "pct": 95.24
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 16,
+                "n": 23,
+                "pct": 69.57
+              },
+              "pick_two_obj_and_place": {
+                "ok": 9,
+                "n": 17,
+                "pct": 52.94
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 107,
+            "n": 140,
+            "pct": 76.43,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 9,
+                "n": 13,
+                "pct": 69.23
+              },
+              "pick_and_place": {
+                "ok": 25,
+                "n": 35,
+                "pct": 71.43
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 23,
+                "n": 27,
+                "pct": 85.19
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 20,
+                "n": 25,
+                "pct": 80.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 14,
+                "n": 16,
+                "pct": 87.5
+              },
+              "pick_two_obj_and_place": {
+                "ok": 16,
+                "n": 24,
+                "pct": 66.67
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "alfworld/skillos/sol-luna/trial1",
+      "benchmark": "alfworld",
+      "mechanism": "skillos",
+      "pair": "sol-luna",
+      "trial": "trial1",
+      "label": "SkillOS \u00b7 sol/luna \u00b7 trial 1",
+      "epochs": {
+        "1": {
+          "test": {
+            "ok": 72,
+            "n": 134,
+            "pct": 53.73,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 15,
+                "n": 18,
+                "pct": 83.33
+              },
+              "pick_and_place": {
+                "ok": 15,
+                "n": 24,
+                "pct": 62.5
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 9,
+                "n": 31,
+                "pct": 29.03
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 9,
+                "n": 21,
+                "pct": 42.86
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 14,
+                "n": 23,
+                "pct": 60.87
+              },
+              "pick_two_obj_and_place": {
+                "ok": 10,
+                "n": 17,
+                "pct": 58.82
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 89,
+            "n": 140,
+            "pct": 63.57,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 11,
+                "n": 13,
+                "pct": 84.62
+              },
+              "pick_and_place": {
+                "ok": 30,
+                "n": 35,
+                "pct": 85.71
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 18,
+                "n": 27,
+                "pct": 66.67
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 10,
+                "n": 25,
+                "pct": 40.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 9,
+                "n": 16,
+                "pct": 56.25
+              },
+              "pick_two_obj_and_place": {
+                "ok": 11,
+                "n": 24,
+                "pct": 45.83
+              }
+            }
+          }
+        },
+        "2": {
+          "test": {
+            "ok": 89,
+            "n": 134,
+            "pct": 66.42,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 17,
+                "n": 18,
+                "pct": 94.44
+              },
+              "pick_and_place": {
+                "ok": 20,
+                "n": 24,
+                "pct": 83.33
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 14,
+                "n": 31,
+                "pct": 45.16
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 14,
+                "n": 21,
+                "pct": 66.67
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 15,
+                "n": 23,
+                "pct": 65.22
+              },
+              "pick_two_obj_and_place": {
+                "ok": 9,
+                "n": 17,
+                "pct": 52.94
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 102,
+            "n": 140,
+            "pct": 72.86,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 12,
+                "n": 13,
+                "pct": 92.31
+              },
+              "pick_and_place": {
+                "ok": 29,
+                "n": 35,
+                "pct": 82.86
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 18,
+                "n": 27,
+                "pct": 66.67
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 18,
+                "n": 25,
+                "pct": 72.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 12,
+                "n": 16,
+                "pct": 75.0
+              },
+              "pick_two_obj_and_place": {
+                "ok": 13,
+                "n": 24,
+                "pct": 54.17
+              }
+            }
+          }
+        },
+        "3": {
+          "test": {
+            "ok": 76,
+            "n": 134,
+            "pct": 56.72,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 15,
+                "n": 18,
+                "pct": 83.33
+              },
+              "pick_and_place": {
+                "ok": 18,
+                "n": 24,
+                "pct": 75.0
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 10,
+                "n": 31,
+                "pct": 32.26
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 11,
+                "n": 21,
+                "pct": 52.38
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 13,
+                "n": 23,
+                "pct": 56.52
+              },
+              "pick_two_obj_and_place": {
+                "ok": 9,
+                "n": 17,
+                "pct": 52.94
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 93,
+            "n": 140,
+            "pct": 66.43,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 12,
+                "n": 13,
+                "pct": 92.31
+              },
+              "pick_and_place": {
+                "ok": 25,
+                "n": 35,
+                "pct": 71.43
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 18,
+                "n": 27,
+                "pct": 66.67
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 13,
+                "n": 25,
+                "pct": 52.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 12,
+                "n": 16,
+                "pct": 75.0
+              },
+              "pick_two_obj_and_place": {
+                "ok": 13,
+                "n": 24,
+                "pct": 54.17
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "alfworld/skillos/sol-luna/trial2",
+      "benchmark": "alfworld",
+      "mechanism": "skillos",
+      "pair": "sol-luna",
+      "trial": "trial2",
+      "label": "SkillOS \u00b7 sol/luna \u00b7 trial 2",
+      "epochs": {
+        "1": {
+          "test": {
+            "ok": 107,
+            "n": 134,
+            "pct": 79.85,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 13,
+                "n": 18,
+                "pct": 72.22
+              },
+              "pick_and_place": {
+                "ok": 21,
+                "n": 24,
+                "pct": 87.5
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 26,
+                "n": 31,
+                "pct": 83.87
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 18,
+                "n": 21,
+                "pct": 85.71
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 17,
+                "n": 23,
+                "pct": 73.91
+              },
+              "pick_two_obj_and_place": {
+                "ok": 12,
+                "n": 17,
+                "pct": 70.59
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 105,
+            "n": 140,
+            "pct": 75.0,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 8,
+                "n": 13,
+                "pct": 61.54
+              },
+              "pick_and_place": {
+                "ok": 27,
+                "n": 35,
+                "pct": 77.14
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 23,
+                "n": 27,
+                "pct": 85.19
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 20,
+                "n": 25,
+                "pct": 80.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 11,
+                "n": 16,
+                "pct": 68.75
+              },
+              "pick_two_obj_and_place": {
+                "ok": 16,
+                "n": 24,
+                "pct": 66.67
+              }
+            }
+          }
+        },
+        "2": {
+          "test": {
+            "ok": 99,
+            "n": 134,
+            "pct": 73.88,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 12,
+                "n": 18,
+                "pct": 66.67
+              },
+              "pick_and_place": {
+                "ok": 18,
+                "n": 24,
+                "pct": 75.0
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 21,
+                "n": 31,
+                "pct": 67.74
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 18,
+                "n": 21,
+                "pct": 85.71
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 18,
+                "n": 23,
+                "pct": 78.26
+              },
+              "pick_two_obj_and_place": {
+                "ok": 12,
+                "n": 17,
+                "pct": 70.59
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 108,
+            "n": 140,
+            "pct": 77.14,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 9,
+                "n": 13,
+                "pct": 69.23
+              },
+              "pick_and_place": {
+                "ok": 34,
+                "n": 35,
+                "pct": 97.14
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 23,
+                "n": 27,
+                "pct": 85.19
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 18,
+                "n": 25,
+                "pct": 72.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 10,
+                "n": 16,
+                "pct": 62.5
+              },
+              "pick_two_obj_and_place": {
+                "ok": 14,
+                "n": 24,
+                "pct": 58.33
+              }
+            }
+          }
+        },
+        "3": {
+          "test": {
+            "ok": 111,
+            "n": 134,
+            "pct": 82.84,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 17,
+                "n": 18,
+                "pct": 94.44
+              },
+              "pick_and_place": {
+                "ok": 19,
+                "n": 24,
+                "pct": 79.17
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 27,
+                "n": 31,
+                "pct": 87.1
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 19,
+                "n": 21,
+                "pct": 90.48
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 18,
+                "n": 23,
+                "pct": 78.26
+              },
+              "pick_two_obj_and_place": {
+                "ok": 11,
+                "n": 17,
+                "pct": 64.71
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 113,
+            "n": 140,
+            "pct": 80.71,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 12,
+                "n": 13,
+                "pct": 92.31
+              },
+              "pick_and_place": {
+                "ok": 27,
+                "n": 35,
+                "pct": 77.14
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 26,
+                "n": 27,
+                "pct": 96.3
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 20,
+                "n": 25,
+                "pct": 80.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 12,
+                "n": 16,
+                "pct": 75.0
+              },
+              "pick_two_obj_and_place": {
+                "ok": 16,
+                "n": 24,
+                "pct": 66.67
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "alfworld/skillos/sol-luna/trial3",
+      "benchmark": "alfworld",
+      "mechanism": "skillos",
+      "pair": "sol-luna",
+      "trial": "trial3",
+      "label": "SkillOS \u00b7 sol/luna \u00b7 trial 3",
+      "epochs": {
+        "1": {
+          "test": {
+            "ok": 109,
+            "n": 134,
+            "pct": 81.34,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 15,
+                "n": 18,
+                "pct": 83.33
+              },
+              "pick_and_place": {
+                "ok": 21,
+                "n": 24,
+                "pct": 87.5
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 25,
+                "n": 31,
+                "pct": 80.65
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 16,
+                "n": 21,
+                "pct": 76.19
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 21,
+                "n": 23,
+                "pct": 91.3
+              },
+              "pick_two_obj_and_place": {
+                "ok": 11,
+                "n": 17,
+                "pct": 64.71
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 106,
+            "n": 140,
+            "pct": 75.71,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 10,
+                "n": 13,
+                "pct": 76.92
+              },
+              "pick_and_place": {
+                "ok": 33,
+                "n": 35,
+                "pct": 94.29
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 24,
+                "n": 27,
+                "pct": 88.89
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 15,
+                "n": 25,
+                "pct": 60.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 11,
+                "n": 16,
+                "pct": 68.75
+              },
+              "pick_two_obj_and_place": {
+                "ok": 13,
+                "n": 24,
+                "pct": 54.17
+              }
+            }
+          }
+        },
+        "2": {
+          "test": {
+            "ok": 114,
+            "n": 134,
+            "pct": 85.07,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 15,
+                "n": 18,
+                "pct": 83.33
+              },
+              "pick_and_place": {
+                "ok": 21,
+                "n": 24,
+                "pct": 87.5
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 26,
+                "n": 31,
+                "pct": 83.87
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 20,
+                "n": 21,
+                "pct": 95.24
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 20,
+                "n": 23,
+                "pct": 86.96
+              },
+              "pick_two_obj_and_place": {
+                "ok": 12,
+                "n": 17,
+                "pct": 70.59
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 111,
+            "n": 140,
+            "pct": 79.29,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 11,
+                "n": 13,
+                "pct": 84.62
+              },
+              "pick_and_place": {
+                "ok": 30,
+                "n": 35,
+                "pct": 85.71
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 23,
+                "n": 27,
+                "pct": 85.19
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 17,
+                "n": 25,
+                "pct": 68.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 14,
+                "n": 16,
+                "pct": 87.5
+              },
+              "pick_two_obj_and_place": {
+                "ok": 16,
+                "n": 24,
+                "pct": 66.67
+              }
+            }
+          }
+        },
+        "3": {
+          "test": {
+            "ok": 111,
+            "n": 134,
+            "pct": 82.84,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 15,
+                "n": 18,
+                "pct": 83.33
+              },
+              "pick_and_place": {
+                "ok": 19,
+                "n": 24,
+                "pct": 79.17
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 26,
+                "n": 31,
+                "pct": 83.87
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 20,
+                "n": 21,
+                "pct": 95.24
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 20,
+                "n": 23,
+                "pct": 86.96
+              },
+              "pick_two_obj_and_place": {
+                "ok": 11,
+                "n": 17,
+                "pct": 64.71
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 119,
+            "n": 140,
+            "pct": 85.0,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 12,
+                "n": 13,
+                "pct": 92.31
+              },
+              "pick_and_place": {
+                "ok": 33,
+                "n": 35,
+                "pct": 94.29
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 26,
+                "n": 27,
+                "pct": 96.3
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 20,
+                "n": 25,
+                "pct": 80.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 14,
+                "n": 16,
+                "pct": 87.5
+              },
+              "pick_two_obj_and_place": {
+                "ok": 14,
+                "n": 24,
+                "pct": 58.33
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "alfworld/skillos/sol-sol/trial1",
+      "benchmark": "alfworld",
+      "mechanism": "skillos",
+      "pair": "sol-sol",
+      "trial": "trial1",
+      "label": "SkillOS \u00b7 sol/sol \u00b7 trial 1",
+      "epochs": {
+        "1": {
+          "test": {
+            "ok": 110,
+            "n": 134,
+            "pct": 82.09,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 15,
+                "n": 18,
+                "pct": 83.33
+              },
+              "pick_and_place": {
+                "ok": 19,
+                "n": 24,
+                "pct": 79.17
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 25,
+                "n": 31,
+                "pct": 80.65
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 20,
+                "n": 21,
+                "pct": 95.24
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 20,
+                "n": 23,
+                "pct": 86.96
+              },
+              "pick_two_obj_and_place": {
+                "ok": 11,
+                "n": 17,
+                "pct": 64.71
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 109,
+            "n": 140,
+            "pct": 77.86,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 7,
+                "n": 13,
+                "pct": 53.85
+              },
+              "pick_and_place": {
+                "ok": 30,
+                "n": 35,
+                "pct": 85.71
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 23,
+                "n": 27,
+                "pct": 85.19
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 22,
+                "n": 25,
+                "pct": 88.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 13,
+                "n": 16,
+                "pct": 81.25
+              },
+              "pick_two_obj_and_place": {
+                "ok": 14,
+                "n": 24,
+                "pct": 58.33
+              }
+            }
+          }
+        },
+        "2": {
+          "test": {
+            "ok": 102,
+            "n": 134,
+            "pct": 76.12,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 15,
+                "n": 18,
+                "pct": 83.33
+              },
+              "pick_and_place": {
+                "ok": 19,
+                "n": 24,
+                "pct": 79.17
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 25,
+                "n": 31,
+                "pct": 80.65
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 18,
+                "n": 21,
+                "pct": 85.71
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 16,
+                "n": 23,
+                "pct": 69.57
+              },
+              "pick_two_obj_and_place": {
+                "ok": 9,
+                "n": 17,
+                "pct": 52.94
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 105,
+            "n": 140,
+            "pct": 75.0,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 11,
+                "n": 13,
+                "pct": 84.62
+              },
+              "pick_and_place": {
+                "ok": 30,
+                "n": 35,
+                "pct": 85.71
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 19,
+                "n": 27,
+                "pct": 70.37
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 20,
+                "n": 25,
+                "pct": 80.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 15,
+                "n": 16,
+                "pct": 93.75
+              },
+              "pick_two_obj_and_place": {
+                "ok": 10,
+                "n": 24,
+                "pct": 41.67
+              }
+            }
+          }
+        },
+        "3": {
+          "test": {
+            "ok": 103,
+            "n": 134,
+            "pct": 76.87,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 18,
+                "n": 18,
+                "pct": 100.0
+              },
+              "pick_and_place": {
+                "ok": 19,
+                "n": 24,
+                "pct": 79.17
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 21,
+                "n": 31,
+                "pct": 67.74
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 16,
+                "n": 21,
+                "pct": 76.19
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 17,
+                "n": 23,
+                "pct": 73.91
+              },
+              "pick_two_obj_and_place": {
+                "ok": 12,
+                "n": 17,
+                "pct": 70.59
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 97,
+            "n": 140,
+            "pct": 69.29,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 13,
+                "n": 13,
+                "pct": 100.0
+              },
+              "pick_and_place": {
+                "ok": 27,
+                "n": 35,
+                "pct": 77.14
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 14,
+                "n": 27,
+                "pct": 51.85
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 18,
+                "n": 25,
+                "pct": 72.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 10,
+                "n": 16,
+                "pct": 62.5
+              },
+              "pick_two_obj_and_place": {
+                "ok": 15,
+                "n": 24,
+                "pct": 62.5
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "alfworld/skillos/sol-sol/trial2",
+      "benchmark": "alfworld",
+      "mechanism": "skillos",
+      "pair": "sol-sol",
+      "trial": "trial2",
+      "label": "SkillOS \u00b7 sol/sol \u00b7 trial 2",
+      "epochs": {
+        "1": {
+          "test": {
+            "ok": 100,
+            "n": 134,
+            "pct": 74.63,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 15,
+                "n": 18,
+                "pct": 83.33
+              },
+              "pick_and_place": {
+                "ok": 20,
+                "n": 24,
+                "pct": 83.33
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 22,
+                "n": 31,
+                "pct": 70.97
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 16,
+                "n": 21,
+                "pct": 76.19
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 18,
+                "n": 23,
+                "pct": 78.26
+              },
+              "pick_two_obj_and_place": {
+                "ok": 9,
+                "n": 17,
+                "pct": 52.94
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 99,
+            "n": 140,
+            "pct": 70.71,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 10,
+                "n": 13,
+                "pct": 76.92
+              },
+              "pick_and_place": {
+                "ok": 26,
+                "n": 35,
+                "pct": 74.29
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 18,
+                "n": 27,
+                "pct": 66.67
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 19,
+                "n": 25,
+                "pct": 76.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 11,
+                "n": 16,
+                "pct": 68.75
+              },
+              "pick_two_obj_and_place": {
+                "ok": 15,
+                "n": 24,
+                "pct": 62.5
+              }
+            }
+          }
+        },
+        "2": {
+          "test": {
+            "ok": 105,
+            "n": 134,
+            "pct": 78.36,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 16,
+                "n": 18,
+                "pct": 88.89
+              },
+              "pick_and_place": {
+                "ok": 19,
+                "n": 24,
+                "pct": 79.17
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 23,
+                "n": 31,
+                "pct": 74.19
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 19,
+                "n": 21,
+                "pct": 90.48
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 19,
+                "n": 23,
+                "pct": 82.61
+              },
+              "pick_two_obj_and_place": {
+                "ok": 9,
+                "n": 17,
+                "pct": 52.94
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 108,
+            "n": 140,
+            "pct": 77.14,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 13,
+                "n": 13,
+                "pct": 100.0
+              },
+              "pick_and_place": {
+                "ok": 32,
+                "n": 35,
+                "pct": 91.43
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 22,
+                "n": 27,
+                "pct": 81.48
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 17,
+                "n": 25,
+                "pct": 68.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 10,
+                "n": 16,
+                "pct": 62.5
+              },
+              "pick_two_obj_and_place": {
+                "ok": 14,
+                "n": 24,
+                "pct": 58.33
+              }
+            }
+          }
+        },
+        "3": {
+          "test": {
+            "ok": 107,
+            "n": 134,
+            "pct": 79.85,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 14,
+                "n": 18,
+                "pct": 77.78
+              },
+              "pick_and_place": {
+                "ok": 19,
+                "n": 24,
+                "pct": 79.17
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 26,
+                "n": 31,
+                "pct": 83.87
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 18,
+                "n": 21,
+                "pct": 85.71
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 19,
+                "n": 23,
+                "pct": 82.61
+              },
+              "pick_two_obj_and_place": {
+                "ok": 11,
+                "n": 17,
+                "pct": 64.71
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 105,
+            "n": 140,
+            "pct": 75.0,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 13,
+                "n": 13,
+                "pct": 100.0
+              },
+              "pick_and_place": {
+                "ok": 29,
+                "n": 35,
+                "pct": 82.86
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 24,
+                "n": 27,
+                "pct": 88.89
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 15,
+                "n": 25,
+                "pct": 60.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 11,
+                "n": 16,
+                "pct": 68.75
+              },
+              "pick_two_obj_and_place": {
+                "ok": 13,
+                "n": 24,
+                "pct": 54.17
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "alfworld/skillos/sol-sol/trial3",
+      "benchmark": "alfworld",
+      "mechanism": "skillos",
+      "pair": "sol-sol",
+      "trial": "trial3",
+      "label": "SkillOS \u00b7 sol/sol \u00b7 trial 3",
+      "epochs": {
+        "1": {
+          "test": {
+            "ok": 103,
+            "n": 134,
+            "pct": 76.87,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 15,
+                "n": 18,
+                "pct": 83.33
+              },
+              "pick_and_place": {
+                "ok": 19,
+                "n": 24,
+                "pct": 79.17
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 23,
+                "n": 31,
+                "pct": 74.19
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 19,
+                "n": 21,
+                "pct": 90.48
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 16,
+                "n": 23,
+                "pct": 69.57
+              },
+              "pick_two_obj_and_place": {
+                "ok": 11,
+                "n": 17,
+                "pct": 64.71
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 105,
+            "n": 140,
+            "pct": 75.0,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 12,
+                "n": 13,
+                "pct": 92.31
+              },
+              "pick_and_place": {
+                "ok": 30,
+                "n": 35,
+                "pct": 85.71
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 22,
+                "n": 27,
+                "pct": 81.48
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 17,
+                "n": 25,
+                "pct": 68.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 10,
+                "n": 16,
+                "pct": 62.5
+              },
+              "pick_two_obj_and_place": {
+                "ok": 14,
+                "n": 24,
+                "pct": 58.33
+              }
+            }
+          }
+        },
+        "2": {
+          "test": {
+            "ok": 98,
+            "n": 134,
+            "pct": 73.13,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 15,
+                "n": 18,
+                "pct": 83.33
+              },
+              "pick_and_place": {
+                "ok": 19,
+                "n": 24,
+                "pct": 79.17
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 23,
+                "n": 31,
+                "pct": 74.19
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 15,
+                "n": 21,
+                "pct": 71.43
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 17,
+                "n": 23,
+                "pct": 73.91
+              },
+              "pick_two_obj_and_place": {
+                "ok": 9,
+                "n": 17,
+                "pct": 52.94
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 97,
+            "n": 140,
+            "pct": 69.29,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 13,
+                "n": 13,
+                "pct": 100.0
+              },
+              "pick_and_place": {
+                "ok": 29,
+                "n": 35,
+                "pct": 82.86
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 19,
+                "n": 27,
+                "pct": 70.37
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 14,
+                "n": 25,
+                "pct": 56.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 8,
+                "n": 16,
+                "pct": 50.0
+              },
+              "pick_two_obj_and_place": {
+                "ok": 14,
+                "n": 24,
+                "pct": 58.33
+              }
+            }
+          }
+        },
+        "3": {
+          "test": {
+            "ok": 91,
+            "n": 134,
+            "pct": 67.91,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 15,
+                "n": 18,
+                "pct": 83.33
+              },
+              "pick_and_place": {
+                "ok": 16,
+                "n": 24,
+                "pct": 66.67
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 22,
+                "n": 31,
+                "pct": 70.97
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 14,
+                "n": 21,
+                "pct": 66.67
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 13,
+                "n": 23,
+                "pct": 56.52
+              },
+              "pick_two_obj_and_place": {
+                "ok": 11,
+                "n": 17,
+                "pct": 64.71
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 83,
+            "n": 140,
+            "pct": 59.29,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 13,
+                "n": 13,
+                "pct": 100.0
+              },
+              "pick_and_place": {
+                "ok": 29,
+                "n": 35,
+                "pct": 82.86
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 15,
+                "n": 27,
+                "pct": 55.56
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 5,
+                "n": 25,
+                "pct": 20.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 10,
+                "n": 16,
+                "pct": 62.5
+              },
+              "pick_two_obj_and_place": {
+                "ok": 11,
+                "n": 24,
+                "pct": 45.83
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "alfworld/memcurator/luna-luna/trial1",
+      "benchmark": "alfworld",
+      "mechanism": "memcurator",
+      "pair": "luna-luna",
+      "trial": "trial1",
+      "label": "JitMem \u00b7 luna/luna \u00b7 trial 1",
+      "epochs": {
+        "1": {
+          "test": {
+            "ok": 92,
+            "n": 134,
+            "pct": 68.66,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 10,
+                "n": 18,
+                "pct": 55.56
+              },
+              "pick_and_place": {
+                "ok": 16,
+                "n": 24,
+                "pct": 66.67
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 20,
+                "n": 31,
+                "pct": 64.52
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 18,
+                "n": 21,
+                "pct": 85.71
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 16,
+                "n": 23,
+                "pct": 69.57
+              },
+              "pick_two_obj_and_place": {
+                "ok": 12,
+                "n": 17,
+                "pct": 70.59
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 73,
+            "n": 140,
+            "pct": 52.14,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 6,
+                "n": 13,
+                "pct": 46.15
+              },
+              "pick_and_place": {
+                "ok": 22,
+                "n": 35,
+                "pct": 62.86
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 4,
+                "n": 27,
+                "pct": 14.81
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 16,
+                "n": 25,
+                "pct": 64.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 10,
+                "n": 16,
+                "pct": 62.5
+              },
+              "pick_two_obj_and_place": {
+                "ok": 15,
+                "n": 24,
+                "pct": 62.5
+              }
+            }
+          }
+        },
+        "2": {
+          "test": {
+            "ok": 82,
+            "n": 134,
+            "pct": 61.19,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 12,
+                "n": 18,
+                "pct": 66.67
+              },
+              "pick_and_place": {
+                "ok": 13,
+                "n": 24,
+                "pct": 54.17
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 20,
+                "n": 31,
+                "pct": 64.52
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 14,
+                "n": 21,
+                "pct": 66.67
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 11,
+                "n": 23,
+                "pct": 47.83
+              },
+              "pick_two_obj_and_place": {
+                "ok": 12,
+                "n": 17,
+                "pct": 70.59
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 94,
+            "n": 140,
+            "pct": 67.14,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 8,
+                "n": 13,
+                "pct": 61.54
+              },
+              "pick_and_place": {
+                "ok": 30,
+                "n": 35,
+                "pct": 85.71
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 8,
+                "n": 27,
+                "pct": 29.63
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 18,
+                "n": 25,
+                "pct": 72.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 12,
+                "n": 16,
+                "pct": 75.0
+              },
+              "pick_two_obj_and_place": {
+                "ok": 18,
+                "n": 24,
+                "pct": 75.0
+              }
+            }
+          }
+        },
+        "3": {
+          "test": {
+            "ok": 78,
+            "n": 134,
+            "pct": 58.21,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 11,
+                "n": 18,
+                "pct": 61.11
+              },
+              "pick_and_place": {
+                "ok": 16,
+                "n": 24,
+                "pct": 66.67
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 18,
+                "n": 31,
+                "pct": 58.06
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 16,
+                "n": 21,
+                "pct": 76.19
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 7,
+                "n": 23,
+                "pct": 30.43
+              },
+              "pick_two_obj_and_place": {
+                "ok": 10,
+                "n": 17,
+                "pct": 58.82
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 99,
+            "n": 140,
+            "pct": 70.71,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 8,
+                "n": 13,
+                "pct": 61.54
+              },
+              "pick_and_place": {
+                "ok": 31,
+                "n": 35,
+                "pct": 88.57
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 10,
+                "n": 27,
+                "pct": 37.04
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 19,
+                "n": 25,
+                "pct": 76.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 12,
+                "n": 16,
+                "pct": 75.0
+              },
+              "pick_two_obj_and_place": {
+                "ok": 19,
+                "n": 24,
+                "pct": 79.17
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "alfworld/memcurator/luna-sol/trial1",
+      "benchmark": "alfworld",
+      "mechanism": "memcurator",
+      "pair": "luna-sol",
+      "trial": "trial1",
+      "label": "JitMem \u00b7 luna/sol \u00b7 trial 1",
+      "epochs": {
+        "1": {
+          "test": {
+            "ok": 91,
+            "n": 134,
+            "pct": 67.91,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 15,
+                "n": 18,
+                "pct": 83.33
+              },
+              "pick_and_place": {
+                "ok": 15,
+                "n": 24,
+                "pct": 62.5
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 20,
+                "n": 31,
+                "pct": 64.52
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 19,
+                "n": 21,
+                "pct": 90.48
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 11,
+                "n": 23,
+                "pct": 47.83
+              },
+              "pick_two_obj_and_place": {
+                "ok": 11,
+                "n": 17,
+                "pct": 64.71
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 73,
+            "n": 140,
+            "pct": 52.14,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 6,
+                "n": 13,
+                "pct": 46.15
+              },
+              "pick_and_place": {
+                "ok": 25,
+                "n": 35,
+                "pct": 71.43
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 3,
+                "n": 27,
+                "pct": 11.11
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 17,
+                "n": 25,
+                "pct": 68.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 8,
+                "n": 16,
+                "pct": 50.0
+              },
+              "pick_two_obj_and_place": {
+                "ok": 14,
+                "n": 24,
+                "pct": 58.33
+              }
+            }
+          }
+        },
+        "2": {
+          "test": {
+            "ok": 81,
+            "n": 134,
+            "pct": 60.45,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 14,
+                "n": 18,
+                "pct": 77.78
+              },
+              "pick_and_place": {
+                "ok": 15,
+                "n": 24,
+                "pct": 62.5
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 14,
+                "n": 31,
+                "pct": 45.16
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 16,
+                "n": 21,
+                "pct": 76.19
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 12,
+                "n": 23,
+                "pct": 52.17
+              },
+              "pick_two_obj_and_place": {
+                "ok": 10,
+                "n": 17,
+                "pct": 58.82
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 89,
+            "n": 140,
+            "pct": 63.57,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 6,
+                "n": 13,
+                "pct": 46.15
+              },
+              "pick_and_place": {
+                "ok": 31,
+                "n": 35,
+                "pct": 88.57
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 7,
+                "n": 27,
+                "pct": 25.93
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 19,
+                "n": 25,
+                "pct": 76.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 11,
+                "n": 16,
+                "pct": 68.75
+              },
+              "pick_two_obj_and_place": {
+                "ok": 15,
+                "n": 24,
+                "pct": 62.5
+              }
+            }
+          }
+        },
+        "3": {
+          "test": {
+            "ok": 77,
+            "n": 134,
+            "pct": 57.46,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 10,
+                "n": 18,
+                "pct": 55.56
+              },
+              "pick_and_place": {
+                "ok": 13,
+                "n": 24,
+                "pct": 54.17
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 13,
+                "n": 31,
+                "pct": 41.94
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 17,
+                "n": 21,
+                "pct": 80.95
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 11,
+                "n": 23,
+                "pct": 47.83
+              },
+              "pick_two_obj_and_place": {
+                "ok": 13,
+                "n": 17,
+                "pct": 76.47
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 100,
+            "n": 140,
+            "pct": 71.43,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 7,
+                "n": 13,
+                "pct": 53.85
+              },
+              "pick_and_place": {
+                "ok": 33,
+                "n": 35,
+                "pct": 94.29
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 8,
+                "n": 27,
+                "pct": 29.63
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 22,
+                "n": 25,
+                "pct": 88.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 12,
+                "n": 16,
+                "pct": 75.0
+              },
+              "pick_two_obj_and_place": {
+                "ok": 18,
+                "n": 24,
+                "pct": 75.0
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "alfworld/memcurator/sol-luna/trial1",
+      "benchmark": "alfworld",
+      "mechanism": "memcurator",
+      "pair": "sol-luna",
+      "trial": "trial1",
+      "label": "JitMem \u00b7 sol/luna \u00b7 trial 1",
+      "epochs": {
+        "1": {
+          "test": {
+            "ok": 106,
+            "n": 134,
+            "pct": 79.1,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 13,
+                "n": 18,
+                "pct": 72.22
+              },
+              "pick_and_place": {
+                "ok": 18,
+                "n": 24,
+                "pct": 75.0
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 28,
+                "n": 31,
+                "pct": 90.32
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 20,
+                "n": 21,
+                "pct": 95.24
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 15,
+                "n": 23,
+                "pct": 65.22
+              },
+              "pick_two_obj_and_place": {
+                "ok": 12,
+                "n": 17,
+                "pct": 70.59
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 107,
+            "n": 140,
+            "pct": 76.43,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 6,
+                "n": 13,
+                "pct": 46.15
+              },
+              "pick_and_place": {
+                "ok": 31,
+                "n": 35,
+                "pct": 88.57
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 22,
+                "n": 27,
+                "pct": 81.48
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 19,
+                "n": 25,
+                "pct": 76.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 13,
+                "n": 16,
+                "pct": 81.25
+              },
+              "pick_two_obj_and_place": {
+                "ok": 16,
+                "n": 24,
+                "pct": 66.67
+              }
+            }
+          }
+        },
+        "2": {
+          "test": {
+            "ok": 99,
+            "n": 134,
+            "pct": 73.88,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 13,
+                "n": 18,
+                "pct": 72.22
+              },
+              "pick_and_place": {
+                "ok": 18,
+                "n": 24,
+                "pct": 75.0
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 27,
+                "n": 31,
+                "pct": 87.1
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 16,
+                "n": 21,
+                "pct": 76.19
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 16,
+                "n": 23,
+                "pct": 69.57
+              },
+              "pick_two_obj_and_place": {
+                "ok": 9,
+                "n": 17,
+                "pct": 52.94
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 129,
+            "n": 140,
+            "pct": 92.14,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 12,
+                "n": 13,
+                "pct": 92.31
+              },
+              "pick_and_place": {
+                "ok": 34,
+                "n": 35,
+                "pct": 97.14
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 25,
+                "n": 27,
+                "pct": 92.59
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 22,
+                "n": 25,
+                "pct": 88.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 15,
+                "n": 16,
+                "pct": 93.75
+              },
+              "pick_two_obj_and_place": {
+                "ok": 21,
+                "n": 24,
+                "pct": 87.5
+              }
+            }
+          }
+        },
+        "3": {
+          "test": {
+            "ok": 97,
+            "n": 134,
+            "pct": 72.39,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 11,
+                "n": 18,
+                "pct": 61.11
+              },
+              "pick_and_place": {
+                "ok": 19,
+                "n": 24,
+                "pct": 79.17
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 23,
+                "n": 31,
+                "pct": 74.19
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 16,
+                "n": 21,
+                "pct": 76.19
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 15,
+                "n": 23,
+                "pct": 65.22
+              },
+              "pick_two_obj_and_place": {
+                "ok": 13,
+                "n": 17,
+                "pct": 76.47
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 133,
+            "n": 140,
+            "pct": 95.0,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 12,
+                "n": 13,
+                "pct": 92.31
+              },
+              "pick_and_place": {
+                "ok": 35,
+                "n": 35,
+                "pct": 100.0
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 26,
+                "n": 27,
+                "pct": 96.3
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 22,
+                "n": 25,
+                "pct": 88.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 16,
+                "n": 16,
+                "pct": 100.0
+              },
+              "pick_two_obj_and_place": {
+                "ok": 22,
+                "n": 24,
+                "pct": 91.67
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "alfworld/memcurator/sol-sol/trial1",
+      "benchmark": "alfworld",
+      "mechanism": "memcurator",
+      "pair": "sol-sol",
+      "trial": "trial1",
+      "label": "JitMem \u00b7 sol/sol \u00b7 trial 1",
+      "epochs": {
+        "1": {
+          "test": {
+            "ok": 107,
+            "n": 134,
+            "pct": 79.85,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 13,
+                "n": 18,
+                "pct": 72.22
+              },
+              "pick_and_place": {
+                "ok": 20,
+                "n": 24,
+                "pct": 83.33
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 26,
+                "n": 31,
+                "pct": 83.87
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 20,
+                "n": 21,
+                "pct": 95.24
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 16,
+                "n": 23,
+                "pct": 69.57
+              },
+              "pick_two_obj_and_place": {
+                "ok": 12,
+                "n": 17,
+                "pct": 70.59
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 109,
+            "n": 140,
+            "pct": 77.86,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 10,
+                "n": 13,
+                "pct": 76.92
+              },
+              "pick_and_place": {
+                "ok": 28,
+                "n": 35,
+                "pct": 80.0
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 21,
+                "n": 27,
+                "pct": 77.78
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 18,
+                "n": 25,
+                "pct": 72.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 14,
+                "n": 16,
+                "pct": 87.5
+              },
+              "pick_two_obj_and_place": {
+                "ok": 18,
+                "n": 24,
+                "pct": 75.0
+              }
+            }
+          }
+        },
+        "2": {
+          "test": {
+            "ok": 98,
+            "n": 134,
+            "pct": 73.13,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 12,
+                "n": 18,
+                "pct": 66.67
+              },
+              "pick_and_place": {
+                "ok": 17,
+                "n": 24,
+                "pct": 70.83
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 30,
+                "n": 31,
+                "pct": 96.77
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 17,
+                "n": 21,
+                "pct": 80.95
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 14,
+                "n": 23,
+                "pct": 60.87
+              },
+              "pick_two_obj_and_place": {
+                "ok": 8,
+                "n": 17,
+                "pct": 47.06
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 129,
+            "n": 140,
+            "pct": 92.14,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 12,
+                "n": 13,
+                "pct": 92.31
+              },
+              "pick_and_place": {
+                "ok": 34,
+                "n": 35,
+                "pct": 97.14
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 24,
+                "n": 27,
+                "pct": 88.89
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 22,
+                "n": 25,
+                "pct": 88.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 15,
+                "n": 16,
+                "pct": 93.75
+              },
+              "pick_two_obj_and_place": {
+                "ok": 22,
+                "n": 24,
+                "pct": 91.67
+              }
+            }
+          }
+        },
+        "3": {
+          "test": {
+            "ok": 90,
+            "n": 134,
+            "pct": 67.16,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 11,
+                "n": 18,
+                "pct": 61.11
+              },
+              "pick_and_place": {
+                "ok": 19,
+                "n": 24,
+                "pct": 79.17
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 24,
+                "n": 31,
+                "pct": 77.42
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 16,
+                "n": 21,
+                "pct": 76.19
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 12,
+                "n": 23,
+                "pct": 52.17
+              },
+              "pick_two_obj_and_place": {
+                "ok": 8,
+                "n": 17,
+                "pct": 47.06
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 134,
+            "n": 140,
+            "pct": 95.71,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 12,
+                "n": 13,
+                "pct": 92.31
+              },
+              "pick_and_place": {
+                "ok": 35,
+                "n": 35,
+                "pct": 100.0
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 27,
+                "n": 27,
+                "pct": 100.0
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 22,
+                "n": 25,
+                "pct": 88.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 15,
+                "n": 16,
+                "pct": 93.75
+              },
+              "pick_two_obj_and_place": {
+                "ok": 23,
+                "n": 24,
+                "pct": 95.83
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "alfworld/memcurator-success-only/luna-luna/trial1",
+      "benchmark": "alfworld",
+      "mechanism": "memcurator-success-only",
+      "pair": "luna-luna",
+      "trial": "trial1",
+      "label": "JitMem \u00b7 successful \u00b7 luna/luna \u00b7 trial 1",
+      "epochs": {
+        "1": {
+          "test": {
+            "ok": 99,
+            "n": 134,
+            "pct": 73.88,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 10,
+                "n": 18,
+                "pct": 55.56
+              },
+              "pick_and_place": {
+                "ok": 20,
+                "n": 24,
+                "pct": 83.33
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 23,
+                "n": 31,
+                "pct": 74.19
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 18,
+                "n": 21,
+                "pct": 85.71
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 17,
+                "n": 23,
+                "pct": 73.91
+              },
+              "pick_two_obj_and_place": {
+                "ok": 11,
+                "n": 17,
+                "pct": 64.71
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 87,
+            "n": 140,
+            "pct": 62.14,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 6,
+                "n": 13,
+                "pct": 46.15
+              },
+              "pick_and_place": {
+                "ok": 27,
+                "n": 35,
+                "pct": 77.14
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 18,
+                "n": 27,
+                "pct": 66.67
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 13,
+                "n": 25,
+                "pct": 52.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 9,
+                "n": 16,
+                "pct": 56.25
+              },
+              "pick_two_obj_and_place": {
+                "ok": 14,
+                "n": 24,
+                "pct": 58.33
+              }
+            }
+          }
+        },
+        "2": {
+          "test": {
+            "ok": 92,
+            "n": 134,
+            "pct": 68.66,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 10,
+                "n": 18,
+                "pct": 55.56
+              },
+              "pick_and_place": {
+                "ok": 19,
+                "n": 24,
+                "pct": 79.17
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 20,
+                "n": 31,
+                "pct": 64.52
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 18,
+                "n": 21,
+                "pct": 85.71
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 13,
+                "n": 23,
+                "pct": 56.52
+              },
+              "pick_two_obj_and_place": {
+                "ok": 12,
+                "n": 17,
+                "pct": 70.59
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 108,
+            "n": 140,
+            "pct": 77.14,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 8,
+                "n": 13,
+                "pct": 61.54
+              },
+              "pick_and_place": {
+                "ok": 31,
+                "n": 35,
+                "pct": 88.57
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 23,
+                "n": 27,
+                "pct": 85.19
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 17,
+                "n": 25,
+                "pct": 68.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 14,
+                "n": 16,
+                "pct": 87.5
+              },
+              "pick_two_obj_and_place": {
+                "ok": 15,
+                "n": 24,
+                "pct": 62.5
+              }
+            }
+          }
+        },
+        "3": {
+          "test": {
+            "ok": 80,
+            "n": 134,
+            "pct": 59.7,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 10,
+                "n": 18,
+                "pct": 55.56
+              },
+              "pick_and_place": {
+                "ok": 15,
+                "n": 24,
+                "pct": 62.5
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 17,
+                "n": 31,
+                "pct": 54.84
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 17,
+                "n": 21,
+                "pct": 80.95
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 10,
+                "n": 23,
+                "pct": 43.48
+              },
+              "pick_two_obj_and_place": {
+                "ok": 11,
+                "n": 17,
+                "pct": 64.71
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 111,
+            "n": 140,
+            "pct": 79.29,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 9,
+                "n": 13,
+                "pct": 69.23
+              },
+              "pick_and_place": {
+                "ok": 34,
+                "n": 35,
+                "pct": 97.14
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 24,
+                "n": 27,
+                "pct": 88.89
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 17,
+                "n": 25,
+                "pct": 68.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 12,
+                "n": 16,
+                "pct": 75.0
+              },
+              "pick_two_obj_and_place": {
+                "ok": 15,
+                "n": 24,
+                "pct": 62.5
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "alfworld/memcurator-success-only/sol-sol/trial1",
+      "benchmark": "alfworld",
+      "mechanism": "memcurator-success-only",
+      "pair": "sol-sol",
+      "trial": "trial1",
+      "label": "JitMem \u00b7 successful \u00b7 sol/sol \u00b7 trial 1",
+      "epochs": {
+        "1": {
+          "test": {
+            "ok": 108,
+            "n": 134,
+            "pct": 80.6,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 11,
+                "n": 18,
+                "pct": 61.11
+              },
+              "pick_and_place": {
+                "ok": 20,
+                "n": 24,
+                "pct": 83.33
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 27,
+                "n": 31,
+                "pct": 87.1
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 20,
+                "n": 21,
+                "pct": 95.24
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 16,
+                "n": 23,
+                "pct": 69.57
+              },
+              "pick_two_obj_and_place": {
+                "ok": 14,
+                "n": 17,
+                "pct": 82.35
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 105,
+            "n": 140,
+            "pct": 75.0,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 7,
+                "n": 13,
+                "pct": 53.85
+              },
+              "pick_and_place": {
+                "ok": 31,
+                "n": 35,
+                "pct": 88.57
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 22,
+                "n": 27,
+                "pct": 81.48
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 14,
+                "n": 25,
+                "pct": 56.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 13,
+                "n": 16,
+                "pct": 81.25
+              },
+              "pick_two_obj_and_place": {
+                "ok": 18,
+                "n": 24,
+                "pct": 75.0
+              }
+            }
+          }
+        },
+        "2": {
+          "test": {
+            "ok": 103,
+            "n": 134,
+            "pct": 76.87,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 12,
+                "n": 18,
+                "pct": 66.67
+              },
+              "pick_and_place": {
+                "ok": 17,
+                "n": 24,
+                "pct": 70.83
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 26,
+                "n": 31,
+                "pct": 83.87
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 20,
+                "n": 21,
+                "pct": 95.24
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 15,
+                "n": 23,
+                "pct": 65.22
+              },
+              "pick_two_obj_and_place": {
+                "ok": 13,
+                "n": 17,
+                "pct": 76.47
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 121,
+            "n": 140,
+            "pct": 86.43,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 8,
+                "n": 13,
+                "pct": 61.54
+              },
+              "pick_and_place": {
+                "ok": 34,
+                "n": 35,
+                "pct": 97.14
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 25,
+                "n": 27,
+                "pct": 92.59
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 20,
+                "n": 25,
+                "pct": 80.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 15,
+                "n": 16,
+                "pct": 93.75
+              },
+              "pick_two_obj_and_place": {
+                "ok": 19,
+                "n": 24,
+                "pct": 79.17
+              }
+            }
+          }
+        },
+        "3": {
+          "test": {
+            "ok": 100,
+            "n": 134,
+            "pct": 74.63,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 11,
+                "n": 18,
+                "pct": 61.11
+              },
+              "pick_and_place": {
+                "ok": 17,
+                "n": 24,
+                "pct": 70.83
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 24,
+                "n": 31,
+                "pct": 77.42
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 20,
+                "n": 21,
+                "pct": 95.24
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 15,
+                "n": 23,
+                "pct": 65.22
+              },
+              "pick_two_obj_and_place": {
+                "ok": 13,
+                "n": 17,
+                "pct": 76.47
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 121,
+            "n": 140,
+            "pct": 86.43,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 8,
+                "n": 13,
+                "pct": 61.54
+              },
+              "pick_and_place": {
+                "ok": 34,
+                "n": 35,
+                "pct": 97.14
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 25,
+                "n": 27,
+                "pct": 92.59
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 20,
+                "n": 25,
+                "pct": 80.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 15,
+                "n": 16,
+                "pct": 93.75
+              },
+              "pick_two_obj_and_place": {
+                "ok": 19,
+                "n": 24,
+                "pct": 79.17
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "alfworld/memcurator-latest/luna-luna/trial1",
+      "benchmark": "alfworld",
+      "mechanism": "memcurator-latest",
+      "pair": "luna-luna",
+      "trial": "trial1",
+      "label": "JitMem \u00b7 latest \u00b7 luna/luna \u00b7 trial 1",
+      "epochs": {
+        "1": {
+          "test": {
+            "ok": 103,
+            "n": 134,
+            "pct": 76.87,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 15,
+                "n": 18,
+                "pct": 83.33
+              },
+              "pick_and_place": {
+                "ok": 20,
+                "n": 24,
+                "pct": 83.33
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 23,
+                "n": 31,
+                "pct": 74.19
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 17,
+                "n": 21,
+                "pct": 80.95
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 15,
+                "n": 23,
+                "pct": 65.22
+              },
+              "pick_two_obj_and_place": {
+                "ok": 13,
+                "n": 17,
+                "pct": 76.47
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 87,
+            "n": 140,
+            "pct": 62.14,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 6,
+                "n": 13,
+                "pct": 46.15
+              },
+              "pick_and_place": {
+                "ok": 26,
+                "n": 35,
+                "pct": 74.29
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 16,
+                "n": 27,
+                "pct": 59.26
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 14,
+                "n": 25,
+                "pct": 56.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 8,
+                "n": 16,
+                "pct": 50.0
+              },
+              "pick_two_obj_and_place": {
+                "ok": 17,
+                "n": 24,
+                "pct": 70.83
+              }
+            }
+          }
+        },
+        "2": {
+          "test": {
+            "ok": 98,
+            "n": 134,
+            "pct": 73.13,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 13,
+                "n": 18,
+                "pct": 72.22
+              },
+              "pick_and_place": {
+                "ok": 19,
+                "n": 24,
+                "pct": 79.17
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 25,
+                "n": 31,
+                "pct": 80.65
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 18,
+                "n": 21,
+                "pct": 85.71
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 11,
+                "n": 23,
+                "pct": 47.83
+              },
+              "pick_two_obj_and_place": {
+                "ok": 12,
+                "n": 17,
+                "pct": 70.59
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 115,
+            "n": 140,
+            "pct": 82.14,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 7,
+                "n": 13,
+                "pct": 53.85
+              },
+              "pick_and_place": {
+                "ok": 35,
+                "n": 35,
+                "pct": 100.0
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 22,
+                "n": 27,
+                "pct": 81.48
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 21,
+                "n": 25,
+                "pct": 84.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 11,
+                "n": 16,
+                "pct": 68.75
+              },
+              "pick_two_obj_and_place": {
+                "ok": 19,
+                "n": 24,
+                "pct": 79.17
+              }
+            }
+          }
+        },
+        "3": {
+          "test": {
+            "ok": 98,
+            "n": 134,
+            "pct": 73.13,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 12,
+                "n": 18,
+                "pct": 66.67
+              },
+              "pick_and_place": {
+                "ok": 18,
+                "n": 24,
+                "pct": 75.0
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 25,
+                "n": 31,
+                "pct": 80.65
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 19,
+                "n": 21,
+                "pct": 90.48
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 12,
+                "n": 23,
+                "pct": 52.17
+              },
+              "pick_two_obj_and_place": {
+                "ok": 12,
+                "n": 17,
+                "pct": 70.59
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 119,
+            "n": 140,
+            "pct": 85.0,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 10,
+                "n": 13,
+                "pct": 76.92
+              },
+              "pick_and_place": {
+                "ok": 35,
+                "n": 35,
+                "pct": 100.0
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 24,
+                "n": 27,
+                "pct": 88.89
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 20,
+                "n": 25,
+                "pct": 80.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 9,
+                "n": 16,
+                "pct": 56.25
+              },
+              "pick_two_obj_and_place": {
+                "ok": 21,
+                "n": 24,
+                "pct": 87.5
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "alfworld/memcurator-latest/sol-sol/trial1",
+      "benchmark": "alfworld",
+      "mechanism": "memcurator-latest",
+      "pair": "sol-sol",
+      "trial": "trial1",
+      "label": "JitMem \u00b7 latest \u00b7 sol/sol \u00b7 trial 1",
+      "epochs": {
+        "1": {
+          "test": {
+            "ok": 106,
+            "n": 134,
+            "pct": 79.1,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 14,
+                "n": 18,
+                "pct": 77.78
+              },
+              "pick_and_place": {
+                "ok": 19,
+                "n": 24,
+                "pct": 79.17
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 27,
+                "n": 31,
+                "pct": 87.1
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 19,
+                "n": 21,
+                "pct": 90.48
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 17,
+                "n": 23,
+                "pct": 73.91
+              },
+              "pick_two_obj_and_place": {
+                "ok": 10,
+                "n": 17,
+                "pct": 58.82
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 98,
+            "n": 140,
+            "pct": 70.0,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 8,
+                "n": 13,
+                "pct": 61.54
+              },
+              "pick_and_place": {
+                "ok": 27,
+                "n": 35,
+                "pct": 77.14
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 22,
+                "n": 27,
+                "pct": 81.48
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 16,
+                "n": 25,
+                "pct": 64.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 12,
+                "n": 16,
+                "pct": 75.0
+              },
+              "pick_two_obj_and_place": {
+                "ok": 13,
+                "n": 24,
+                "pct": 54.17
+              }
+            }
+          }
+        },
+        "2": {
+          "test": {
+            "ok": 111,
+            "n": 134,
+            "pct": 82.84,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 15,
+                "n": 18,
+                "pct": 83.33
+              },
+              "pick_and_place": {
+                "ok": 17,
+                "n": 24,
+                "pct": 70.83
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 29,
+                "n": 31,
+                "pct": 93.55
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 19,
+                "n": 21,
+                "pct": 90.48
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 18,
+                "n": 23,
+                "pct": 78.26
+              },
+              "pick_two_obj_and_place": {
+                "ok": 13,
+                "n": 17,
+                "pct": 76.47
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 123,
+            "n": 140,
+            "pct": 87.86,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 11,
+                "n": 13,
+                "pct": 84.62
+              },
+              "pick_and_place": {
+                "ok": 34,
+                "n": 35,
+                "pct": 97.14
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 25,
+                "n": 27,
+                "pct": 92.59
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 21,
+                "n": 25,
+                "pct": 84.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 13,
+                "n": 16,
+                "pct": 81.25
+              },
+              "pick_two_obj_and_place": {
+                "ok": 19,
+                "n": 24,
+                "pct": 79.17
+              }
+            }
+          }
+        },
+        "3": {
+          "test": {
+            "ok": 111,
+            "n": 134,
+            "pct": 82.84,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 16,
+                "n": 18,
+                "pct": 88.89
+              },
+              "pick_and_place": {
+                "ok": 18,
+                "n": 24,
+                "pct": 75.0
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 29,
+                "n": 31,
+                "pct": 93.55
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 20,
+                "n": 21,
+                "pct": 95.24
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 15,
+                "n": 23,
+                "pct": 65.22
+              },
+              "pick_two_obj_and_place": {
+                "ok": 13,
+                "n": 17,
+                "pct": 76.47
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 131,
+            "n": 140,
+            "pct": 93.57,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 12,
+                "n": 13,
+                "pct": 92.31
+              },
+              "pick_and_place": {
+                "ok": 35,
+                "n": 35,
+                "pct": 100.0
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 26,
+                "n": 27,
+                "pct": 96.3
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 22,
+                "n": 25,
+                "pct": 88.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 14,
+                "n": 16,
+                "pct": 87.5
+              },
+              "pick_two_obj_and_place": {
+                "ok": 22,
+                "n": 24,
+                "pct": 91.67
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "alfworld/memcurator-success-latest/luna-luna/trial1",
+      "benchmark": "alfworld",
+      "mechanism": "memcurator-success-latest",
+      "pair": "luna-luna",
+      "trial": "trial1",
+      "label": "JitMem \u00b7 successful + latest \u00b7 luna/luna \u00b7 trial 1",
+      "epochs": {
+        "1": {
+          "test": {
+            "ok": 93,
+            "n": 134,
+            "pct": 69.4,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 7,
+                "n": 18,
+                "pct": 38.89
+              },
+              "pick_and_place": {
+                "ok": 19,
+                "n": 24,
+                "pct": 79.17
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 22,
+                "n": 31,
+                "pct": 70.97
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 17,
+                "n": 21,
+                "pct": 80.95
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 16,
+                "n": 23,
+                "pct": 69.57
+              },
+              "pick_two_obj_and_place": {
+                "ok": 12,
+                "n": 17,
+                "pct": 70.59
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 89,
+            "n": 140,
+            "pct": 63.57,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 6,
+                "n": 13,
+                "pct": 46.15
+              },
+              "pick_and_place": {
+                "ok": 29,
+                "n": 35,
+                "pct": 82.86
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 18,
+                "n": 27,
+                "pct": 66.67
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 14,
+                "n": 25,
+                "pct": 56.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 8,
+                "n": 16,
+                "pct": 50.0
+              },
+              "pick_two_obj_and_place": {
+                "ok": 14,
+                "n": 24,
+                "pct": 58.33
+              }
+            }
+          }
+        },
+        "2": {
+          "test": {
+            "ok": 100,
+            "n": 134,
+            "pct": 74.63,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 10,
+                "n": 18,
+                "pct": 55.56
+              },
+              "pick_and_place": {
+                "ok": 19,
+                "n": 24,
+                "pct": 79.17
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 24,
+                "n": 31,
+                "pct": 77.42
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 18,
+                "n": 21,
+                "pct": 85.71
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 15,
+                "n": 23,
+                "pct": 65.22
+              },
+              "pick_two_obj_and_place": {
+                "ok": 14,
+                "n": 17,
+                "pct": 82.35
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 108,
+            "n": 140,
+            "pct": 77.14,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 7,
+                "n": 13,
+                "pct": 53.85
+              },
+              "pick_and_place": {
+                "ok": 33,
+                "n": 35,
+                "pct": 94.29
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 25,
+                "n": 27,
+                "pct": 92.59
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 14,
+                "n": 25,
+                "pct": 56.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 12,
+                "n": 16,
+                "pct": 75.0
+              },
+              "pick_two_obj_and_place": {
+                "ok": 17,
+                "n": 24,
+                "pct": 70.83
+              }
+            }
+          }
+        },
+        "3": {
+          "test": {
+            "ok": 100,
+            "n": 134,
+            "pct": 74.63,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 12,
+                "n": 18,
+                "pct": 66.67
+              },
+              "pick_and_place": {
+                "ok": 19,
+                "n": 24,
+                "pct": 79.17
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 22,
+                "n": 31,
+                "pct": 70.97
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 18,
+                "n": 21,
+                "pct": 85.71
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 15,
+                "n": 23,
+                "pct": 65.22
+              },
+              "pick_two_obj_and_place": {
+                "ok": 14,
+                "n": 17,
+                "pct": 82.35
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 110,
+            "n": 140,
+            "pct": 78.57,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 9,
+                "n": 13,
+                "pct": 69.23
+              },
+              "pick_and_place": {
+                "ok": 33,
+                "n": 35,
+                "pct": 94.29
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 24,
+                "n": 27,
+                "pct": 88.89
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 17,
+                "n": 25,
+                "pct": 68.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 10,
+                "n": 16,
+                "pct": 62.5
+              },
+              "pick_two_obj_and_place": {
+                "ok": 17,
+                "n": 24,
+                "pct": 70.83
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "alfworld/memcurator-success-latest/sol-sol/trial1",
+      "benchmark": "alfworld",
+      "mechanism": "memcurator-success-latest",
+      "pair": "sol-sol",
+      "trial": "trial1",
+      "label": "JitMem \u00b7 successful + latest \u00b7 sol/sol \u00b7 trial 1",
+      "epochs": {
+        "1": {
+          "test": {
+            "ok": 109,
+            "n": 134,
+            "pct": 81.34,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 16,
+                "n": 18,
+                "pct": 88.89
+              },
+              "pick_and_place": {
+                "ok": 20,
+                "n": 24,
+                "pct": 83.33
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 27,
+                "n": 31,
+                "pct": 87.1
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 18,
+                "n": 21,
+                "pct": 85.71
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 15,
+                "n": 23,
+                "pct": 65.22
+              },
+              "pick_two_obj_and_place": {
+                "ok": 13,
+                "n": 17,
+                "pct": 76.47
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 106,
+            "n": 140,
+            "pct": 75.71,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 9,
+                "n": 13,
+                "pct": 69.23
+              },
+              "pick_and_place": {
+                "ok": 29,
+                "n": 35,
+                "pct": 82.86
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 23,
+                "n": 27,
+                "pct": 85.19
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 16,
+                "n": 25,
+                "pct": 64.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 12,
+                "n": 16,
+                "pct": 75.0
+              },
+              "pick_two_obj_and_place": {
+                "ok": 17,
+                "n": 24,
+                "pct": 70.83
+              }
+            }
+          }
+        },
+        "2": {
+          "test": {
+            "ok": 107,
+            "n": 134,
+            "pct": 79.85,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 13,
+                "n": 18,
+                "pct": 72.22
+              },
+              "pick_and_place": {
+                "ok": 19,
+                "n": 24,
+                "pct": 79.17
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 26,
+                "n": 31,
+                "pct": 83.87
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 20,
+                "n": 21,
+                "pct": 95.24
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 16,
+                "n": 23,
+                "pct": 69.57
+              },
+              "pick_two_obj_and_place": {
+                "ok": 13,
+                "n": 17,
+                "pct": 76.47
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 116,
+            "n": 140,
+            "pct": 82.86,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 10,
+                "n": 13,
+                "pct": 76.92
+              },
+              "pick_and_place": {
+                "ok": 33,
+                "n": 35,
+                "pct": 94.29
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 25,
+                "n": 27,
+                "pct": 92.59
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 18,
+                "n": 25,
+                "pct": 72.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 11,
+                "n": 16,
+                "pct": 68.75
+              },
+              "pick_two_obj_and_place": {
+                "ok": 19,
+                "n": 24,
+                "pct": 79.17
+              }
+            }
+          }
+        },
+        "3": {
+          "test": {
+            "ok": 109,
+            "n": 134,
+            "pct": 81.34,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 12,
+                "n": 18,
+                "pct": 66.67
+              },
+              "pick_and_place": {
+                "ok": 20,
+                "n": 24,
+                "pct": 83.33
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 26,
+                "n": 31,
+                "pct": 83.87
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 20,
+                "n": 21,
+                "pct": 95.24
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 17,
+                "n": 23,
+                "pct": 73.91
+              },
+              "pick_two_obj_and_place": {
+                "ok": 14,
+                "n": 17,
+                "pct": 82.35
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 122,
+            "n": 140,
+            "pct": 87.14,
+            "by_type": {
+              "look_at_obj_in_light": {
+                "ok": 10,
+                "n": 13,
+                "pct": 76.92
+              },
+              "pick_and_place": {
+                "ok": 33,
+                "n": 35,
+                "pct": 94.29
+              },
+              "pick_clean_then_place_in_recep": {
+                "ok": 26,
+                "n": 27,
+                "pct": 96.3
+              },
+              "pick_cool_then_place_in_recep": {
+                "ok": 22,
+                "n": 25,
+                "pct": 88.0
+              },
+              "pick_heat_then_place_in_recep": {
+                "ok": 12,
+                "n": 16,
+                "pct": 75.0
+              },
+              "pick_two_obj_and_place": {
+                "ok": 19,
+                "n": 24,
+                "pct": 79.17
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "enterpriseops/no-skill/enterpriseops-all/trial1",
+      "benchmark": "enterpriseops",
+      "mechanism": "no-skill",
+      "pair": "enterpriseops-all",
+      "trial": "trial1",
+      "label": "enterpriseops \u00b7 No-memory",
+      "epochs": {
+        "0": {
+          "test": {
+            "ok": 1,
+            "n": 36,
+            "pct": 2.78,
+            "by_type": {
+              "csm": {
+                "ok": 1,
+                "n": 36,
+                "pct": 2.78
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 0,
+            "n": 66,
+            "pct": 0.0,
+            "by_type": {
+              "csm": {
+                "ok": 0,
+                "n": 66,
+                "pct": 0.0
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "tau2/no-skill/tau2-all/trial1",
+      "benchmark": "tau2",
+      "mechanism": "no-skill",
+      "pair": "tau2-all",
+      "trial": "trial1",
+      "label": "tau2 \u00b7 No-memory",
+      "epochs": {
+        "0": {
+          "test": {
+            "ok": 104,
+            "n": 174,
+            "pct": 59.77,
+            "by_type": {
+              "airline": {
+                "ok": 13,
+                "n": 20,
+                "pct": 65.0
+              },
+              "banking_knowledge": {
+                "ok": 6,
+                "n": 34,
+                "pct": 17.65
+              },
+              "retail": {
+                "ok": 33,
+                "n": 40,
+                "pct": 82.5
+              },
+              "telecom": {
+                "ok": 21,
+                "n": 40,
+                "pct": 52.5
+              },
+              "telecom-workflow": {
+                "ok": 31,
+                "n": 40,
+                "pct": 77.5
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 165,
+            "n": 315,
+            "pct": 52.38,
+            "by_type": {
+              "airline": {
+                "ok": 26,
+                "n": 30,
+                "pct": 86.67
+              },
+              "banking_knowledge": {
+                "ok": 12,
+                "n": 63,
+                "pct": 19.05
+              },
+              "retail": {
+                "ok": 55,
+                "n": 74,
+                "pct": 74.32
+              },
+              "telecom": {
+                "ok": 27,
+                "n": 74,
+                "pct": 36.49
+              },
+              "telecom-workflow": {
+                "ok": 45,
+                "n": 74,
+                "pct": 60.81
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "tau2/skillos/tau2-all/trial1",
+      "benchmark": "tau2",
+      "mechanism": "skillos",
+      "pair": "tau2-all",
+      "trial": "trial1",
+      "label": "tau2 \u00b7 SkillOS \u00b7 tau2/all \u00b7 trial 1",
+      "epochs": {
+        "1": {
+          "test": {
+            "ok": 80,
+            "n": 174,
+            "pct": 45.98,
+            "by_type": {
+              "airline": {
+                "ok": 13,
+                "n": 20,
+                "pct": 65.0
+              },
+              "banking_knowledge": {
+                "ok": 5,
+                "n": 34,
+                "pct": 14.71
+              },
+              "retail": {
+                "ok": 25,
+                "n": 40,
+                "pct": 62.5
+              },
+              "telecom": {
+                "ok": 15,
+                "n": 40,
+                "pct": 37.5
+              },
+              "telecom-workflow": {
+                "ok": 22,
+                "n": 40,
+                "pct": 55.0
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 143,
+            "n": 315,
+            "pct": 45.4,
+            "by_type": {
+              "airline": {
+                "ok": 28,
+                "n": 30,
+                "pct": 93.33
+              },
+              "banking_knowledge": {
+                "ok": 6,
+                "n": 63,
+                "pct": 9.52
+              },
+              "retail": {
+                "ok": 59,
+                "n": 74,
+                "pct": 79.73
+              },
+              "telecom": {
+                "ok": 10,
+                "n": 74,
+                "pct": 13.51
+              },
+              "telecom-workflow": {
+                "ok": 40,
+                "n": 74,
+                "pct": 54.05
+              }
+            }
+          }
+        },
+        "2": {
+          "test": {
+            "ok": 85,
+            "n": 174,
+            "pct": 48.85,
+            "by_type": {
+              "airline": {
+                "ok": 15,
+                "n": 20,
+                "pct": 75.0
+              },
+              "banking_knowledge": {
+                "ok": 6,
+                "n": 34,
+                "pct": 17.65
+              },
+              "retail": {
+                "ok": 27,
+                "n": 40,
+                "pct": 67.5
+              },
+              "telecom": {
+                "ok": 14,
+                "n": 40,
+                "pct": 35.0
+              },
+              "telecom-workflow": {
+                "ok": 23,
+                "n": 40,
+                "pct": 57.5
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 135,
+            "n": 315,
+            "pct": 42.86,
+            "by_type": {
+              "airline": {
+                "ok": 21,
+                "n": 30,
+                "pct": 70.0
+              },
+              "banking_knowledge": {
+                "ok": 14,
+                "n": 63,
+                "pct": 22.22
+              },
+              "retail": {
+                "ok": 57,
+                "n": 74,
+                "pct": 77.03
+              },
+              "telecom": {
+                "ok": 9,
+                "n": 74,
+                "pct": 12.16
+              },
+              "telecom-workflow": {
+                "ok": 34,
+                "n": 74,
+                "pct": 45.95
+              }
+            }
+          }
+        },
+        "3": {
+          "test": {
+            "ok": 87,
+            "n": 174,
+            "pct": 50.0,
+            "by_type": {
+              "airline": {
+                "ok": 15,
+                "n": 20,
+                "pct": 75.0
+              },
+              "banking_knowledge": {
+                "ok": 4,
+                "n": 34,
+                "pct": 11.76
+              },
+              "retail": {
+                "ok": 30,
+                "n": 40,
+                "pct": 75.0
+              },
+              "telecom": {
+                "ok": 15,
+                "n": 40,
+                "pct": 37.5
+              },
+              "telecom-workflow": {
+                "ok": 23,
+                "n": 40,
+                "pct": 57.5
+              }
+            }
+          },
+          "valid_seen": {
+            "ok": 129,
+            "n": 315,
+            "pct": 40.95,
+            "by_type": {
+              "airline": {
+                "ok": 23,
+                "n": 30,
+                "pct": 76.67
+              },
+              "banking_knowledge": {
+                "ok": 12,
+                "n": 63,
+                "pct": 19.05
+              },
+              "retail": {
+                "ok": 53,
+                "n": 74,
+                "pct": 71.62
+              },
+              "telecom": {
+                "ok": 13,
+                "n": 74,
+                "pct": 17.57
+              },
+              "telecom-workflow": {
+                "ok": 28,
+                "n": 74,
+                "pct": 37.84
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evolution Playground Dashboard</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/demo.css?v=83">
+    <script>
+        (function () {
+            var params = new URLSearchParams(location.search);
+            var embed = params.get('embed') === '1' || window.self !== window.top;
+            if (embed) document.documentElement.classList.add('is-embed');
+        })();
+    </script>
+</head>
+<body>
+    <header class="demo-header">
+        <div class="header-content">
+            <a class="back-link" href="index.html">← Self-Evolving Agents</a>
+            <h1>JitMem: Just-in-Time Memory</h1>
+            <p class="subtitle">Learning to Curate Task-Adaptive Memory for LLM Agents</p>
+        </div>
+    </header>
+
+    <main class="demo-container">
+        <!-- Timeline Controls -->
+        <section class="timeline-section">
+            <div class="timeline-controls">
+                <button id="playBtn" class="control-btn">▶ Play</button>
+                <button id="resetBtn" class="control-btn">⟲ Reset</button>
+                <div class="timeline-slider-container">
+                    <input type="range" id="timelineSlider" min="0" max="110" value="0">
+                    <div class="timeline-labels">
+                        <span>Task 0</span>
+                        <span id="currentTaskLabel">Current: 0</span>
+                        <span>Task 110</span>
+                    </div>
+                </div>
+                <select id="speedSelect" class="speed-select">
+                    <option value="1000">1x Speed</option>
+                    <option value="500">2x Speed</option>
+                    <option value="250">4x Speed</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- Panel C: Evaluation -->
+        <section class="panel evaluation-panel">
+            <h2 class="panel-title">
+                <span class="panel-icon">📊</span>
+                Evaluation
+            </h2>
+            <div class="eval-grid">
+                <div class="eval-section chart-section">
+                    <h3>Success (seen) <span class="chart-live" id="seenRateLabel">—</span></h3>
+                    <div class="chart-container">
+                        <div class="chart-svg" id="seenChart" role="img" aria-label="Success seen"></div>
+                    </div>
+                    <div class="chart-controls">
+                        <label><input type="radio" name="chartModeSeen" value="cumulative" checked> Cumulative</label>
+                        <label><input type="radio" name="chartModeSeen" value="byType"> By type</label>
+                    </div>
+                    <div class="eval-outcomes" aria-label="Seen outcomes by epoch">
+                        <h4>Episode outcomes by epoch</h4>
+                        <div id="seenOutcomeRows" class="eval-outcome-rows"></div>
+                    </div>
+                </div>
+                <div class="eval-section chart-section">
+                    <h3>Success (unseen) <span class="chart-live" id="unseenRateLabel">—</span></h3>
+                    <div class="chart-container">
+                        <div class="chart-svg" id="unseenChart" role="img" aria-label="Success unseen"></div>
+                    </div>
+                    <div class="chart-controls">
+                        <label><input type="radio" name="chartModeUnseen" value="cumulative" checked> Checkpoints</label>
+                        <label><input type="radio" name="chartModeUnseen" value="byType"> By type</label>
+                    </div>
+                    <div class="eval-outcomes" aria-label="Unseen outcomes by epoch">
+                        <h4>Episode outcomes by epoch</h4>
+                        <div id="unseenOutcomeRows" class="eval-outcome-rows"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Panels Grid -->
+        <div class="panels-grid">
+            <!-- Panel A: Trajectory Bank -->
+            <section class="panel trajectory-panel">
+                <h2 class="panel-title">
+                    <span class="panel-icon">📚</span>
+                    Trajectory Bank
+                    <span class="panel-title-note">newest first</span>
+                </h2>
+                <div class="panel-content">
+                    <div class="traj-sidebar">
+                        <div class="traj-sidebar-head">
+                            <span id="trajListCount">Trajectories</span>
+                            <div class="trajectory-split-toggle" role="tablist" aria-label="Trajectory evaluation split">
+                                <button type="button" class="is-active" role="tab" aria-selected="true" data-trajectory-split="seen">Seen</button>
+                                <button type="button" role="tab" aria-selected="false" data-trajectory-split="unseen">Unseen</button>
+                            </div>
+                        </div>
+                        <div class="task-tree" id="taskTree" role="listbox" aria-label="Trajectories, newest first"></div>
+                    </div>
+                    <div class="trajectory-viewer" id="trajectoryViewer">
+                        <div class="placeholder-text">Select a trajectory to see the original query, step count, outcome, and individual steps.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Panel B: Skill Panel -->
+            <section class="panel skill-panel">
+                <h2 class="panel-title">
+                    <span class="panel-icon">🎯</span>
+                    Skill Panel
+                    <span class="panel-title-note" id="skillPanelNote">newest first · bank at selected sample</span>
+                </h2>
+                <div class="panel-content">
+                    <div class="skill-explorer" id="skillExplorer">
+                        <div class="skill-history-pane">
+                            <div class="skill-history-head">
+                                <span>Samples</span>
+                                <span id="skillSampleCount">0 samples</span>
+                            </div>
+                            <div class="skill-sample-list" id="skillSampleList" role="listbox" aria-label="Skill samples, newest first"></div>
+                            <div class="skill-sample-detail" id="skillSampleDetail">
+                                <div class="skill-detail-field skill-detail-query">
+                                    <h3>Query</h3>
+                                    <div class="query-box" id="currentQuery"><span class="placeholder-text">Select a sample</span></div>
+                                </div>
+                                <div class="skill-detail-field">
+                                    <h3 id="retrievedSkillsLabel">Retrieved Skills</h3>
+                                    <div class="retrieved-skills" id="retrievedSkills"><span class="placeholder-text">—</span></div>
+                                    <p class="retrieval-k-note" id="retrievalKNote"></p>
+                                </div>
+                                <div class="skill-outcome-grid">
+                                    <div class="skill-detail-field">
+                                        <h3>Outcome</h3>
+                                        <div class="result-badge" id="resultBadge"><span class="placeholder-text">—</span></div>
+                                    </div>
+                                    <div class="skill-detail-field">
+                                        <h3>Self-judge Outcome</h3>
+                                        <div class="result-badge" id="judgeBadge"><span class="placeholder-text">—</span></div>
+                                    </div>
+                                </div>
+                                <div class="skill-detail-field">
+                                    <h3 id="curationDecisionLabel">Curation Decision</h3>
+                                    <div class="curation-op" id="curationOp"><span class="placeholder-text">—</span></div>
+                                </div>
+                                <details class="skill-detail-field curator-output-field">
+                                    <summary>Complete Curator Output</summary>
+                                    <div class="curator-output" id="curatorOutput"><span class="placeholder-text">—</span></div>
+                                </details>
+                            </div>
+                        </div>
+                        <div class="skill-bank-pane">
+                            <div class="skill-bank-head">
+                                <span>Skill bank</span>
+                                <span id="skillBankFolderCount">0 items</span>
+                            </div>
+                            <div class="skill-bank-folders" id="skillBankFolders" role="list" aria-label="Current skill bank"></div>
+                            <div class="skill-bank-detail" id="skillBankDetail">
+                                <span class="placeholder-text">Select a bank item to inspect its description, edit history, and trajectories.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="skill-utility-layout">
+        <section class="panel skill-utility-panel" aria-labelledby="skill-utility-panel-title">
+            <h2 class="panel-title" id="skill-utility-panel-title">
+                <span class="panel-icon">📈</span>
+                Skill Lifecycle and Usage
+                <label class="skill-utility-picker">
+                    <span>Skill · most used first</span>
+                    <select id="skillUtilitySelect" aria-label="Select a skill for utility analysis" disabled>
+                        <option value="">Select a skill</option>
+                    </select>
+                </label>
+            </h2>
+            <div class="panel-content skill-utility-panel-content" id="skillUtilityPanelContent">
+                <div class="placeholder-text">Select a skill in the Skill Panel to inspect its lifecycle and usage.</div>
+            </div>
+        </section>
+        <section class="panel skill-category-panel" aria-labelledby="skill-category-panel-title">
+            <h2 class="panel-title" id="skill-category-panel-title">
+                <span class="panel-icon">🧭</span>
+                Skill Categories
+            </h2>
+            <div class="panel-content skill-category-panel-content" id="skillCategoryDistribution">
+                <div class="placeholder-text">Load an experiment to see the eight-category skill distribution.</div>
+            </div>
+        </section>
+        </div>
+
+    </main>
+
+    <footer class="demo-footer">
+        <p>JitMem Demo | ALFWorld Benchmark | GPT-5.6-luna Executor</p>
+    </footer>
+
+    <script src="js/demo.js?v=113"></script>
+</body>
+</html>

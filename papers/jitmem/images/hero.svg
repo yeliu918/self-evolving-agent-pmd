@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#032d60"/>
+      <stop offset="100%" stop-color="#0176d3"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#g)"/>
+  <rect x="72" y="150" width="480" height="280" rx="20" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
+  <text x="104" y="220" fill="rgba(255,255,255,0.7)" font-family="DM Sans, Arial, sans-serif" font-size="22" font-weight="700">WRITE-TIME</text>
+  <text x="104" y="280" fill="#fff" font-family="DM Sans, Arial, sans-serif" font-size="36" font-weight="700">Compress early</text>
+  <text x="104" y="330" fill="rgba(255,255,255,0.8)" font-family="DM Sans, Arial, sans-serif" font-size="22">before the next task is known</text>
+  <rect x="648" y="150" width="480" height="280" rx="20" fill="rgba(255,255,255,0.14)" stroke="rgba(255,255,255,0.55)" stroke-width="2"/>
+  <text x="680" y="220" fill="#fe9339" font-family="DM Sans, Arial, sans-serif" font-size="22" font-weight="700">READ-TIME</text>
+  <text x="680" y="280" fill="#fff" font-family="DM Sans, Arial, sans-serif" font-size="36" font-weight="700">Curate for this task</text>
+  <text x="680" y="330" fill="rgba(255,255,255,0.85)" font-family="DM Sans, Arial, sans-serif" font-size="22">from raw history, on demand</text>
+  <text x="72" y="520" fill="#fff" font-family="DM Sans, Arial, sans-serif" font-size="48" font-weight="700">JitMem</text>
+  <text x="72" y="572" fill="rgba(255,255,255,0.85)" font-family="DM Sans, Arial, sans-serif" font-size="24">Task-Adaptive Memory for LLM Agents</text>
+</svg>
