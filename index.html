@@ -299,9 +299,9 @@
                                 <span>Benchmark</span>
                                 <select id="pg-benchmark">
                                     <option value="alfworld" selected>ALFWorld</option>
-                                    <option value="tau2" disabled hidden>Tau2</option>
-                                    <option value="enterpriseops" disabled hidden>Enterprise Ops</option>
-                                    <option value="bird" disabled hidden>BIRD</option>
+                                    <option value="tau2">Tau2</option>
+                                    <option value="enterpriseops">Enterprise Ops</option>
+                                    <option value="bird">BIRD</option>
                                 </select>
                             </label>
                             <label class="pg-field" id="pg-domain-field" hidden>
@@ -317,7 +317,7 @@
                             <label class="pg-field">
                                 <span>Mechanism</span>
                                 <select id="pg-mechanism">
-                                    <option value="no-skill" disabled hidden>No-skill</option>
+                                    <option value="no-skill">No-skill</option>
                                     <option value="skillos" selected>SkillOS</option>
                                     <option value="memcurator" disabled hidden>JitMem</option>
                                 </select>
@@ -433,7 +433,7 @@
 
             <div class="playground-demo" id="playground-dashboard">
                 <div class="jitmem-frame-wrap dashboard-frame-wrap">
-                    <p class="pg-dashboard-missing" id="pg-dashboard-missing" hidden>No matching run for this config.</p>
+                    <p class="pg-dashboard-missing" id="pg-dashboard-missing" hidden>No completed production run is available for this configuration.</p>
                     <iframe
                         id="playground-dashboard-frame"
                         class="jitmem-frame dashboard-frame"
@@ -646,6 +646,6 @@
         </section>
     </main>
 
-    <script src="shared/js/index-script.js?v=243"></script>
+    <script src="shared/js/index-script.js?v=244"></script>
 </body>
 </html>

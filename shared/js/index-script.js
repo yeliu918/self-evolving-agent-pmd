@@ -494,7 +494,7 @@ document.addEventListener('DOMContentLoaded', function() {
         function buildControls() {
             const datasetBenchmark = isDatasetBenchmark();
             const experiments = benchmarkExperiments();
-            const mechanisms = ['skillos'].filter((mechanism) => experiments.some((experiment) => experiment.mechanism === mechanism));
+            const mechanisms = ['no-skill', 'skillos'].filter((mechanism) => experiments.some((experiment) => experiment.mechanism === mechanism));
             mechanismsHost.innerHTML = mechanisms.map((mechanism) => `<label style="--series-color:${colors[mechanism]}"><input type="checkbox" value="${mechanism}" checked><i></i><span>${esc(datasetBenchmark && mechanism === 'no-skill' ? 'No-memory' : names[mechanism])}</span></label>`).join('');
             const pairs = Array.from(new Set(experiments.filter((experiment) => experiment.pair !== 'none').map((experiment) => experiment.pair))).sort();
             pairsHost.innerHTML = `<label><input type="checkbox" data-all-pairs checked><i class="pg-pair-line is-all"></i><span>All pairs</span></label>` + pairs.map((pair) => `<label><input type="checkbox" data-pair value="${pair}" checked><i class="pg-pair-line is-${pair}"></i><span>${pair.replace('-', ' / ')}</span></label>`).join('');
@@ -770,7 +770,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const isTau2 = benchmark === 'tau2';
             const datasetBenchmark = benchmark !== 'alfworld';
             syncDatasetOptions();
-            const allowedMechanisms = ['skillos'];
+            const allowedMechanisms = ['no-skill', 'skillos'];
             if (!allowedMechanisms.includes(mech)) mech = 'skillos';
             const previous = active;
             active = mech;
@@ -924,7 +924,11 @@ document.addEventListener('DOMContentLoaded', function() {
             tab.addEventListener('click', () => showAndLoad(tab.dataset.mech));
         });
         if (mechanism) mechanism.addEventListener('change', () => showAndLoad(mechanism.value));
-        if (bench) bench.addEventListener('change', () => showAndLoad('skillos'));
+        if (bench) bench.addEventListener('change', () => {
+            const available = ['skillos', 'no-skill'].filter((candidate) => manifestRows(candidate).length > 0);
+            const next = available.includes(active) ? active : (available[0] || active);
+            showAndLoad(next);
+        });
         [domain, executor, curator, judge, memoryFilter, epochs, trial].forEach((el) => {
             if (el) el.addEventListener('change', () => showAndLoad(active));
         });
@@ -1189,7 +1193,7 @@ document.addEventListener('DOMContentLoaded', function() {
             stopPlay();
             const chain = (runs && runs.length) ? runs : (run ? [run] : []);
             if (!found || !chain.length) {
-                emptyReplay('No matching run for this config.');
+                emptyReplay('No completed production run is available for this configuration.');
                 return;
             }
             try {
@@ -1205,7 +1209,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 paint(results.length);
             } catch (err) {
                 if (seq !== loadSeq) return;
-                emptyReplay('No matching run for this config.');
+                emptyReplay('No completed production run is available for this configuration.');
             }
         }
 
