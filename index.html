@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Self-Evolving Agents — a Salesforce AI Research program on agents that improve from their own experience.">
+    <meta name="description" content="Salesforce AI Research on agents that grow more capable with use and transfer what they learn to unfamiliar tasks.">
     <meta name="keywords" content="AI research, self-evolving agents, procedural memory, Salesforce, reinforcement learning">
     <meta name="author" content="Salesforce AI Research">
     <meta property="og:type" content="website">
     <meta property="og:title" content="Self-Evolving Agents — Salesforce AI Research">
-    <meta property="og:description" content="Research on agents that improve from their own experience.">
+    <meta property="og:description" content="Agents that grow more capable with use and transfer what they learn to unfamiliar tasks.">
     <link rel="icon" type="image/jpeg" href="shared/assets/salesforce-official.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <title>Self-Evolving Agents</title>
     <link rel="stylesheet" href="shared/css/styles.css?v=62">
-    <link rel="stylesheet" href="shared/css/index-styles.css?v=137">
+    <link rel="stylesheet" href="shared/css/index-styles.css?v=138">
     <script>
         (function () {
             var h = (location.hash || '').replace('#', '').toLowerCase();
@@ -83,16 +83,114 @@
             tabindex="0">
             <header class="hero">
                 <div class="landing-wrap">
-                    <span class="eyebrow">Salesforce AI Research · Research program</span>
-                    <h1>Self-Evolving Agents</h1>
+                    <span class="eyebrow">Salesforce AI Research · Our north star</span>
+                    <h1>Agents that get better with use</h1>
                     <p class="sub">
-                        We build agents that turn experience into durable capability—during execution and through post-training. Across memory, RL, language feedback, and policy distillation, every task should make the next one easier.
+                        We aim for agents that learn from the work they do, bring useful lessons to unfamiliar tasks and environments, and keep improving as experience accumulates.
                     </p>
                 </div>
             </header>
 
             <div class="vision-body">
                 <div class="landing-wrap">
+                    <div class="vision-target" aria-label="What progress toward our vision looks like">
+                        <span class="vision-target-label">What progress looks like</span>
+                        <div class="vision-target-signals">
+                            <p><strong>Transfer</strong><span>Better on unfamiliar tasks</span></p>
+                            <p><strong>Persistence</strong><span>Gains that last beyond one episode</span></p>
+                            <p><strong>Autonomy</strong><span>Less task-specific guidance over time</span></p>
+                        </div>
+                    </div>
+                    <div class="vision-intro">
+                        <h2>A cycle of self-improvement</h2>
+                        <p>Our approach links fast adaptation through memory with lasting model improvement. Better models then produce richer experience for the next round.</p>
+                    </div>
+
+                    <figure class="vision-cycle" aria-labelledby="vision-cycle-caption">
+                        <figcaption id="vision-cycle-caption" class="visually-hidden">Memory evolves from past experience into useful guidance. It helps the model on the next task and, through on-policy distillation, is internalized into model weights. The improved model produces new actions and outcomes that enrich memory.</figcaption>
+                        <div class="vision-cycle-node vision-cycle-memory">
+                            <div class="vision-node-head">
+                                <span class="vision-node-icon" aria-hidden="true">
+                                    <svg viewBox="0 0 48 48" fill="none"><ellipse cx="24" cy="11" rx="15" ry="6"/><path d="M9 11v12c0 3.3 6.7 6 15 6s15-2.7 15-6V11M9 23v13c0 3.3 6.7 6 15 6s15-2.7 15-6V23"/></svg>
+                                </span>
+                                <div><span class="vision-cycle-label">Memory loop</span><span class="vision-cycle-tempo">Adapts between tasks</span></div>
+                            </div>
+                            <div class="vision-cycle-stage">
+                                <div class="vision-cycle-state"><small>Memory v1</small><strong>Experience</strong></div>
+                                <span class="vision-cycle-step" aria-hidden="true">→</span>
+                                <div class="vision-cycle-state"><small>Memory v2</small><strong>Guidance</strong></div>
+                            </div>
+                            <p>Keep trajectories and reusable strategies. Curate what the next task needs.</p>
+                            <div class="vision-cycle-foot" aria-hidden="true"><span>Store</span><span>Curate</span><span>Retrieve</span></div>
+                        </div>
+                        <div class="vision-cycle-flows" aria-hidden="true">
+                            <div class="vision-flow vision-flow-forward">
+                                <strong>Memory guides the next task</strong>
+                                <span>Relevant experience helps now</span>
+                                <i>→</i>
+                            </div>
+                            <div class="vision-flow vision-flow-forward vision-flow-distill">
+                                <strong>Distill memory into weights</strong>
+                                <span>Teacher scores the student's own attempts</span>
+                                <i>→</i>
+                            </div>
+                            <div class="vision-flow vision-flow-back">
+                                <strong>Model produces new experience</strong>
+                                <span>Actions and outcomes enrich memory</span>
+                                <i>←</i>
+                            </div>
+                        </div>
+                        <div class="vision-cycle-node vision-cycle-model">
+                            <div class="vision-node-head">
+                                <span class="vision-node-icon" aria-hidden="true">
+                                    <svg viewBox="0 0 48 48" fill="none"><path d="M24 8v32M10 17l14 7 14-7M10 31l14-7 14 7"/><circle cx="24" cy="7" r="4"/><circle cx="9" cy="16" r="4"/><circle cx="39" cy="16" r="4"/><circle cx="9" cy="32" r="4"/><circle cx="39" cy="32" r="4"/><circle cx="24" cy="41" r="4"/></svg>
+                                </span>
+                                <div><span class="vision-cycle-label">Model loop</span><span class="vision-cycle-tempo">Improves through training</span></div>
+                            </div>
+                            <div class="vision-cycle-stage">
+                                <div class="vision-cycle-state"><small>Model v1</small><strong>Student policy</strong></div>
+                                <span class="vision-cycle-step" aria-hidden="true">→</span>
+                                <div class="vision-cycle-state"><small>Model v2</small><strong>Stronger policy</strong></div>
+                            </div>
+                            <p>Learn from verified outcomes and memory-guided teaching.</p>
+                            <div class="vision-cycle-foot" aria-hidden="true"><span>Act</span><span>Learn</span><span>Repeat</span></div>
+                        </div>
+                    </figure>
+
+                    <section class="vision-agenda" aria-labelledby="vision-agenda-title">
+                        <div class="vision-agenda-head">
+                            <h2 id="vision-agenda-title">Four questions that guide our research</h2>
+                            <p>Each addresses a bottleneck between raw experience and transferable capability.</p>
+                        </div>
+                        <div class="vision-agenda-path">
+                            <a class="vision-area" href="#publications" data-vision-theme="memory">
+                                <span class="vision-area-kicker">01 · What persists?</span>
+                                <h3>Agent memory</h3>
+                                <p>Which experiences should we keep, and when should we turn them into guidance for a new task?</p>
+                                <span class="vision-area-link">Explore papers <span aria-hidden="true">→</span></span>
+                            </a>
+                            <a class="vision-area" href="#publications" data-vision-theme="teaching">
+                                <span class="vision-area-kicker">02 · What helps this student?</span>
+                                <h3>Adaptive teaching</h3>
+                                <p>What should a teacher reveal, and how can feedback improve the guidance it gives?</p>
+                                <span class="vision-area-link">Explore papers <span aria-hidden="true">→</span></span>
+                            </a>
+                            <a class="vision-area" href="#publications" data-vision-theme="distillation">
+                                <span class="vision-area-kicker">03 · What becomes capability?</span>
+                                <h3>On-policy distillation</h3>
+                                <p>How do we use the student's own attempts to turn useful guidance into model behavior?</p>
+                                <span class="vision-area-link">Explore papers <span aria-hidden="true">→</span></span>
+                            </a>
+                        </div>
+                        <a class="vision-area vision-area-foundation" href="#publications" data-vision-theme="rl">
+                            <span class="vision-area-kicker">Across the cycle · What earns reinforcement?</span>
+                            <div>
+                                <h3>RL post-training</h3>
+                                <p>Study rewards, environments, and training stages so the behaviors we reinforce transfer beyond one task.</p>
+                            </div>
+                            <span class="vision-area-link">Explore papers <span aria-hidden="true">→</span></span>
+                        </a>
+                    </section>
                     <section class="vision-team" aria-labelledby="vision-team-title">
                         <div class="sec-head vision-team-head">
                             <h2 id="vision-team-title"><span class="pre">The people</span>Meet the team</h2>
@@ -477,9 +575,10 @@
                     <div class="pubs-hero-side">
                         <div class="pubs-themes" data-pubs-themes role="listbox" aria-label="Filter publications by theme">
                             <span class="pubs-themes-label">Themes</span>
-                            <button type="button" class="pubs-theme" role="option" aria-selected="false" data-theme="memory">Procedural Memory</button>
-                            <button type="button" class="pubs-theme" role="option" aria-selected="false" data-theme="distillation">Policy Distillation</button>
-                            <button type="button" class="pubs-theme" role="option" aria-selected="false" data-theme="post-training">Post Training</button>
+                            <button type="button" class="pubs-theme" role="option" aria-selected="false" data-theme="memory">Agent memory</button>
+                            <button type="button" class="pubs-theme" role="option" aria-selected="false" data-theme="teaching">Adaptive teaching</button>
+                            <button type="button" class="pubs-theme" role="option" aria-selected="false" data-theme="distillation">On-policy distillation</button>
+                            <button type="button" class="pubs-theme" role="option" aria-selected="false" data-theme="rl">RL post-training</button>
                         </div>
                         <div class="pubs-hero-art">
                             <img src="shared/assets/publications-hero.jpg" alt="Illustration of a curious researcher learning from books and scientific ideas">
@@ -488,7 +587,7 @@
                 </div>
 
                 <div class="paper-list" data-paper-list>
-                    <a href="papers/jitmem/index.html" class="box paper-card" data-published="2026-09-23" data-themes="memory post-training">
+                    <a href="papers/jitmem/index.html" class="box paper-card" data-published="2026-09-23" data-themes="memory">
                         <div class="paper-card-media">
                             <img src="papers/jitmem/images/figure1-paper.png" alt="Figure 1 from the JitMem paper, showing its inference and training pipelines">
                         </div>
@@ -514,7 +613,7 @@
                         </div>
                     </a>
 
-                    <a href="papers/rise/index.html" class="box paper-card" data-published="2026-09-04" data-themes="distillation post-training">
+                    <a href="papers/rise/index.html" class="box paper-card" data-published="2026-09-04" data-themes="teaching distillation rl">
                         <div class="paper-card-media">
                             <img src="papers/rise/images/figure1-paper.png" alt="Figure 1 from the RISE paper, showing extrapolation geometry and its recursive training loop">
                         </div>
@@ -540,7 +639,7 @@
                         </div>
                     </a>
 
-                    <a href="papers/river/index.html" class="box paper-card" data-published="2026-08-23" data-themes="post-training">
+                    <a href="papers/river/index.html" class="box paper-card" data-published="2026-08-23" data-themes="rl">
                         <div class="paper-card-media">
                             <img src="papers/river/images/behavior_transfer.png" alt="RIVER paper figure">
                         </div>
@@ -566,7 +665,7 @@
                         </div>
                     </a>
 
-                    <a href="papers/pmd/index.html" class="box paper-card" data-published="2026-07-01" data-themes="memory distillation post-training">
+                    <a href="papers/pmd/index.html" class="box paper-card" data-published="2026-07-01" data-themes="memory distillation">
                         <div class="paper-card-media">
                             <img src="papers/pmd/images/illustration_pmd.png" alt="PMD paper figure">
                         </div>
@@ -595,7 +694,7 @@
                         </div>
                     </a>
 
-                    <a href="papers/vpd/index.html" class="box paper-card" data-published="2026-05-14" data-themes="distillation post-training">
+                    <a href="papers/vpd/index.html" class="box paper-card" data-published="2026-05-14" data-themes="teaching distillation">
                         <div class="paper-card-media">
                             <img src="papers/vpd/images/fig1_lcb_reward_margin.png" alt="VPD paper figure">
                         </div>
@@ -626,17 +725,17 @@
                 </div>
 
                 <div class="upcoming-list" data-upcoming-list hidden>
-                    <article class="box upcoming-card" data-themes="distillation post-training">
+                    <article class="box upcoming-card" data-themes="distillation">
                         <span class="tag tag-soon">Coming soon</span>
                         <h3>Efficiency of On-Policy Distillation</h3>
                         <p>Making on-policy distillation cheaper and faster while preserving teacher quality and student gains.</p>
                     </article>
-                    <article class="box upcoming-card" data-themes="memory distillation post-training">
+                    <article class="box upcoming-card" data-themes="memory distillation">
                         <span class="tag tag-soon">Coming soon</span>
                         <h3>PMD+</h3>
                         <p>Next-generation procedural memory distillation with richer memory abstractions and stronger co-evolution.</p>
                     </article>
-                    <article class="box upcoming-card" data-themes="distillation post-training">
+                    <article class="box upcoming-card" data-themes="distillation rl">
                         <span class="tag tag-soon">Coming soon</span>
                         <h3>RL, SFT, and On-Policy Distillation Interplay</h3>
                         <p>How reinforcement learning, supervised fine-tuning, and on-policy distillation interact — and when to combine them.</p>

@@ -1523,8 +1523,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const cards = Array.from(document.querySelectorAll('#panel-publications [data-themes]'));
         let active = null;
 
-        function applyTheme(theme) {
-            if (theme && theme === active) theme = null;
+        function applyTheme(theme, allowToggle = true) {
+            if (allowToggle && theme && theme === active) theme = null;
             active = theme;
             const filtering = Boolean(theme);
 
@@ -1547,6 +1547,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
         buttons.forEach((btn) => {
             btn.addEventListener('click', () => applyTheme(btn.dataset.theme));
+        });
+
+        document.querySelectorAll('[data-vision-theme]').forEach((link) => {
+            link.addEventListener('click', (event) => {
+                event.preventDefault();
+                applyTheme(link.dataset.visionTheme, false);
+                activateTab('publications', { focusTab: true });
+                requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+            });
         });
     })();
 });
