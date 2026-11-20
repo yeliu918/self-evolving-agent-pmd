@@ -1,0 +1,134 @@
+.synergy .blog-hero h1 { max-width: 28ch; }
+.synergy .blog-hero .container { max-width: 1120px; }
+.synergy .blog-body { max-width: 1040px; }
+.synergy .blog-figure a { display: block; }
+.synergy .blog-callout h3 { margin-top: 0; }
+.synergy .blog-callout p:last-child { margin-bottom: 0; }
+.synergy .blog-hero .tag { display: inline-block; color: var(--sfdc-blue-dark); font-weight: 600; }
+.synergy .fine { color: var(--muted); font-size: 0.92rem; }
+
+/* ---- stage identity: one color per training method, always paired with its name ---- */
+.synergy {
+    --sft: #c98a1a;  --sft-ink: #7a5208;  --sft-tint: #fbf3e4;
+    --rlvr: #2e844a; --rlvr-ink: #1d5c32; --rlvr-tint: #e9f5ed;
+    --opd: #0176d3;  --opd-ink: #0b5cab;  --opd-tint: #e8f2fc;
+}
+.synergy .stage-chip {
+    display: inline-block; padding: 2px 9px; border-radius: 6px;
+    font-size: 0.82rem; font-weight: 700; letter-spacing: 0.02em; line-height: 1.5;
+    border-left: 3px solid; white-space: nowrap; vertical-align: baseline;
+}
+.synergy .stage-chip.sft  { color: var(--sft-ink);  background: var(--sft-tint);  border-color: var(--sft); }
+.synergy .stage-chip.rlvr { color: var(--rlvr-ink); background: var(--rlvr-tint); border-color: var(--rlvr); }
+.synergy .stage-chip.opd  { color: var(--opd-ink);  background: var(--opd-tint);  border-color: var(--opd); }
+
+/* ---- the three tools ---- */
+.synergy .tools { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 0.5rem 0 1.25rem; }
+.synergy .tool { background: #fff; border: 1px solid var(--rule); border-radius: 12px; padding: 16px 16px 6px; border-top: 3px solid; }
+.synergy .tool-sft { border-top-color: var(--sft); }
+.synergy .tool-rlvr { border-top-color: var(--rlvr); }
+.synergy .tool-opd { border-top-color: var(--opd); }
+.synergy .tool .tool-name { font-weight: 700; color: var(--navy); margin: 10px 0 4px; }
+.synergy .tool p { font-size: 0.95rem; line-height: 1.5; }
+
+/* ---- pipeline diagrams (composition map + recipe) ---- */
+.synergy .compose,
+.synergy .recipe {
+    margin: 1rem 0 1.5rem; padding: 22px 20px 16px;
+    background: #fff; border: 1px solid var(--rule); border-radius: 12px;
+    display: grid; align-items: center; row-gap: 18px; column-gap: 8px;
+}
+.synergy .compose { grid-template-columns: 74px auto 22px minmax(160px, 1fr) 22px minmax(160px, 1fr) 22px auto; }
+.synergy .recipe  { grid-template-columns: 74px auto 22px minmax(120px, 1fr) 22px minmax(120px, 1fr) 22px auto; }
+.synergy .compose .lane,
+.synergy .recipe .lane { display: contents; }
+/* pin each lane to its own row; the teacher lane's last item lands above OPD */
+.synergy .compose .lane:nth-of-type(1) > *,
+.synergy .recipe .lane:nth-of-type(1) > * { grid-row: 1; }
+.synergy .compose .lane:nth-of-type(2) > *,
+.synergy .recipe .lane:nth-of-type(2) > * { grid-row: 2; }
+.synergy .compose figcaption,
+.synergy .recipe figcaption { grid-row: 3; }
+.synergy .lane-label { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.synergy .node { justify-self: stretch; text-align: center; font-size: 0.9rem; }
+.synergy .node.model { padding: 8px 10px; border-radius: 8px; background: var(--band); color: var(--navy); font-weight: 600; white-space: nowrap; }
+.synergy .node.stage { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.synergy .node.stage .stage-chip { font-size: 0.92rem; padding: 5px 12px; }
+.synergy .node.note { color: var(--muted); font-size: 0.82rem; line-height: 1.3; }
+.synergy .node.result { justify-self: start; padding: 8px 14px; border-radius: 8px; background: var(--navy); color: #fff; font-weight: 700; }
+.synergy .dur { color: var(--muted); font-size: 0.8rem; line-height: 1.3; }
+.synergy .arrow { height: 2px; background: var(--tint-line); position: relative; }
+.synergy .arrow::after {
+    content: ""; position: absolute; right: -1px; top: -4px;
+    border-left: 7px solid var(--tint-line); border-top: 5px solid transparent; border-bottom: 5px solid transparent;
+}
+.synergy .slot {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px;
+    padding: 10px 10px 12px; border: 1.5px dashed var(--tint-line); border-radius: 10px; background: var(--paper);
+    position: relative; text-align: center;
+}
+.synergy .slot-q { flex-basis: 100%; font-size: 0.8rem; color: var(--ink); font-weight: 600; line-height: 1.3; margin-bottom: 2px; }
+.synergy .option + .option::before { content: "or"; color: var(--muted); font-size: 0.78rem; margin-right: 6px; }
+.synergy .slot-n {
+    display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%;
+    background: var(--navy); color: #fff; font-size: 0.78rem; font-weight: 700; flex: none;
+}
+.synergy .slot > .slot-n { position: absolute; top: -11px; left: -11px; }
+.synergy .compose figcaption,
+.synergy .recipe figcaption { grid-column: 1 / -1; color: var(--muted); font-size: 0.9rem; line-height: 1.5; border-top: 1px solid var(--rule-soft); padding-top: 12px; }
+
+/* ---- handoff findings ---- */
+.synergy .handoffs { display: grid; gap: 16px; margin: 0.5rem 0 1.5rem; }
+.synergy .handoff { background: #fff; border: 1px solid var(--rule); border-radius: 12px; padding: 18px 20px 4px; }
+.synergy .handoff-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.synergy .handoff-head h3 { margin: 0; }
+.synergy .vs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.synergy .vs-side { border: 1px solid var(--rule-soft); border-radius: 10px; padding: 12px 14px; background: var(--paper); }
+.synergy .vs-side.win { border: 1.5px solid var(--sfdc-blue); background: var(--tint); }
+.synergy .vs-side.win .vs-label::after { content: "Better"; margin-left: 8px; font-size: 0.72rem; font-weight: 700; color: #fff; background: var(--sfdc-blue); padding: 1px 7px; border-radius: 999px; vertical-align: middle; }
+.synergy .vs-side p { margin: 0; }
+.synergy .vs-label { font-size: 0.9rem; font-weight: 600; color: var(--navy); }
+.synergy .vs-num { font-size: 1.5rem; font-weight: 700; color: var(--navy); margin: 6px 0 2px !important; letter-spacing: -0.01em; }
+.synergy .vs-sub { font-size: 0.86rem; color: var(--muted) !important; line-height: 1.4 !important; }
+.synergy .lesson { font-size: 0.97rem; }
+
+/* ---- recipe results bars ---- */
+.synergy .results { display: grid; gap: 14px; margin: 0 0 18px; padding: 20px 24px 16px; border: 1px solid var(--rule); border-radius: 12px; background: white; }
+.synergy .results-title { margin: 0 !important; font-weight: 700; color: var(--navy); font-size: 0.95rem; }
+.synergy .results .result { display: grid; grid-template-columns: 180px 1fr 58px; gap: 16px; align-items: center; font-size: 0.95rem; }
+.synergy .result-track { background: var(--band); border-radius: 4px; height: 24px; }
+.synergy .result-bar { display: block; height: 100%; border-radius: 4px; background: #aacbff; width: var(--value); }
+.synergy .results .result:nth-last-child(2) .result-bar { background: var(--sfdc-blue); }
+.synergy .results .result strong { color: var(--navy); }
+.synergy .results .result-axis { margin-top: -6px; }
+.synergy .axis-ticks { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--muted); }
+
+/* ---- good practices ---- */
+.synergy .practices { list-style: none; padding: 0; margin: 0.5rem 0 1.5rem; border: 1px solid var(--rule); border-radius: 12px; background: #fff; }
+.synergy .practices li { display: grid; grid-template-columns: 150px 1fr; gap: 14px; align-items: baseline; padding: 12px 18px; border-bottom: 1px solid var(--rule-soft); color: var(--ink); line-height: 1.55; }
+.synergy .practices li:last-child { border-bottom: 0; }
+.synergy .p-tag { font-size: 0.82rem; font-weight: 700; color: var(--navy); }
+
+/* ---- narrow screens: stack the pipeline vertically ---- */
+@media (max-width: 860px) {
+    .synergy .tools { grid-template-columns: 1fr; }
+    .synergy .compose, .synergy .recipe { display: block; padding: 18px 16px 14px; }
+    .synergy .compose .lane, .synergy .recipe .lane {
+        display: flex; flex-direction: column; align-items: stretch; gap: 8px;
+        padding: 12px; border: 1px solid var(--rule-soft); border-radius: 10px; margin-bottom: 14px;
+    }
+    .synergy .arrow { width: 2px; height: 16px; align-self: center; }
+    .synergy .arrow::after { right: -4px; top: auto; bottom: -1px; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 7px solid var(--tint-line); border-bottom: 0; }
+    .synergy .node.model { white-space: normal; }
+    .synergy .slot > .slot-n { top: -9px; left: -6px; }
+    .synergy .vs { grid-template-columns: 1fr; }
+    .synergy .practices li { grid-template-columns: 1fr; gap: 4px; }
+}
+@media (max-width: 560px) {
+    .synergy .blog-hero { padding-top: 30px; }
+    .synergy .blog-body { padding: 24px 20px 48px; }
+    .synergy .results { padding: 18px 14px; }
+    .synergy .results .result { grid-template-columns: 1fr 58px; gap: 6px 10px; }
+    .synergy .result-label { grid-column: 1 / -1; }
+    .synergy .results .result-axis { display: none; }
+}

@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Unpacking the Compute Efficiency of Strong-to-Weak OPD vs. GRPO</title>
+<meta name="description" content="A systematic, matched-FLOPs study of on-policy distillation (OPD) against GRPO: when dense teacher supervision actually saves compute, and when it does not." />
+<link rel="icon" type="image/jpeg" href="../../shared/assets/salesforce-official.jpg" />
+
+<style>
+  :root {
+    color-scheme: light dark;
+    --page:        #f9f9f7;
+    --surface:     #fcfcfb;
+    --surface-2:   #ffffff;
+    --ink:         #0b0b0b;
+    --ink-2:       #52514e;
+    --muted:       #6b6a63;     /* AA on light surface */
+    --hair:        rgba(11,11,11,0.10);
+    --grid:        #e1e0d9;
+    --axis:        #c3c2b7;
+    --blue:        #2a78d6;
+    --orange:      #eb6834;
+    --aqua:        #1baf7a;
+    --good:        #006300;
+    --crit:        #d03b3b;
+    --de-emph:     #c9c8c1;
+    --on-accent:   #ffffff;     /* text on top of --blue fills */
+    --radius:      16px;
+    --maxw:        1080px;
+  }
+  :root[data-theme="dark"] {
+    --page:        #0d0d0d;
+    --surface:     #1a1a19;
+    --surface-2:   #202020;
+    --ink:         #ffffff;
+    --ink-2:       #c3c2b7;
+    --muted:       #a3a199;
+    --hair:        rgba(255,255,255,0.10);
+    --grid:        #2c2c2a;
+    --axis:        #383835;
+    --blue:        #3987e5;
+    --orange:      #d95926;
+    --aqua:        #199e70;
+    --good:        #0ca30c;
+    --crit:        #e66767;
+    --de-emph:     #4a4a46;
+    --on-accent:   #08131f;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root[data-theme="auto"] {
+      --page:#0d0d0d; --surface:#1a1a19; --surface-2:#202020; --ink:#ffffff; --ink-2:#c3c2b7;
+      --muted:#a3a199; --hair:rgba(255,255,255,0.10); --grid:#2c2c2a; --axis:#383835;
+      --blue:#3987e5; --orange:#d95926; --aqua:#199e70; --good:#0ca30c; --crit:#e66767;
+      --de-emph:#4a4a46; --on-accent:#08131f;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--page);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--blue); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+
+  /* ---------- top nav ---------- */
+  header.nav {
+    position: sticky; top: 0; z-index: 40;
+    backdrop-filter: saturate(1.4) blur(10px);
+    background: color-mix(in srgb, var(--page) 82%, transparent);
+    border-bottom: 1px solid var(--hair);
+  }
+  .nav-in {
+    max-width: var(--maxw); margin: 0 auto; padding: 12px 22px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .brand { font-weight: 700; letter-spacing: -0.01em; font-size: 15px; color: var(--ink); }
+  .brand:hover { text-decoration: none; }
+  .brand .dot { color: var(--blue); }
+  .nav-links { margin-left: auto; display: flex; gap: 6px; flex-wrap: wrap; align-items:center; }
+  .nav-links a {
+    font-size: 13.5px; font-weight: 600; color: var(--ink-2);
+    padding: 7px 12px; border-radius: 999px; border: 1px solid var(--hair);
+  }
+  .nav-links a:hover { color: var(--ink); background: var(--surface); text-decoration: none; }
+  .nav-links a.active { color: var(--blue); background: color-mix(in srgb, var(--blue) 12%, transparent); border-color: color-mix(in srgb, var(--blue) 45%, transparent); }
+  .spy-anchor { scroll-margin-top: 96px; }
+  /* ---------- left TOC ---------- */
+  .toc { display: none; }
+  @media (min-width: 1100px) {
+    .nav-links a.sec { display: none; }
+    body > main, header.nav .nav-in { margin-left: max(244px, calc((100vw - var(--maxw)) / 2)); margin-right: auto; }
+    .toc {
+      display: flex; flex-direction: column; gap: 2px;
+      position: fixed; top: 96px; width: 200px; z-index: 30;
+      left: max(16px, calc((100vw - var(--maxw)) / 2 - 228px));
+      border-left: 1px solid var(--hair);
+    }
+    .toc-h { font-size: 11.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; padding-left: 14px; }
+    .toc a {
+      display: block; font-size: 13.5px; font-weight: 600; color: var(--ink-2); line-height: 1.35;
+      padding: 6px 10px 6px 14px; margin-left: -1px; border-left: 2px solid transparent; border-radius: 0 6px 6px 0;
+    }
+    .toc a:hover { color: var(--ink); background: var(--surface); text-decoration: none; }
+    .toc a.active { color: var(--blue); border-left-color: var(--blue); background: color-mix(in srgb, var(--blue) 10%, transparent); }
+    .toc-n { font-variant-numeric: tabular-nums; color: var(--muted); margin-right: 7px; font-weight: 700; }
+    .toc a.active .toc-n { color: var(--blue); }
+  }
+  .nav-links a.primary { color: var(--on-accent); background: var(--blue); border-color: transparent; }
+  .theme-btn {
+    cursor: pointer; font-size: 13.5px; font-weight: 600; color: var(--ink-2);
+    padding: 7px 11px; border-radius: 999px; border: 1px solid var(--hair);
+    background: transparent;
+  }
+  .theme-btn:hover { color: var(--ink); background: var(--surface); }
+  :focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 4px; }
+
+  /* ---------- layout ---------- */
+  main { max-width: var(--maxw); margin: 0 auto; padding: 0 22px 96px; }
+  section { padding-top: 56px; scroll-margin-top: 96px; }
+  .eyebrow {
+    font-size: 12.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--blue);
+  }
+  h1 { font-size: clamp(30px, 5vw, 50px); line-height: 1.08; letter-spacing: -0.025em; margin: 14px 0 0; font-weight: 800; }
+  h2 { font-size: clamp(23px, 3.4vw, 32px); line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 6px; font-weight: 750; }
+  h3 { font-size: 18px; margin: 0 0 6px; font-weight: 700; letter-spacing: -0.01em; }
+  p  { color: var(--ink-2); font-size: 16.5px; }
+  .lead { font-size: 19px; color: var(--ink); }
+
+  /* ---------- hero ---------- */
+  .hero { padding-top: 60px; }
+  .hero .sub { font-size: clamp(17px, 2.4vw, 21px); color: var(--ink-2); margin: 18px 0 0; max-width: 40em; }
+  .authors { margin-top: 26px; font-size: 15.5px; color: var(--ink-2); }
+  .authors .who { color: var(--ink); font-weight: 600; white-space: nowrap; }
+  .authors .names { line-height: 1.7; }
+  .authors sup { font-size: 0.68em; color: var(--muted); font-weight: 500; margin-left: 1px; }
+  .authors .affils { margin-top: 6px; font-size: 14.5px; color: var(--ink-2); }
+  .venue { display:inline-block; margin-top:8px; font-size: 13px; color: var(--muted); }
+  .cta { margin-top: 28px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 11px 17px; border-radius: 12px; font-weight: 650; font-size: 15px;
+    border: 1px solid var(--hair); color: var(--ink); background: var(--surface);
+  }
+  .btn:hover { text-decoration: none; border-color: color-mix(in srgb, var(--blue) 45%, var(--hair)); }
+  .btn.solid { background: var(--blue); color: var(--on-accent); border-color: transparent; }
+  .btn .ico { width: 16px; height: 16px; }
+
+  /* ---------- tldr banner ---------- */
+  .tldr {
+    margin-top: 40px; padding: 20px 22px; border-radius: var(--radius);
+    background: var(--surface); border: 1px solid var(--hair);
+    display: flex; gap: 16px; align-items: flex-start;
+  }
+  .tldr .tag {
+    flex: none; font-size: 12px; font-weight: 800; letter-spacing: .06em;
+    color: var(--blue); border: 1px solid color-mix(in srgb, var(--blue) 35%, var(--hair));
+    padding: 4px 9px; border-radius: 8px; margin-top: 2px;
+  }
+  .tldr p { margin: 0; color: var(--ink); font-size: 16.5px; }
+
+  /* ---------- KPI tiles ---------- */
+  .kpi-row {
+    margin-top: 24px; display: grid; gap: 14px;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .kpi {
+    background: var(--surface); border: 1px solid var(--hair); border-radius: var(--radius);
+    padding: 18px 18px 16px;
+  }
+  .kpi .num { font-size: 34px; font-weight: 800; letter-spacing: -0.02em; color: var(--ink); line-height: 1; }
+  .kpi .num .u { font-size: 18px; font-weight: 750; color: var(--blue); }
+  .kpi .lbl { margin-top: 9px; font-size: 13px; color: var(--ink-2); }
+  .kpi .lbl em { color: var(--ink); font-style: normal; font-weight: 650; }
+
+  /* ---------- finding cards ---------- */
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 8px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--hair); border-radius: var(--radius);
+    padding: 22px; position: relative; overflow: hidden;
+  }
+  .card .rail { position:absolute; left:0; top:0; bottom:0; width:4px; }
+  .card .n { font-size: 12.5px; font-weight: 800; color: var(--muted); letter-spacing: .06em; }
+  .card h3 { margin-top: 6px; }
+  .card p { font-size: 15px; margin: 6px 0 0; }
+
+  /* ---------- generic panel ---------- */
+  .panel {
+    background: var(--surface); border: 1px solid var(--hair); border-radius: var(--radius);
+    padding: 22px 24px; margin-top: 20px;
+  }
+  .grid-2 { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 26px; align-items: center; }
+  .fig-cap { font-size: 13px; color: var(--ink-2); margin-top: 12px; }
+  .fig-title { font-size: 14.5px; font-weight: 700; color: var(--ink); margin: 0 0 2px; }
+  .fig-sub { font-size: 12.5px; color: var(--muted); margin: 0 0 12px; }
+
+  ul.clean { padding-left: 0; list-style: none; margin: 14px 0 0; }
+  ul.clean li { position: relative; padding-left: 24px; margin: 10px 0; color: var(--ink-2); font-size: 16px; }
+  ul.clean li::before {
+    content: ""; position: absolute; left: 4px; top: 10px; width: 8px; height: 8px;
+    border-radius: 2px; background: var(--blue);
+  }
+  ul.clean li.bad::before { background: var(--crit); }
+  ul.clean li.good::before { background: var(--good); }
+  ul.clean li b { color: var(--ink); }
+
+  .callout {
+    margin-top: 18px; border-radius: 12px; padding: 16px 18px;
+    background: color-mix(in srgb, var(--crit) 9%, var(--surface));
+    border: 1px solid color-mix(in srgb, var(--crit) 30%, var(--hair));
+  }
+  .callout .h { font-weight: 750; color: var(--ink); font-size: 15px; }
+  .callout p { margin: 4px 0 0; font-size: 14.5px; }
+  .callout .chips { margin-top: 10px; display:flex; gap:8px; flex-wrap:wrap; }
+  .chip { font-size:12.5px; font-weight:700; padding:4px 9px; border-radius:8px; background:var(--surface-2); border:1px solid var(--hair); color:var(--ink-2); font-family: ui-monospace, monospace; }
+  .callout.good {
+    background: color-mix(in srgb, var(--good) 9%, var(--surface));
+    border: 1px solid color-mix(in srgb, var(--good) 32%, var(--hair));
+  }
+  .callout.good .h { color: var(--good); }
+
+  .eqbox {
+    margin-top: 14px; background: var(--surface-2); border: 1px solid var(--hair);
+    border-radius: 12px; padding: 16px 18px; overflow-x: auto;
+  }
+  .eqbox .row { display:flex; align-items:baseline; gap:12px; font-size:15px; color:var(--ink-2); padding:5px 0; }
+  .eqbox .row .lhs { font-weight: 700; color: var(--ink); min-width: 168px; font-family: ui-monospace, monospace; }
+  .eqbox .row .rhs .mono { color: var(--ink); }
+
+  /* scope / limitations */
+  .scope {
+    margin-top: 22px; border-radius: var(--radius); padding: 22px 24px;
+    background: var(--surface); border: 1px dashed color-mix(in srgb, var(--ink) 22%, var(--hair));
+  }
+  .scope h3 { color: var(--ink); }
+  .scope p { font-size: 15.5px; margin: 8px 0 0; }
+
+  /* takeaway */
+  .takeaway {
+    margin-top: 24px; border-radius: var(--radius); padding: 30px 28px;
+    background: linear-gradient(135deg, color-mix(in srgb, var(--blue) 12%, var(--surface)), var(--surface));
+    border: 1px solid color-mix(in srgb, var(--blue) 28%, var(--hair));
+  }
+  .takeaway h2 { margin-bottom: 8px; }
+  .takeaway p { color: var(--ink); font-size: 18px; }
+
+  /* bibtex */
+  pre.bib {
+    background: var(--surface); border: 1px solid var(--hair); border-radius: 12px;
+    padding: 18px; overflow-x: auto; font-size: 13px; color: var(--ink-2); line-height: 1.5;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  .copy-row { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+  .copy-btn { cursor:pointer; font-size:13px; font-weight:650; padding:7px 13px; border-radius:9px; border:1px solid var(--hair); background:var(--surface); color:var(--ink); }
+  .copy-btn:hover { border-color: color-mix(in srgb, var(--blue) 45%, var(--hair)); }
+
+  footer { border-top: 1px solid var(--hair); margin-top: 80px; }
+  .foot-in { max-width: var(--maxw); margin: 0 auto; padding: 28px 22px; color: var(--muted); font-size: 13.5px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+
+  /* svg chart shared */
+  .chart { width: 100%; height: auto; display:block; }
+  .chart text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .ax-lbl { fill: var(--muted); font-size: 11px; }
+  .val-lbl { fill: var(--ink); font-size: 12.5px; font-weight: 700; }
+  .val-sub { fill: var(--muted); font-size: 11px; }
+  .bar-name { fill: var(--ink-2); font-size: 12.5px; font-weight: 600; }
+  /* Finding 03 compute-frontier plots: scoped larger labels */
+  .chart-f3 .ax-lbl  { font-size: 20px; }
+  .chart-f3 .val-lbl { font-size: 22px; }
+  .chart-f3 .val-sub { font-size: 19px; }
+  .gridline { stroke: var(--grid); stroke-width: 1; }
+  .axisline { stroke: var(--axis); stroke-width: 1; }
+  .mark:hover { filter: brightness(1.08); }
+
+  .tbl-wrap { max-width: 720px; margin: 14px auto 0; overflow-x: auto; }
+  .data-tbl { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+  .data-tbl th, .data-tbl td { padding: 8px 12px; text-align: right; border-bottom: 1px solid var(--hair); }
+  .data-tbl th:first-child, .data-tbl td:first-child { text-align: left; }
+  .data-tbl thead th { font-weight: 700; color: var(--ink); border-bottom: 1.5px solid var(--axis); }
+  .data-tbl td { color: var(--ink-2); }
+  .data-tbl tr.sub td:first-child { padding-left: 28px; font-style: italic; color: var(--muted); }
+  .hl-bad { color: var(--crit) !important; font-weight: 700; }
+  .f3-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; max-width: 960px; margin: 16px auto 0; align-items: start; }
+  @media (max-width: 860px) {
+    .nav-in { flex-wrap: wrap; }
+    .nav-links { margin-left: 0; width: 100%; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+    .nav-links a, .nav-links .theme-btn { flex: none; }
+    .f3-pair { grid-template-columns: 1fr; max-width: 560px; gap: 26px; }
+    .kpi-row { grid-template-columns: repeat(2, 1fr); }
+    .cards { grid-template-columns: 1fr; }
+    .grid-2 { grid-template-columns: 1fr; gap: 18px; }
+    .eqbox .row { flex-direction: column; gap: 2px; }
+    .eqbox .row .lhs { min-width: 0; }
+  }
+</style>
+</head>
+
+<body>
+
+<header class="nav">
+  <div class="nav-in">
+    <a class="brand" href="../../index.html#publications" title="Back to Self-Evolving Agents publications">Strong-to-Weak <span class="dot">OPD</span> vs. GRPO</a>
+    <nav class="nav-links">
+      <a href="#findings" class="sec" data-spy>Findings</a>
+      <a href="#setup" class="sec" data-spy>Setup</a>
+      <a href="#f1" class="sec" data-spy>01&nbsp;External</a>
+      <a href="#f2" class="sec" data-spy>02&nbsp;Self-GRPO</a>
+      <a href="#f3" class="sec" data-spy>03&nbsp;Merge</a>
+      <a href="#takeaway" class="sec" data-spy>Takeaway</a>
+      <a href="#cite" class="sec" data-spy>Cite</a>
+      <a href="https://arxiv.org/abs/2611.08453" class="primary" id="lnk-paper">Paper&nbsp;↗</a>
+      <button class="theme-btn" id="themeToggle">◐ Auto</button>
+    </nav>
+  </div>
+</header>
+
+<!-- left-side table of contents (wide screens); scrollspy highlights the section in view -->
+<aside class="toc" aria-label="On this page">
+  <p class="toc-h">On this page</p>
+  <a href="#findings" data-spy>Three findings</a>
+  <a href="#setup" data-spy>Setup</a>
+  <a href="#f1" data-spy><span class="toc-n">01</span>External teachers</a>
+  <a href="#f2" data-spy><span class="toc-n">02</span>Self-GRPO teacher</a>
+  <a href="#f3" data-spy><span class="toc-n">03</span>Multi-teacher merge</a>
+  <a href="#takeaway" data-spy>Takeaway</a>
+  <a href="#cite" data-spy>Cite</a>
+</aside>
+
+<main>
+
+  <!-- ======================= HERO ======================= -->
+  <section class="hero" id="top">
+    <div class="eyebrow">On-policy distillation · reinforcement learning · compute efficiency</div>
+    <h1>Unpacking the Compute Efficiency of<br>Strong-to-Weak OPD against GRPO</h1>
+    <p class="sub">On-policy distillation trains a student on its own rollouts under a frozen teacher's per-token supervision. Does that dense signal actually reach a target accuracy in <em>fewer training FLOPs</em> than reinforcement learning? We answer with the first systematic, matched-FLOPs comparison against GRPO.</p>
+
+    <div class="authors">
+      <div class="names">
+        <span class="who">Zeyu Leo Liu<sup>1</sup></span>,
+        <span class="who">Yang Li<sup>1</sup></span>,
+        <span class="who">Bo Pang<sup>1</sup></span>,
+        <span class="who">Emre Can Acikgoz<sup>1,2</sup></span>,
+        <span class="who">Xuan-Phi Nguyen<sup>1</sup></span>,
+        <span class="who">Anurag Koul<sup>1</sup></span>,
+        <span class="who">Srijan Bansal<sup>1</sup></span>,
+        <span class="who">Erik Nijkamp<sup>1</sup></span>,
+        <span class="who">Shafiq Joty<sup>1</sup></span>,
+        <span class="who">Semih Yavuz<sup>1</sup></span>
+      </div>
+      <div class="affils"><sup>1</sup>Salesforce AI Research &nbsp;&nbsp; <sup>2</sup>UIUC</div>
+      <span class="venue">arXiv:2611.08453 · 2026</span>
+    </div>
+
+    <div class="cta">
+      <a class="btn solid" href="https://arxiv.org/abs/2611.08453" id="cta-arxiv">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6"/></svg>
+        Read the paper
+      </a>
+      <a class="btn" href="https://github.com/leo-liuzy/unpack_opd_vs_grpo" id="cta-code" target="_blank" rel="noopener">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="M8 9l-4 3 4 3"/><path d="M16 9l4 3-4 3"/></svg>
+        Code
+      </a>
+      <a class="btn" href="#cite">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="M4 5h16M4 12h16M4 19h10"/></svg>
+        BibTeX
+      </a>
+    </div>
+
+    <div class="tldr">
+      <span class="tag">TL;DR</span>
+      <p>With an <b>off-the-shelf teacher</b>, vanilla reverse-KL OPD is <b>not</b> more compute-efficient than GRPO — it usually loses, and inflates response length. Among the teachers we tried, OPD becomes dramatically efficient in one case: when the teacher is <b>the student's own GRPO checkpoint</b> (a <em>self-GRPO teacher</em>). That reframes OPD's real value — not as a replacement for GRPO, but as a cheap <b>consolidation step</b> that folds several per-domain GRPO experts into one model, beating joint GRPO at lower total compute.</p>
+    </div>
+
+    <div class="kpi-row" aria-label="Headline results">
+      <div class="kpi">
+        <div class="num">50<span class="u">×</span></div>
+        <div class="lbl">FLOPs saved vs. GRPO to reach the same math accuracy — only with a self-GRPO teacher (Qwen3-4B-Base).</div>
+      </div>
+      <div class="kpi">
+        <div class="num">135.6<span class="u">×</span></div>
+        <div class="lbl">Fewer FLOPs than OPD with an external Qwen3-8B teacher, for the same accuracy target.</div>
+      </div>
+      <div class="kpi">
+        <div class="num">42<span class="u">%</span></div>
+        <div class="lbl">Fewer total FLOPs than joint GRPO to match its 2-domain (math + code) accuracy.</div>
+      </div>
+      <div class="kpi">
+        <div class="num">5–8<span class="u">%</span></div>
+        <div class="lbl">Extra FLOPs the multi-teacher merge adds on top of specialist training (2 and 4 domains).</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= FINDINGS ======================= -->
+  <section id="findings">
+    <div class="eyebrow">Three findings</div>
+    <h2>Where OPD falls short of GRPO — and where it wins decisively</h2>
+    <p class="lead" style="max-width:46em;">We measure held-out accuracy (<span class="mono">mean@16</span>) against cumulative training FLOPs, an implementation-invariant compute measure, while varying data difficulty, student and teacher size and initialization, domain, thinking mode, the distillation objective, and the RL framework.</p>
+
+    <div class="cards">
+      <div class="card">
+        <div class="rail" style="background:var(--crit)"></div>
+        <div class="n">FINDING 01</div>
+        <h3>External teachers don't pay off</h3>
+        <p>Across a nine-axis sweep, <b>vanilla reverse-KL</b> OPD with an off-the-shelf post-trained teacher is broadly <b>less</b> compute-efficient than running GRPO directly — even when the teacher is itself GRPO-trained, and even in the regime that should favor OPD most. It also pathologically inflates response length.</p>
+      </div>
+      <div class="card">
+        <div class="rail" style="background:var(--blue)"></div>
+        <div class="n">FINDING 02</div>
+        <h3>The self-GRPO teacher makes OPD compute-efficient</h3>
+        <p>Of the teacher types we tested, OPD reliably recovers the teacher's accuracy only when the teacher is a <b>GRPO checkpoint of the student itself</b>. In the math setting it matches GRPO at <b>50× fewer</b> distillation-stage FLOPs; the pattern of full recovery (not the exact ratio) also holds across domains, student sizes, and model families.</p>
+      </div>
+      <div class="card">
+        <div class="rail" style="background:var(--good)"></div>
+        <div class="n">FINDING 03</div>
+        <h3>Specialize with GRPO, then consolidate with OPD</h3>
+        <p>On a single domain, distilling a checkpoint you already have is a paradox. Across domains it's an opportunity: <b>multi-teacher OPD</b> merges per-domain GRPO experts into one student, adding only 5–8% to specialist FLOPs and beating joint GRPO.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= SETUP ======================= -->
+  <section id="setup">
+    <div class="eyebrow">Setup &amp; compute accounting</div>
+    <h2>Same axis for both methods: accuracy per training FLOP</h2>
+    <div class="grid-2">
+      <div>
+        <p>Past efficiency claims rely on GPU-hours or step counts, which depend on the implementation, and never compare OPD and GRPO at matched FLOPs. We do: every run is priced in FLOPs per generated token, which is implementation-invariant. Here, <span class="mono">N<sub>s</sub></span> is the number of parameters in the student model, and <span class="mono">N<sub>t</sub></span> is the number of parameters in the teacher model.</p>
+        <div class="eqbox" aria-label="Per-token FLOPs accounting">
+          <div class="row"><span class="lhs">GRPO</span><span class="rhs"><span class="mono">10·N<sub>s</sub></span> per generated token &nbsp;=&nbsp; 2 (generate) + 2 (log-prob recompute) + 6 (update)</span></div>
+          <div class="row"><span class="lhs">OPD adds</span><span class="rhs"><span class="mono">+ 2·N<sub>t</sub></span> — one frozen-teacher forward pass over every training token</span></div>
+        </div>
+        <p style="margin-top:14px; font-size:15px;">So fewer rollouts or steps don't guarantee fewer FLOPs — OPD also pays for the teacher pass and tends to generate longer responses. Its loss is a closed-form <b>reverse KL</b> over the student's top-<span class="mono">k</span> tokens (<span class="mono">k=16</span>) on its own rollouts; the outcome reward never enters it.</p>
+      </div>
+      <div>
+        <ul class="clean">
+          <li><b>Students.</b> Qwen3 1.7B / 4B / 8B — mostly base checkpoints, plus selected SFT cold starts.</li>
+          <li><b>Teachers.</b> External thinking models (Qwen3 4B–32B), GRPO-trained base models, further-GRPO-trained thinking models, and <b>self-GRPO</b> checkpoints of the student.</li>
+          <li><b>Math.</b> Train on DAPO-Math-17K &amp; DeepMath-103k; evaluate OOD on AIME24 + AIME25 + AMC23.</li>
+          <li><b>Code.</b> Train on LiveCodeBench v1–v5 + CodeForces; evaluate on LiveCodeBench v6.</li>
+          <li><b>Multi-domain.</b> Adds MMLU-Pro (knowledge) and IFBench (instruction following).</li>
+          <li><b>Metric.</b> <span class="mono">mean@16</span> — mean accuracy over 16 samples per prompt.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= RESULTS ======================= -->
+  <section id="results">
+    <div class="eyebrow spy-anchor" id="f1">Finding 01 · in depth</div>
+    <h2>External teachers are compute-inefficient for OPD</h2>
+    <p class="lead" style="max-width:47em;">Under the vanilla reverse-KL objective, GRPO sits above every external-teacher OPD run at every evaluated FLOP count. Larger teachers only push OPD's curve rightward (more FLOPs) without lifting the student's accuracy.</p>
+
+    <div class="panel">
+      <div class="grid-2">
+        <div>
+          <p class="fig-title">Qwen3-1.7B-Base, 3 runs each: GRPO leads at every FLOP count; OPD then collapses</p>
+          <p class="fig-sub">Qwen3-1.7B-Base student (SFT-initialized); OPD distills from an external Qwen3-8B teacher. Macro mean@16 over AIME24 / AIME25 / AMC23 vs. cumulative training FLOPs (1 EFLOP = 10<sup>18</sup>); higher is better. Line = mean of 3 runs, band = &#177;1 std, faint lines = individual runs.</p>
+          <!-- CHART 1.7B: macro mean@16 (AIME24/25+AMC23) vs cumulative training FLOPs, 3 runs/method; acc from opd_grpo_1p7b_evals/eval_metrics.json, FLOPs from W&B perf/total_num_tokens (opd-tml-dapo-math) x (10*N_1.7B [+2*N_8B for OPD]); x = mean over runs. x: px = 70 + EFLOP*430/24 (0..24). y: py = 270 - acc%*9.2 (0..20%). -->
+          <svg class="chart" viewBox="0 56 520 274" role="img" aria-label="Macro mean@16 accuracy over AIME24, AIME25 and AMC23 versus cumulative training FLOPs for a Qwen3-1.7B-Base student (SFT-initialized), three runs per method. Both start at 6.6 percent. At matched FLOPs GRPO is above OPD with an external Qwen3-8B teacher from the start: at about 2 exaFLOP GRPO is at 12.8 percent versus OPD's 11.5 percent. GRPO finishes at 18.7 percent using 8.3 exaFLOP. OPD peaks at 14.5 percent after 14.0 exaFLOP, then collapses in all three runs to 9.1 percent at 18.8 exaFLOP and 0.5 percent at 23.7 exaFLOP.">
+            <g>
+              <line class="gridline" x1="70" y1="270" x2="500" y2="270"/>
+              <line class="gridline" x1="70" y1="224" x2="500" y2="224"/>
+              <line class="gridline" x1="70" y1="178" x2="500" y2="178"/>
+              <line class="gridline" x1="70" y1="132" x2="500" y2="132"/>
+              <line class="gridline" x1="70" y1="86" x2="500" y2="86"/>
+              <text class="ax-lbl" x="64" y="273" text-anchor="end">0</text>
+              <text class="ax-lbl" x="64" y="227" text-anchor="end">5</text>
+              <text class="ax-lbl" x="64" y="181" text-anchor="end">10</text>
+              <text class="ax-lbl" x="64" y="135" text-anchor="end">15</text>
+              <text class="ax-lbl" x="64" y="89" text-anchor="end">20</text>
+              <text class="ax-lbl" x="26" y="178" text-anchor="middle" transform="rotate(-90 26 178)">macro mean@16 (%)</text>
+            </g>
+            <line class="axisline" x1="70" y1="270" x2="500" y2="270"/>
+            <g class="ax-lbl" text-anchor="middle">
+              <text x="70.0" y="288">0</text>
+              <text x="141.7" y="288">4</text>
+              <text x="213.3" y="288">8</text>
+              <text x="285.0" y="288">12</text>
+              <text x="356.7" y="288">16</text>
+              <text x="428.3" y="288">20</text>
+              <text x="500.0" y="288">24</text>
+              <text x="285" y="312" fill="var(--muted)">cumulative training FLOPs (EFLOP)</text>
+            </g>
+            <!-- GRPO: ±1 std band, per-run traces, mean line -->
+            <polygon points="70.0,208.9 89.4,178.1 107.2,140.0 122.3,131.9 136.0,128.0 162.6,112.5 187.5,93.6 218.7,91.0 218.7,105.5 187.5,102.4 162.6,114.5 136.0,134.0 122.3,148.0 107.2,163.6 89.4,182.3 70.0,208.9" style="fill:var(--blue);opacity:0.16"/>
+            <polyline points="70.0,208.9 89.2,177.7 106.1,136.3 120.1,128.8 133.6,127.1 158.4,112.7 179.1,92.8 203.5,88.4" fill="none" style="stroke:var(--blue);stroke-width:1;opacity:0.3"/>
+            <polyline points="70.0,208.9 89.6,182.9 109.0,164.9 125.6,143.7 139.3,134.3 164.1,114.9 189.9,103.6 224.8,100.7" fill="none" style="stroke:var(--blue);stroke-width:1;opacity:0.3"/>
+            <polyline points="70.0,208.9 89.3,180.0 106.6,154.2 121.2,147.4 135.1,131.6 165.4,112.9 193.3,97.7 227.9,105.7" fill="none" style="stroke:var(--blue);stroke-width:1;opacity:0.3"/>
+            <polyline points="70.0,208.9 89.4,180.2 107.2,151.8 122.3,139.9 136.0,131.0 162.6,113.5 187.5,98.0 218.7,98.2" fill="none" style="stroke:var(--blue);stroke-width:2.5" stroke-linejoin="round"/>
+            <g class="mark"><circle cx="89.4" cy="180.2" r="4.5" style="fill:var(--blue);stroke:var(--surface);stroke-width:1.5"/><title>GRPO: 9.8% &#177; 0.2 at 1.1 EFLOP (mean of 3 runs)</title></g>
+            <g class="mark"><circle cx="107.2" cy="151.8" r="4.5" style="fill:var(--blue);stroke:var(--surface);stroke-width:1.5"/><title>GRPO: 12.8% &#177; 1.3 at 2.1 EFLOP (mean of 3 runs)</title></g>
+            <g class="mark"><circle cx="122.3" cy="139.9" r="4.5" style="fill:var(--blue);stroke:var(--surface);stroke-width:1.5"/><title>GRPO: 14.1% &#177; 0.9 at 2.9 EFLOP (mean of 3 runs)</title></g>
+            <g class="mark"><circle cx="136.0" cy="131.0" r="4.5" style="fill:var(--blue);stroke:var(--surface);stroke-width:1.5"/><title>GRPO: 15.1% &#177; 0.3 at 3.7 EFLOP (mean of 3 runs)</title></g>
+            <g class="mark"><circle cx="162.6" cy="113.5" r="4.5" style="fill:var(--blue);stroke:var(--surface);stroke-width:1.5"/><title>GRPO: 17.0% &#177; 0.1 at 5.2 EFLOP (mean of 3 runs)</title></g>
+            <g class="mark"><circle cx="187.5" cy="98.0" r="4.5" style="fill:var(--blue);stroke:var(--surface);stroke-width:1.5"/><title>GRPO: 18.7% &#177; 0.5 at 6.6 EFLOP (mean of 3 runs)</title></g>
+            <g class="mark"><circle cx="218.7" cy="98.2" r="4.5" style="fill:var(--blue);stroke:var(--surface);stroke-width:1.5"/><title>GRPO: 18.7% &#177; 0.8 at 8.3 EFLOP (mean of 3 runs)</title></g>
+            <!-- OPD (8B teacher): ±1 std band, per-run traces, mean line -->
+            <polygon points="70.0,208.9 108.7,156.8 146.8,134.7 189.9,134.7 233.2,133.1 320.3,124.1 407.2,173.6 494.0,261.1 494.0,268.8 407.2,198.5 320.3,149.6 233.2,157.1 189.9,158.1 146.8,155.6 108.7,171.9 70.0,208.9" style="fill:var(--orange);opacity:0.16"/>
+            <polyline points="70.0,208.9 108.5,160.1 147.1,159.6 190.5,156.4 233.8,154.5 320.9,154.7 407.8,197.4 494.7,269.8" fill="none" style="stroke:var(--orange);stroke-width:1;opacity:0.3"/>
+            <polyline points="70.0,208.9 108.9,158.0 146.3,135.2 188.7,130.0 232.1,128.2 319.1,129.6 405.9,192.1 492.7,264.6" fill="none" style="stroke:var(--orange);stroke-width:1;opacity:0.3"/>
+            <polyline points="70.0,208.9 108.7,174.9 147.1,140.7 190.4,152.9 233.8,152.6 320.9,126.2 407.8,168.7 494.6,260.5" fill="none" style="stroke:var(--orange);stroke-width:1;opacity:0.3"/>
+            <polyline points="70.0,208.9 108.7,164.4 146.8,145.2 189.9,146.4 233.2,145.1 320.3,136.9 407.2,186.1 494.0,265.0" fill="none" style="stroke:var(--orange);stroke-width:2.5" stroke-linejoin="round"/>
+            <g class="mark"><circle cx="108.7" cy="164.4" r="4.5" style="fill:var(--orange);stroke:var(--surface);stroke-width:1.5"/><title>OPD (8B teacher): 11.5% &#177; 0.8 at 2.2 EFLOP (mean of 3 runs)</title></g>
+            <g class="mark"><circle cx="146.8" cy="145.2" r="4.5" style="fill:var(--orange);stroke:var(--surface);stroke-width:1.5"/><title>OPD (8B teacher): 13.6% &#177; 1.1 at 4.3 EFLOP (mean of 3 runs)</title></g>
+            <g class="mark"><circle cx="189.9" cy="146.4" r="4.5" style="fill:var(--orange);stroke:var(--surface);stroke-width:1.5"/><title>OPD (8B teacher): 13.4% &#177; 1.3 at 6.7 EFLOP (mean of 3 runs)</title></g>
+            <g class="mark"><circle cx="233.2" cy="145.1" r="4.5" style="fill:var(--orange);stroke:var(--surface);stroke-width:1.5"/><title>OPD (8B teacher): 13.6% &#177; 1.3 at 9.1 EFLOP (mean of 3 runs)</title></g>
+            <g class="mark"><circle cx="320.3" cy="136.9" r="4.5" style="fill:var(--orange);stroke:var(--surface);stroke-width:1.5"/><title>OPD (8B teacher): 14.5% &#177; 1.4 at 14.0 EFLOP (mean of 3 runs)</title></g>
+            <g class="mark"><circle cx="407.2" cy="186.1" r="4.5" style="fill:var(--orange);stroke:var(--surface);stroke-width:1.5"/><title>OPD (8B teacher): 9.1% &#177; 1.4 at 18.8 EFLOP (mean of 3 runs)</title></g>
+            <g class="mark"><circle cx="494.0" cy="265.0" r="4.5" style="fill:var(--orange);stroke:var(--surface);stroke-width:1.5"/><title>OPD (8B teacher): 0.5% &#177; 0.4 at 23.7 EFLOP (mean of 3 runs)</title></g>
+            <g class="mark"><circle cx="70" cy="208.9" r="5" style="fill:var(--muted);stroke:var(--surface);stroke-width:1.5"/><title>Shared SFT init (both methods): 6.6%</title></g>
+            <text class="val-sub" x="80" y="232">SFT init &#183; 6.6%</text>
+            <text class="val-lbl" x="230" y="95" style="fill:var(--blue)">GRPO &#8212; 18.7%</text>
+            <text class="val-sub" x="230" y="109">full run &#183; 8.3 EFLOP</text>
+            <text class="val-lbl" x="150" y="192" style="fill:var(--orange)">OPD &#183; 8B teacher</text>
+            <text class="val-sub" x="150" y="206">peaks 14.5% at 14.0 EFLOP</text>
+            <text class="val-lbl" x="474" y="266" text-anchor="end" style="fill:var(--crit)">collapse &#183; 3/3 runs</text>
+          </svg>
+          <p class="fig-cap">FLOPs count the tokens each run actually processed: 10&#183;<i>N</i><sub>student</sub> per token, plus 2&#183;<i>N</i><sub>teacher</sub> for OPD's teacher forward pass. With the teacher pass and longer rollouts, a full OPD run costs <b>2.9&times;</b> a full GRPO run (23.7 vs. 8.3 EFLOP).</p>
+          <p class="fig-cap">Code to reproduce this plot: <a href="https://github.com/leo-liuzy/unpack_opd_vs_grpo" target="_blank" rel="noopener">github.com/leo-liuzy/unpack_opd_vs_grpo</a>.</p>
+        </div>
+        <div>
+          <ul class="clean">
+            <li class="bad"><b>GRPO leads at every FLOP count.</b> On Qwen3-1.7B-Base (3 runs each), GRPO stays above OPD with an 8B teacher across the whole compute range: at ~2 EFLOP, GRPO is at 12.8% vs. OPD's 11.5%. GRPO reaches <b>18.7%</b> using 8.3 EFLOP; OPD peaks at 14.5% after 14.0 EFLOP (1.7&times; more), then collapses in all 3 runs to <b>~0.5%</b>.</li>
+            <li class="bad"><b>Picking the "right" training prompts doesn't help.</b> We binned prompts by how often the student and the teacher solve them (an 8-cell difficulty grid) and trained on each cell separately: GRPO wins <em>in-domain</em> in <em>every</em> cell — even where the student barely solves anything and the teacher solves most.</li>
+            <li class="bad"><b>Nine axes, same verdict.</b> Student init, domain, dataset difficulty, learning rate, batch size, reverse-KL estimator, thinking mode, student and teacher size, and RL framework — none flips the ordering.</li>
+            <li><b>One fragile exception -- rollout group size <i>G</i>=1.</b> On math alone, OPD from Qwen3-8B then beats GRPO at matched FLOPs, though it needs 8× as many optimizer steps. On code it still loses, and on the 4-domain mix it collapses.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Finding 02 -->
+
+    <!-- Rollout pathologies table (math-only, step 200) -->
+    <div class="panel" style="margin-top:22px">
+      <p class="fig-title">Length inflation: external-teacher OPD rollouts degenerate</p>
+      <p class="fig-sub">Rollout pathologies at step 200 on math-only training, 500 rollouts per run (Qwen3 tokenizer). <span class="hl-bad">Bold red</span> = at least 2&times; the GRPO value.</p>
+      <div class="tbl-wrap">
+      <table class="data-tbl">
+        <thead><tr><th>metric</th><th>GRPO</th><th>OPD, external teacher</th></tr></thead>
+        <tbody>
+          <tr><td>repetition loop (naive detection)</td><td>16.6%</td><td class="hl-bad">63.6%</td></tr>
+          <tr><td>median response length (tokens)</td><td>6,504</td><td class="hl-bad">30,720 (= maximum)</td></tr>
+          <tr class="sub"><td>&#8618; if detected loops removed</td><td>4,573</td><td class="hl-bad">21,031</td></tr>
+          <tr><td>mean response length (tokens)</td><td>11,233</td><td class="hl-bad">30,229</td></tr>
+          <tr class="sub"><td>&#8618; if detected loops removed</td><td>7,763</td><td class="hl-bad">19,627</td></tr>
+          <tr><td>&ge; 95% of eval max length</td><td>19.0%</td><td class="hl-bad">97.8%</td></tr>
+          <tr><td>missing <span class="mono">\boxed{&middot;}</span></td><td>21.2%</td><td class="hl-bad">49.0%</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="fig-cap">The loop probe is conservative: it flags a rollout when the 100-char window <span class="mono">response[-200:-100]</span> recurs &ge; 3 times, so it catches short token-level loops but misses longer or paraphrased repetition. The de-looped lengths (cut at the first repeat) are therefore an <em>upper bound</em> on unique content &mdash; and even so, the external-teacher median is <b>~4.6&times;</b> GRPO's.</p>
+    </div>
+    <div style="padding-top:52px"></div>
+    <div class="eyebrow spy-anchor" id="f2">Finding 02 · in depth</div>
+    <h2>Efficient only when the teacher is the student's own RL checkpoint</h2>
+    <p class="lead" style="max-width:47em;">We sweep the teacher along three axes — base vs. thinking init, used as-is vs. further GRPO-trained, and same-size vs. larger. Among these, one setup stands out: the <b>self-GRPO teacher</b>, the student's own GRPO checkpoint.</p>
+
+    <!-- ===== 3-axis design-space board ===== -->
+    <div class="panel">
+      <p class="fig-title">The teacher design space: three axes, one efficient teacher</p>
+      <p class="fig-sub">Student fixed: Qwen3-4B-Base &middot; DAPO-Math-17K, thinking mode. We vary only the <b>teacher</b>, on three axes &mdash; <b>init</b> (rows), <b>training</b> (columns), and <b>size</b> (the 4B / 8B / 14B chips inside each family). In each chip the large number is the <b>OPD student&rsquo;s held-out OOD-math accuracy</b> (macro mean@16) using that teacher; the small line below is the <b>training compute</b> to get there (EFLOP) or the post-peak trend. Plain GRPO on this student reaches <b>33.9%</b> &mdash; the baseline an OPD student must outperform for its teacher to be worth using. A raw base used as-is (top-left) is too weak to be an appealing teacher &mdash; its <i>own</i> accuracy falls short of that mark &mdash; so we run OPD only from the three tested families.</p>
+      <svg class="chart" viewBox="0 0 960 492" role="img" aria-label="Two-by-two design space of teacher choices. Rows are teacher initialization (base on top, external thinking on the bottom); columns are training (used as-is on the left, further GRPO-trained on the right); the 4B, 8B and 14B chips inside each cell are teacher size. Only the base-initialized, GRPO-trained, same-size 4B teacher (self-GRPO) is efficient and stable. Larger teacher sizes do not transfer, as-is thinking teachers are slow, and further-GRPO thinking teachers collapse. A base model used as-is is untested.">
+        <!-- Axis-2 (columns) label + column header pills -->
+        <text class="ax-lbl" x="140" y="15">AXIS 2 &middot; TEACHER TRAINING&#8194;&#8594; more training to the right</text>
+        <g>
+          <rect x="268" y="28" width="140" height="26" rx="13" fill="var(--surface-2)" stroke="var(--hair)"/>
+          <text class="bar-name" x="338" y="45" text-anchor="middle">used as-is</text>
+          <rect x="626" y="28" width="248" height="26" rx="13" fill="var(--surface-2)" stroke="var(--hair)"/>
+          <text class="bar-name" x="750" y="45" text-anchor="middle">further GRPO-trained on the task</text>
+        </g>
+        <!-- Axis-1 (rows) rotated label -->
+        <text class="ax-lbl" x="16" y="262" text-anchor="middle" transform="rotate(-90 16 262)">AXIS 1 &middot; TEACHER INIT</text>
+        <!-- Row tabs -->
+        <g>
+          <rect x="46" y="138" width="82" height="56" rx="8" fill="var(--surface-2)" stroke="var(--hair)"/>
+          <rect x="49" y="142" width="4" height="48" rx="2" fill="var(--blue)"/>
+          <text class="bar-name" x="60" y="163">base</text>
+          <text class="ax-lbl" x="60" y="180">init</text>
+          <rect x="46" y="330" width="82" height="56" rx="8" fill="var(--surface-2)" stroke="var(--hair)"/>
+          <rect x="49" y="334" width="4" height="48" rx="2" fill="var(--orange)"/>
+          <text class="bar-name" x="60" y="355">thinking</text>
+          <text class="ax-lbl" x="60" y="372">init</text>
+        </g>
+
+        <!-- ===== CELL row1 x col1 : base + as-is -> UNTESTED (degenerate) ===== -->
+        <g>
+          <rect x="140" y="76" width="396" height="180" rx="12" fill="var(--surface-2)" stroke="var(--hair)" stroke-dasharray="5 4"/>
+          <g transform="translate(156,90)"><circle cx="7" cy="7" r="6" fill="none" stroke="var(--muted)" stroke-width="1.6"/><line x1="2.6" y1="11.4" x2="11.4" y2="2.6" stroke="var(--muted)" stroke-width="1.6"/></g>
+          <text class="bar-name" x="178" y="101" style="fill:var(--muted)">NOT A USEFUL TEACHER</text>
+          <text class="ax-lbl" x="158" y="119">Too weak to distil &mdash; every teacher trails the 33.9% GRPO bar.</text>
+          <text class="ax-lbl" x="158" y="134">Student (18.9%) is too close to teachers (23.1% 8B, 23.8% 14B).</text>
+          <g opacity="0.5">
+            <rect x="158" y="146" width="112" height="56" rx="8" fill="var(--surface)" stroke="var(--hair)"/>
+            <text class="bar-name" x="214" y="170" text-anchor="middle" style="fill:var(--muted)">4B</text>
+            <text class="val-sub" x="214" y="188" text-anchor="middle">&ndash;</text>
+            <rect x="282" y="146" width="112" height="56" rx="8" fill="var(--surface)" stroke="var(--hair)"/>
+            <text class="bar-name" x="338" y="170" text-anchor="middle" style="fill:var(--muted)">8B</text>
+            <text class="val-sub" x="338" y="188" text-anchor="middle">&ndash;</text>
+            <rect x="406" y="146" width="112" height="56" rx="8" fill="var(--surface)" stroke="var(--hair)"/>
+            <text class="bar-name" x="462" y="170" text-anchor="middle" style="fill:var(--muted)">14B</text>
+            <text class="val-sub" x="462" y="188" text-anchor="middle">&ndash;</text>
+          </g>
+        </g>
+
+        <!-- ===== CELL row1 x col2 : base + GRPO-trained -> WINNER (efficient) ===== -->
+        <g>
+          <rect x="552" y="76" width="396" height="180" rx="12" fill="var(--surface-2)" stroke="var(--hair)"/>
+          <rect x="553.5" y="77.5" width="393" height="177" rx="11" fill="none" stroke="var(--good)" stroke-width="2"/>
+          <rect x="558" y="86" width="4" height="160" rx="2" fill="var(--good)"/>
+          <g transform="translate(572,90)"><path d="M0,7 l4,4 l8,-10" fill="none" stroke="var(--good)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g>
+          <text class="bar-name" x="592" y="101" style="fill:var(--good);font-weight:700">EFFICIENT &middot; STABLE</text>
+          <text class="ax-lbl" x="940" y="101" text-anchor="end">family: GRPO-trained base</text>
+          <text class="ax-lbl" x="572" y="123">Recovers GRPO accuracy (33.9%) &mdash; from 0.2 EFLOP at group size = 1.</text>
+          <!-- 4B winner chip -->
+          <rect x="570" y="146" width="112" height="56" rx="8" fill="color-mix(in srgb, var(--good) 10%, var(--surface))" stroke="var(--good)" stroke-width="2"/>
+          <g transform="translate(578,151)"><path d="M8,0 L9.88,5.41 L15.61,5.53 L11.04,8.99 L12.70,14.47 L8,11.2 L3.30,14.47 L4.96,8.99 L0.39,5.53 L6.12,5.41 Z" fill="var(--good)"/></g>
+          <text class="bar-name" x="632" y="163" text-anchor="middle">4B</text>
+          <text class="val-lbl" x="626" y="181" text-anchor="middle">35.8%</text>
+          <text class="val-sub" x="626" y="196" text-anchor="middle" style="fill:var(--good);font-weight:700">0.2 EFLOP</text>
+          <!-- 8B chip -->
+          <rect x="694" y="146" width="112" height="56" rx="8" fill="var(--surface)" stroke="var(--hair)"/>
+          <text class="bar-name" x="750" y="167" text-anchor="middle">8B</text>
+          <text class="val-lbl" x="750" y="186" text-anchor="middle">34.5%</text>
+          <text class="val-sub" x="750" y="199" text-anchor="middle">&#8595; no gain</text>
+          <!-- 14B chip -->
+          <rect x="818" y="146" width="112" height="56" rx="8" fill="var(--surface)" stroke="var(--hair)"/>
+          <text class="bar-name" x="874" y="167" text-anchor="middle">14B</text>
+          <text class="val-lbl" x="874" y="186" text-anchor="middle">33.0%</text>
+          <text class="val-sub" x="874" y="199" text-anchor="middle">&#8595; no gain</text>
+          <!-- size bracket -->
+          <path d="M570,214 v5 h112 v-5" fill="none" stroke="var(--hair)"/>
+          <text class="ax-lbl" x="626" y="230" text-anchor="middle">same-size</text>
+          <path d="M694,214 v5 h236 v-5" fill="none" stroke="var(--hair)"/>
+          <text class="ax-lbl" x="812" y="230" text-anchor="middle">larger</text>
+        </g>
+
+        <!-- ===== CELL row2 x col1 : thinking + as-is -> SLOW ===== -->
+        <g>
+          <rect x="140" y="268" width="396" height="180" rx="12" fill="var(--surface-2)" stroke="var(--hair)"/>
+          <rect x="144" y="278" width="4" height="160" rx="2" fill="var(--de-emph)"/>
+          <g transform="translate(156,282)"><path d="M0,0 L12,0 L6,7 Z M0,14 L12,14 L6,7 Z" fill="var(--de-emph)" stroke="var(--muted)" stroke-width="1" stroke-linejoin="round"/></g>
+          <text class="bar-name" x="178" y="293" style="fill:var(--muted)">SLOW</text>
+          <text class="ax-lbl" x="520" y="293" text-anchor="end">family: external thinking</text>
+          <text class="ax-lbl" x="158" y="315">Improves the student, but never matches the teacher&rsquo;s own accuracy.</text>
+          <rect x="158" y="338" width="112" height="56" rx="8" fill="var(--surface)" stroke="var(--hair)"/>
+          <text class="bar-name" x="214" y="362" text-anchor="middle">4B</text>
+          <text class="val-lbl" x="214" y="381" text-anchor="middle">&lt;32%</text>
+          <rect x="282" y="338" width="112" height="56" rx="8" fill="var(--surface)" stroke="var(--hair)"/>
+          <text class="bar-name" x="338" y="359" text-anchor="middle">8B</text>
+          <text class="val-lbl" x="338" y="378" text-anchor="middle">34.2%</text>
+          <text class="val-sub" x="338" y="391" text-anchor="middle">@27.2 EFLOP</text>
+          <rect x="406" y="338" width="112" height="56" rx="8" fill="var(--surface)" stroke="var(--hair)"/>
+          <text class="bar-name" x="462" y="362" text-anchor="middle">14B</text>
+          <text class="val-lbl" x="462" y="381" text-anchor="middle">&lt;32%</text>
+          <path d="M158,406 v5 h112 v-5" fill="none" stroke="var(--hair)"/>
+          <text class="ax-lbl" x="214" y="422" text-anchor="middle">same-size</text>
+          <path d="M282,406 v5 h236 v-5" fill="none" stroke="var(--hair)"/>
+          <text class="ax-lbl" x="400" y="422" text-anchor="middle">larger</text>
+        </g>
+
+        <!-- ===== CELL row2 x col2 : thinking + GRPO-trained -> UNSTABLE ===== -->
+        <g>
+          <rect x="552" y="268" width="396" height="180" rx="12" fill="var(--surface-2)" stroke="var(--hair)"/>
+          <rect x="556" y="278" width="4" height="160" rx="2" fill="var(--crit)"/>
+          <g transform="translate(568,281)"><path d="M7,0.5 L13.5,13 L0.5,13 Z" fill="none" stroke="var(--crit)" stroke-width="2" stroke-linejoin="round"/><line x1="7" y1="4.5" x2="7" y2="8.8" stroke="var(--crit)" stroke-width="2" stroke-linecap="round"/><circle cx="7" cy="11.2" r="1.1" fill="var(--crit)"/></g>
+          <text class="bar-name" x="590" y="293" style="fill:var(--crit)">UNSTABLE</text>
+          <text class="ax-lbl" x="940" y="293" text-anchor="end">family: further-GRPO thinking</text>
+          <text class="ax-lbl" x="570" y="315">Peaks near the best GRPO run, then collapses &mdash; repeated runs confirm.</text>
+          <rect x="570" y="338" width="112" height="56" rx="8" fill="var(--surface)" stroke="var(--hair)"/>
+          <text class="bar-name" x="626" y="359" text-anchor="middle">4B</text>
+          <text class="val-lbl" x="626" y="378" text-anchor="middle">38.7%</text>
+          <text class="val-sub" x="626" y="391" text-anchor="middle" style="fill:var(--crit)">&#8600; 26.0</text>
+          <rect x="694" y="338" width="112" height="56" rx="8" fill="var(--surface)" stroke="var(--hair)"/>
+          <text class="bar-name" x="750" y="359" text-anchor="middle">8B</text>
+          <text class="val-lbl" x="750" y="378" text-anchor="middle">6.6%</text>
+          <text class="val-sub" x="750" y="391" text-anchor="middle" style="fill:var(--crit)">&#8600; below init</text>
+          <rect x="818" y="338" width="112" height="56" rx="8" fill="var(--surface)" stroke="var(--hair)"/>
+          <text class="bar-name" x="874" y="362" text-anchor="middle">14B</text>
+          <text class="val-sub" x="874" y="381" text-anchor="middle">not run</text>
+          <path d="M570,406 v5 h112 v-5" fill="none" stroke="var(--hair)"/>
+          <text class="ax-lbl" x="626" y="422" text-anchor="middle">same-size</text>
+          <path d="M694,406 v5 h236 v-5" fill="none" stroke="var(--hair)"/>
+          <text class="ax-lbl" x="812" y="422" text-anchor="middle">larger</text>
+        </g>
+
+        <!-- ===== KEY ===== -->
+        <g>
+          <g transform="translate(140,462)"><path d="M0,7 l4,4 l8,-10" fill="none" stroke="var(--good)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></g>
+          <text class="ax-lbl" x="158" y="473">efficient</text>
+          <g transform="translate(240,461)"><path d="M0,0 L12,0 L6,7 Z M0,14 L12,14 L6,7 Z" fill="var(--de-emph)" stroke="var(--muted)" stroke-width="1" stroke-linejoin="round"/></g>
+          <text class="ax-lbl" x="258" y="473">slow</text>
+          <g transform="translate(322,461)"><path d="M7,0.5 L13.5,13 L0.5,13 Z" fill="none" stroke="var(--crit)" stroke-width="2" stroke-linejoin="round"/><line x1="7" y1="4.5" x2="7" y2="8.8" stroke="var(--crit)" stroke-width="2" stroke-linecap="round"/><circle cx="7" cy="11.2" r="1.1" fill="var(--crit)"/></g>
+          <text class="ax-lbl" x="342" y="473">unstable</text>
+          <g transform="translate(430,461)"><circle cx="7" cy="7" r="6" fill="none" stroke="var(--muted)" stroke-width="1.6"/><line x1="2.6" y1="11.4" x2="11.4" y2="2.6" stroke="var(--muted)" stroke-width="1.6"/></g>
+          <text class="ax-lbl" x="448" y="473">untested</text>
+          <g transform="translate(548,460)"><path d="M8,0 L9.88,5.41 L15.61,5.53 L11.04,8.99 L12.70,14.47 L8,11.2 L3.30,14.47 L4.96,8.99 L0.39,5.53 L6.12,5.41 Z" fill="var(--good)"/></g>
+          <text class="ax-lbl" x="568" y="473">= winning config (self-GRPO)</text>
+        </g>
+      </svg>
+    </div>
+
+    <!-- design-space takeaways -->
+    <div class="panel" style="margin-top:22px">
+      <ul class="clean">
+        <li class="good"><b>One efficient, stable teacher.</b> Base-initialized, GRPO-trained, and the <em>same</em> size as the student — i.e. the student&rsquo;s own GRPO checkpoint (&ldquo;self-GRPO&rdquo;): it recovers GRPO&rsquo;s 33.9% at 1.62&nbsp;EFLOP (~6&times; cheaper; ~50&times; at group size G=1) and even peaks at 35.8%.</li>
+        <li class="good"><b>135.6&times; cheaper than an external teacher.</b> Same student, same OPD loss &mdash; only the teacher changes. To reach GRPO&rsquo;s ~34%, an off-the-shelf 8B thinking teacher needs <b>27.2&nbsp;EFLOP</b>; the self-GRPO teacher gets there from <b>~0.2&nbsp;EFLOP</b> (G=1). The efficiency comes from the teacher being the student&rsquo;s own RL checkpoint, not from dense supervision per se.</li>
+        <li><b>Larger teachers don&rsquo;t transfer.</b> Scaling the teacher to 8B or 14B does not lift the OPD student above the same-size 4B teacher.</li>
+        <li><b>Off-the-shelf thinking teachers are slow.</b> Used as-is, a thinking teacher pays a heavy per-step compute cost.</li>
+        <li><b>Further-GRPO thinking teachers collapse.</b> Continuing to GRPO-train a thinking teacher degrades the OPD student.</li>
+      </ul>
+    </div>
+
+    <div class="callout good">
+      <div class="h">High compute-efficiency with self-GRPO generalizes</div>
+      <p>A self-GRPO teacher fully recovers GRPO accuracy at a fraction of the compute well beyond the 4B math run &mdash; for an <b>8B-Base</b> student, for <b>code</b>, and for <b>Olmo-3-7B-Instruct-SFT</b>.</p>
+    </div>
+
+    <p class="lead" style="max-width:47em;margin-top:30px;">The most striking case is <b>Olmo-3-7B-Instruct-SFT</b>: distilling the student&rsquo;s own GRPO checkpoint, the self-GRPO student doesn&rsquo;t just match its teacher &mdash; it clearly surpasses it, and does so on a sliver of the compute.</p>
+
+    <!-- ===== Olmo-3-7B-Instruct-SFT self-GRPO: student overtakes teacher ===== -->
+    <div class="panel">
+      <p class="fig-title">Olmo-3-7B-Instruct-SFT: the self-GRPO student overtakes its teacher</p>
+      <p class="fig-sub">Student = <b>Olmo-3-7B-Instruct-SFT</b>; teacher = its <b>own</b> Answer-format GRPO checkpoint (self-GRPO). Accuracy = mean@16 over AIME24 / AIME25 / AMC23. Both methods start from the same SFT model at 17%; up-and-left is better.</p>
+      <div style="max-width:640px;margin:14px auto 0">
+          <!-- CHART OLMO: acc vs cumulative training FLOPs. LINEAR x 0..15 EFLOP: px = 70 + f/15*430 (28.667 px/EFLOP). y: 0%->270, 60%->86 (3.0667 px/%). Both curves share origin (0 EFLOP,17%)=(70,217.9). -->
+          <svg class="chart" viewBox="0 0 520 330" role="img" aria-label="Math accuracy versus cumulative training FLOPs (linear axis) for Olmo-3-7B-Instruct-SFT. Both methods start from the same SFT model at 0 FLOPs and 17 percent. The self-GRPO OPD student rises almost immediately, peaking at 51 percent by about 1.2 exaFLOP and holding near 50 percent. Its GRPO teacher climbs slowly across the full axis to 40 percent at about 14 exaFLOP. The OPD student exceeds the teacher's final accuracy using roughly 56 times fewer FLOPs.">
+            <!-- horizontal gridlines: 0,15,30,45,60% at y 270,224,178,132,86 -->
+            <g>
+              <line class="gridline" x1="70" y1="270" x2="500" y2="270"/>
+              <line class="gridline" x1="70" y1="224" x2="500" y2="224"/>
+              <line class="gridline" x1="70" y1="178" x2="500" y2="178"/>
+              <line class="gridline" x1="70" y1="132" x2="500" y2="132"/>
+              <line class="gridline" x1="70" y1="86"  x2="500" y2="86"/>
+              <text class="ax-lbl" x="64" y="273" text-anchor="end">0</text>
+              <text class="ax-lbl" x="64" y="227" text-anchor="end">15</text>
+              <text class="ax-lbl" x="64" y="181" text-anchor="end">30</text>
+              <text class="ax-lbl" x="64" y="135" text-anchor="end">45</text>
+              <text class="ax-lbl" x="64" y="90"  text-anchor="end">60</text>
+              <text class="ax-lbl" x="26" y="170" text-anchor="middle" transform="rotate(-90 26 170)">math accuracy &mdash; mean@16 (%)</text>
+            </g>
+            <line class="axisline" x1="70" y1="270" x2="500" y2="270"/>
+            <g class="ax-lbl" text-anchor="middle">
+              <text x="70"  y="288">0</text>
+              <text x="213" y="288">5</text>
+              <text x="357" y="288">10</text>
+              <text x="500" y="288">15</text>
+              <text x="285" y="312" fill="var(--muted)">cumulative training FLOPs (EFLOP)</text>
+            </g>
+
+            <!-- teacher final-accuracy level (40%) -->
+            <line x1="70" y1="147.3" x2="500" y2="147.3" stroke="var(--blue)" stroke-width="1" stroke-dasharray="5 4" opacity="0.5"/>
+
+            <!-- efficiency cue: OPD reaches teacher's 40% at ~0.26 EFLOP (px77); GRPO at 14.4 EFLOP (px482) -->
+            <line x1="79" y1="252" x2="480" y2="252" stroke="var(--muted)" stroke-width="1.2"/>
+            <path d="M77.4,252 l7,-3.2 v6.4 z" fill="var(--muted)"/>
+            <path d="M482,252 l-7,-3.2 v6.4 z" fill="var(--muted)"/>
+            <text class="val-sub" x="280" y="246" text-anchor="middle">&#8776;56&#215; fewer FLOPs to match the teacher&rsquo;s 40%</text>
+
+            <!-- GRPO teacher curve (blue) -->
+            <polyline points="70,217.9 125.3,206.8 290.7,155.3 482.1,147.3" fill="none" stroke="var(--blue)" stroke-width="2" opacity="0.9" stroke-linejoin="round"/>
+            <g class="mark"><circle cx="125.3" cy="206.8" r="5" style="fill:var(--blue);stroke:var(--surface);stroke-width:2"/><title>GRPO teacher, step 80: 20.6% at 1.93 EFLOP</title></g>
+            <g class="mark"><circle cx="290.7" cy="155.3" r="5" style="fill:var(--blue);stroke:var(--surface);stroke-width:2"/><title>GRPO teacher, step 160: 37.4% at 7.70 EFLOP</title></g>
+            <g class="mark"><circle cx="482.1" cy="147.3" r="5" style="fill:var(--blue);stroke:var(--surface);stroke-width:2"/><title>GRPO teacher, step 200: 40.0% at 14.4 EFLOP &mdash; the checkpoint OPD distills from</title></g>
+            <text class="val-sub" x="480" y="139" text-anchor="end" style="fill:var(--blue)">teacher&rsquo;s GRPO run &middot; 40%</text>
+
+            <!-- OPD self-GRPO student curve (green, emphasized) -->
+            <polyline points="70,217.9 71.5,199.8 80.4,120.0 105.7,113.0 147.7,117.6" fill="none" stroke="var(--good)" stroke-width="2.5" stroke-linejoin="round"/>
+            <g class="mark"><circle cx="71.5" cy="199.8" r="5" style="fill:var(--good);stroke:var(--surface);stroke-width:2"/><title>OPD student, step 10: 22.9% at 0.05 EFLOP</title></g>
+            <g class="mark"><circle cx="80.4" cy="120.0" r="5" style="fill:var(--good);stroke:var(--surface);stroke-width:2"/><title>OPD student, step 20: 48.9% at 0.36 EFLOP &mdash; already above the teacher</title></g>
+            <g class="mark"><circle cx="147.7" cy="117.6" r="5" style="fill:var(--good);stroke:var(--surface);stroke-width:2"/><title>OPD student, step 80: 49.7% at 2.71 EFLOP</title></g>
+            <!-- peak star at step 40 -->
+            <g class="mark" transform="translate(97.7,105.6)"><path d="M8,0 L9.88,5.41 L15.61,5.53 L11.04,8.99 L12.70,14.47 L8,11.2 L3.30,14.47 L4.96,8.99 L0.39,5.53 L6.12,5.41 Z" fill="var(--good)"/><title>OPD student, step 40: 51.2% at 1.25 EFLOP &mdash; peak, 11 points above the teacher</title></g>
+            <!-- leader from peak to labels in open space -->
+            <line x1="113" y1="107" x2="150" y2="96" stroke="var(--good)" stroke-width="1" opacity="0.6"/>
+            <text class="val-lbl" x="154" y="92" style="fill:var(--good)">student peak &middot; 51%</text>
+            <text class="val-sub" x="154" y="106" style="fill:var(--good)">OPD &middot; self-GRPO (group size G=1)</text>
+
+            <!-- shared SFT start: both curves originate here -->
+            <g class="mark"><circle cx="70" cy="217.9" r="5" style="fill:var(--muted);stroke:var(--surface);stroke-width:2"/><title>SFT start (both methods): 17.0% at 0 FLOPs</title></g>
+            <text class="val-sub" x="80" y="231">SFT start (both) &middot; 17%</text>
+
+            <text class="ax-lbl" x="80" y="58" style="fill:var(--good)">&#8598; better</text>
+          </svg>
+      </div>
+    </div>
+
+    <!-- Finding 03 -->
+    <div style="padding-top:52px"></div>
+    <div class="eyebrow spy-anchor" id="f3">Finding 03 · in depth</div>
+    <h2>Multi-teacher OPD: the natural use case</h2>
+    <p class="lead" style="max-width:47em;">On one domain, distilling a checkpoint you already trained is a paradox. Across domains it becomes an opportunity: separate GRPO experts each hold different capabilities, and no single checkpoint serves them all. Multi-teacher OPD routes each instance to its domain's self-GRPO teacher and merges them into one student.</p>
+
+    <!-- Finding 03: takeaways + external-teacher caveat -->
+    <div class="panel">
+      <div class="grid-2">
+        <div>
+          <ul class="clean">
+            <li class="good"><b>Beats joint GRPO.</b> Self-GRPO OPD (multi-teacher) matches joint GRPO with 42.0% fewer FLOPs on 2 domains and 31.6% fewer on 4 — joint GRPO underperforms within budget.</li>
+            <li><b>Cheap consolidation.</b> Specialists cost 10.7 EFLOP (2 domains) / 14.4 EFLOP (4 domains); the merge adds only 0.55 / 1.15 EFLOP (about 5.2% / 8.0%).</li>
+            <li><b>Three practical wins.</b> Better overall accuracy, <b>modular development</b> (each domain keeps its own stack, rewards, and hyper-parameters), and <b>parallelizable</b> specialist training.</li>
+            <li><b>A rationale for frontier practice.</b> Nemotron-Cascade&nbsp;2, DeepSeek-V4, and Kimi&nbsp;K3 already merge domain experts this way — we supply the matched-compute justification they omit.</li>
+          </ul>
+        </div>
+        <div>
+          <div class="callout">
+            <div class="h">One external 8B teacher for every domain: the student collapses</div>
+            <p>OPD with one strong external 8B-thinking teacher is the worst option: it reaches only 26.7% on 2 domains, and on 4 domains the student <b>collapses on most domains</b> — with severe response-length inflation and degenerate output.</p>
+            <div class="chips">
+              <span class="chip">math 0%</span>
+              <span class="chip">code 0%</span>
+              <span class="chip">MMLU-Pro 7%</span>
+              <span class="chip">IFBench 18%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHART C3+C4: the compute frontier, side by side (2-domain left, 4-domain right) -->
+    <div class="panel" style="margin-top:22px">
+      <p class="fig-title">The compute frontier: accuracy vs. total training FLOPs</p>
+      <p class="fig-sub">Domain-averaged mean@16 vs. cumulative training FLOPs (EFLOP). Up-and-left is better. Self-GRPO OPD (multi-teacher) (green) starts once the per-domain specialists' FLOPs are summed and outperforms joint GRPO's best almost immediately, while external-teacher OPD (red = 8B, orange = 4B) never does.</p>
+
+      <!-- ===== side by side, width-limited (2-domain left, 4-domain right; stacks on narrow screens) ===== -->
+      <div class="f3-pair">
+      <!-- ===== 2 domains (math + code) ===== -->
+      <div>
+      <p class="fig-title" style="font-size:15px;margin:0 0 6px">2 domains · math + code</p>
+      <svg class="chart chart-f3" viewBox="0 -110 960 730" role="img" aria-label="Top strip: training all per-domain specialists costs 10.7 exaFLOP summed; self-GRPO OPD then needs about 0.4 exaFLOP more (about 4 percent) to reach the self-GRPO teacher average of 40.1 percent. Main plot: domain-averaged accuracy versus cumulative training FLOPs on two domains (math and code), Qwen3-4B-Base. Joint GRPO climbs from 19 percent to 37.4 percent over 18.7 exaFLOP. Self-GRPO OPD (multi-teacher) starts from the same base as joint GRPO (about 19 percent) and rises steeply to 41.5 percent at about 11 exaFLOP — at the point where the two specialists' FLOPs are summed (about 10.7 exaFLOP) it already matches joint GRPO's final 37.4 percent, a 42 percent FLOPs saving. External-teacher OPD peaks at only 26.7 percent with an 8B teacher and 29.7 percent with a 4B teacher, the 4B curve extending past 14 exaFLOP. The self-GRPO teacher averages 40.1 percent.">
+        <g>
+          <line class="gridline" x1="90" y1="530"   x2="920" y2="530"/>
+          <line class="gridline" x1="90" y1="448.3" x2="920" y2="448.3"/>
+          <line class="gridline" x1="90" y1="366.7" x2="920" y2="366.7"/>
+          <line class="gridline" x1="90" y1="285"   x2="920" y2="285"/>
+          <line class="gridline" x1="90" y1="203.3" x2="920" y2="203.3"/>
+          <line class="gridline" x1="90" y1="121.7"  x2="920" y2="121.7"/>
+          <line class="gridline" x1="90" y1="40"    x2="920" y2="40"/>
+          <text class="ax-lbl" x="82" y="535.2"   text-anchor="end">15</text>
+          <text class="ax-lbl" x="82" y="453.5" text-anchor="end">20</text>
+          <text class="ax-lbl" x="82" y="372" text-anchor="end">25</text>
+          <text class="ax-lbl" x="82" y="290.2"   text-anchor="end">30</text>
+          <text class="ax-lbl" x="82" y="208.5" text-anchor="end">35</text>
+          <text class="ax-lbl" x="82" y="127"  text-anchor="end">40</text>
+          <text class="ax-lbl" x="82" y="45.2"    text-anchor="end">45</text>
+          <text class="ax-lbl" x="34" y="285" text-anchor="middle" transform="rotate(-90 34 285)">domain-averaged mean@16 (%)</text>
+        </g>
+        <line class="axisline" x1="90" y1="530" x2="920" y2="530"/>
+        <g class="ax-lbl" text-anchor="middle">
+          <text x="90"  y="561.5">0</text>
+          <text x="308" y="561.5">5</text>
+          <text x="527" y="561.5">10</text>
+          <text x="745" y="561.5">15</text>
+          <text x="505" y="603.5" fill="var(--muted)">cumulative training FLOPs (EFLOP)</text>
+        </g>
+        <!-- self-GRPO teacher reference (0.401) -->
+        <line x1="90" y1="120" x2="920" y2="120" style="stroke:var(--de-emph);stroke-width:1.5;stroke-dasharray:6 5"/>
+        <text class="ax-lbl" x="96" y="110" style="fill:var(--muted)">self-GRPO teacher avg · 40.1%</text>
+        <!-- budget strip: specialists' summed FLOPs, then the extra self-GRPO OPD FLOPs to reach the teacher avg -->
+        <text class="val-sub" x="90" y="-84"><tspan style="font-weight:700;fill:var(--ink)">10.7 EFLOP</tspan> · train all specialists (per-domain GRPO, summed)</text>
+        <g class="mark"><rect x="90" y="-74" width="467.4" height="24" rx="4" style="fill:var(--muted);opacity:0.55"/><title>All specialists (per-domain GRPO), FLOPs summed: 10.7 EFLOP</title></g>
+        <g class="mark"><rect x="557.4" y="-40" width="19.1" height="24" rx="4" style="fill:var(--good);stroke:var(--surface);stroke-width:2"/><title>Extra self-GRPO OPD FLOPs to reach the teacher avg (40.1%): +0.4 EFLOP (+4% over the specialists)</title></g>
+        <text class="val-lbl" x="545.4" y="-21" text-anchor="end">+0.4 EFLOP self-GRPO OPD (+4%)</text>
+        <text class="val-sub" x="545.4" y="4" text-anchor="end">to reach the teacher avg (40.1%)</text>
+        <!-- vertical: individual GRPO FLOPs summed (~10.7) -->
+        <line x1="557.4" y1="-74" x2="557.4" y2="530" style="stroke:var(--muted);stroke-width:1.2;stroke-dasharray:2 4"/>
+        <text class="val-sub" x="565" y="523" style="fill:var(--muted)">specialist FLOPs summed</text>
+        <!-- Joint GRPO (blue) -->
+        <polyline points="90,464.7 109.7,285 135.9,249.1 194.8,232.7 301.9,216.4 478.8,191.9 701.5,185.4 906.8,164.1" fill="none" style="stroke:var(--blue);stroke-width:2.5"/>
+        <g class="mark"><circle cx="906.8" cy="164.1" r="6" style="fill:var(--blue);stroke:var(--surface);stroke-width:2"/><title>Joint GRPO: 37.4% at 18.7 EFLOP</title></g>
+        <text class="val-lbl" x="915" y="212" text-anchor="end" style="fill:var(--blue)">Joint GRPO — 37.4%</text>
+        <text class="val-sub" x="915" y="235" text-anchor="end">18.7 EFLOP</text>
+        <!-- external 8B teacher OPD (crit) — U-shape, peaks ~26.7% -->
+        <polyline points="90,464.7 94.4,338.9 164.3,476.1 242.9,464.7 334.6,417.3 413.2,391.2 483.1,371.6 561.7,347.1" fill="none" style="stroke:var(--crit);stroke-width:2.5"/>
+        <g class="mark"><circle cx="561.7" cy="347.1" r="6" style="fill:var(--crit);stroke:var(--surface);stroke-width:2"/><title>External teacher OPD (8B): up to 26.7%</title></g>
+        <text class="val-lbl" x="100" y="519.5" style="fill:var(--crit)">External teacher OPD (8B) — 26.7%</text>
+        <!-- external 4B teacher OPD (orange) — climbs to ~29.7% out past 14 EFLOP -->
+        <polyline points="90,464.7 124.9,402.6 242.9,448.3 334.6,391.2 417.6,348.7 509.3,309.5 649.1,289.9 740.8,306.2" fill="none" style="stroke:var(--orange);stroke-width:2.5"/>
+        <g class="mark"><circle cx="740.8" cy="306.2" r="6" style="fill:var(--orange);stroke:var(--surface);stroke-width:2"/><title>External teacher OPD (4B): up to 29.7%</title></g>
+        <text class="val-lbl" x="600" y="342" style="fill:var(--orange)">External teacher OPD (4B)</text>
+        <text class="val-sub" x="600" y="365">up to 29.7%</text>
+        <!-- Self-GRPO OPD (multi-teacher) (green diamonds + line) -->
+        <polyline points="557.4,464.7 560,368.3 564,273.6 569,190.3 576,121.7 583,97.2" fill="none" style="stroke:var(--good);stroke-width:2.5"/>
+        <g class="mark" style="fill:var(--good);stroke:var(--surface);stroke-width:1.5">
+          <polygon points="557.4,457.7 564.4,464.7 557.4,471.7 550.4,464.7"><title>Self-GRPO OPD (multi-teacher): 18.7% (base, = joint GRPO start)</title></polygon>
+          <polygon points="560,361.3 567,368.3 560,375.3 553,368.3"><title>Self-GRPO OPD (multi-teacher): 24.9%</title></polygon>
+          <polygon points="564,266.6 571,273.6 564,280.6 557,273.6"><title>Self-GRPO OPD (multi-teacher): 30.7%</title></polygon>
+          <polygon points="569,183.3 576,190.3 569,197.3 562,190.3"><title>Self-GRPO OPD (multi-teacher): 35.8%</title></polygon>
+          <polygon points="576,114.7 583,121.7 576,128.7 569,121.7"><title>Self-GRPO OPD (multi-teacher): 40.0%</title></polygon>
+          <polygon points="583,90.2 590,97.2 583,104.2 576,97.2"><title>Self-GRPO OPD (multi-teacher): 41.5%</title></polygon>
+        </g>
+        <text class="val-lbl" x="598" y="85.5" style="fill:var(--good)">Self-GRPO OPD (multi-teacher)</text>
+        <text class="val-sub" x="598" y="108">up to 41.5% · outperforms the teacher</text>
+        <!-- -42% FLOPs marker: joint GRPO's final accuracy, reached at the summed-FLOP mark -->
+        <line x1="571.7" y1="164.1" x2="906.8" y2="164.1" style="stroke:var(--ink);stroke-width:1.2;stroke-dasharray:5 4;opacity:0.55"/>
+        <g class="mark"><circle cx="571.7" cy="164.1" r="6" style="fill:var(--ink);stroke:var(--surface);stroke-width:2"/><title>Self-GRPO OPD reaches joint GRPO's final 37.4% here, just past the summed-specialist budget</title></g>
+        <text class="val-lbl" x="730" y="154" text-anchor="middle">&minus;42% FLOPs</text>
+        <text class="ax-lbl" x="100" y="64.5" style="fill:var(--good)">&#8598; better</text>
+      </svg>
+      </div>
+      <!-- ===== 4 domains (math + code + MMLU-Pro + IFBench) ===== -->
+      <div>
+      <p class="fig-title" style="font-size:15px;margin:0 0 6px">4 domains · math + code + MMLU-Pro + IFBench</p>
+      <svg class="chart chart-f3" viewBox="0 -110 960 730" role="img" aria-label="Top strip: training all four per-domain specialists costs 14.4 exaFLOP summed; self-GRPO OPD then needs about 1.15 exaFLOP more (about 8 percent) to reach the self-GRPO teacher average of 47.9 percent. Main plot: domain-averaged accuracy versus cumulative training FLOPs on four domains, Qwen3-4B-Base. Joint GRPO climbs from 25.8 percent to about 44 percent and stays flat out to 21 exaFLOP. Self-GRPO OPD (multi-teacher) reaches 47.9 percent at about 15.6 exaFLOP, right where the four specialists' FLOPs are summed, exceeding joint GRPO by 31.6 percent fewer FLOPs. The multi-teacher curve starts from the same base as joint GRPO (about 25.5 percent) and climbs steeply. External-teacher OPD with a 4B teacher climbs only to 35 percent, and with an 8B teacher it collapses from its 25 percent start to a 6.3 percent average, below the 15 percent axis floor, so its last point is clipped at the bottom of the chart. The self-GRPO teacher averages 47.9 percent.">
+        <g>
+          <line class="gridline" x1="90" y1="530" x2="920" y2="530"/>
+          <line class="gridline" x1="90" y1="460" x2="920" y2="460"/>
+          <line class="gridline" x1="90" y1="390" x2="920" y2="390"/>
+          <line class="gridline" x1="90" y1="320" x2="920" y2="320"/>
+          <line class="gridline" x1="90" y1="250" x2="920" y2="250"/>
+          <line class="gridline" x1="90" y1="180" x2="920" y2="180"/>
+          <line class="gridline" x1="90" y1="110"  x2="920" y2="110"/>
+          <line class="gridline" x1="90" y1="40"  x2="920" y2="40"/>
+          <text class="ax-lbl" x="82" y="535.2" text-anchor="end">15</text>
+          <text class="ax-lbl" x="82" y="465.2" text-anchor="end">20</text>
+          <text class="ax-lbl" x="82" y="395.2" text-anchor="end">25</text>
+          <text class="ax-lbl" x="82" y="325.2" text-anchor="end">30</text>
+          <text class="ax-lbl" x="82" y="255.2" text-anchor="end">35</text>
+          <text class="ax-lbl" x="82" y="185.2" text-anchor="end">40</text>
+          <text class="ax-lbl" x="82" y="115.2"  text-anchor="end">45</text>
+          <text class="ax-lbl" x="82" y="45.2"  text-anchor="end">50</text>
+          <text class="ax-lbl" x="34" y="285" text-anchor="middle" transform="rotate(-90 34 285)">domain-averaged mean@16 (%)</text>
+        </g>
+        <line class="axisline" x1="90" y1="530" x2="920" y2="530"/>
+        <g class="ax-lbl" text-anchor="middle">
+          <text x="90"    y="561.5">0</text>
+          <text x="278.6" y="561.5">5</text>
+          <text x="467.3" y="561.5">10</text>
+          <text x="655.9" y="561.5">15</text>
+          <text x="844.5" y="561.5">20</text>
+          <text x="505" y="603.5" fill="var(--muted)">cumulative training FLOPs (EFLOP)</text>
+        </g>
+        <!-- self-GRPO teacher reference (47.9%) -->
+        <line x1="90" y1="69.4" x2="920" y2="69.4" style="stroke:var(--de-emph);stroke-width:1.5;stroke-dasharray:6 5"/>
+        <text class="ax-lbl" x="96" y="59.2" style="fill:var(--muted)">self-GRPO teacher avg · 47.9%</text>
+        <!-- budget strip: specialists' summed FLOPs, then the extra self-GRPO OPD FLOPs to reach the teacher avg -->
+        <text class="val-sub" x="90" y="-84"><tspan style="font-weight:700;fill:var(--ink)">14.4 EFLOP</tspan> · train all specialists (per-domain GRPO, summed)</text>
+        <g class="mark"><rect x="90" y="-74" width="539.5" height="24" rx="4" style="fill:var(--muted);opacity:0.55"/><title>All specialists (per-domain GRPO), FLOPs summed: 14.4 EFLOP</title></g>
+        <g class="mark"><rect x="629.5" y="-40" width="49.0" height="24" rx="4" style="fill:var(--good);stroke:var(--surface);stroke-width:2"/><title>Extra self-GRPO OPD FLOPs to reach the teacher avg (47.9%): +1.15 EFLOP (+8% over the specialists)</title></g>
+        <text class="val-lbl" x="617.5" y="-21" text-anchor="end">+1.15 EFLOP self-GRPO OPD (+8%)</text>
+        <text class="val-sub" x="617.5" y="4" text-anchor="end">to reach the teacher avg (47.9%)</text>
+        <!-- vertical: individual GRPO FLOPs summed (~14.3) -->
+        <line x1="629.5" y1="-74" x2="629.5" y2="530" style="stroke:var(--muted);stroke-width:1.2;stroke-dasharray:2 4"/>
+        <text class="val-sub" x="637" y="523" style="fill:var(--muted)">specialist FLOPs summed</text>
+        <!-- Joint GRPO (blue) -->
+        <polyline points="90,359.2 154.1,195.4 214.5,160.4 274.9,149.2 410.7,149.2 591.8,131 731.4,121.2 889.8,129.6" fill="none" style="stroke:var(--blue);stroke-width:2.5"/>
+        <g class="mark"><circle cx="889.8" cy="129.6" r="6" style="fill:var(--blue);stroke:var(--surface);stroke-width:2"/><title>Joint GRPO: 43.6% at 21.2 EFLOP</title></g>
+        <text class="val-lbl" x="915" y="158" text-anchor="end" style="fill:var(--blue)">Joint GRPO — 43.6%</text>
+        <!-- external 4B teacher OPD (orange): climbs to 35% -->
+        <polyline points="90,378.8 124,521.6 139,335.4 195.6,336.8 244.7,287.8 297.5,278 354.1,255.6 497.5,248.6" fill="none" style="stroke:var(--orange);stroke-width:2.5"/>
+        <g class="mark"><circle cx="497.5" cy="248.6" r="6" style="fill:var(--orange);stroke:var(--surface);stroke-width:2"/><title>External teacher OPD (4B): up to 35.1%</title></g>
+        <text class="val-lbl" x="320" y="208" style="fill:var(--orange)">External teacher OPD (4B)</text>
+        <text class="val-sub" x="320" y="231">up to 35.1%</text>
+        <!-- external 8B teacher OPD (crit): collapses -->
+        <polyline points="90,383 128,348 196,369 241,523 328,376 411,404 494,526.5" fill="none" style="stroke:var(--crit);stroke-width:2.5"/>
+        <g class="mark"><polygon points="485,520 503,520 494,535" style="fill:var(--crit);stroke:var(--surface);stroke-width:2"/><title>External teacher OPD (8B): collapses to a 6.3% average (math 0%, code 0%, MMLU-Pro 7%, IFBench 18%) — below the 15% axis floor, so the point is clipped (from a ~25% start)</title></g>
+        <text class="val-lbl" x="250" y="330" style="fill:var(--crit)">External teacher OPD (8B)</text>
+        <text class="val-sub" x="250" y="353">collapses to 6.3% avg (&#9660; below axis)</text>
+        <!-- Self-GRPO OPD (multi-teacher) (green diamonds + line) -->
+        <polyline points="629.5,383 638,278 649,180 661,110 678.5,69.4" fill="none" style="stroke:var(--good);stroke-width:2.5"/>
+        <g class="mark" style="fill:var(--good);stroke:var(--surface);stroke-width:1.5">
+          <polygon points="629.5,376 636.5,383 629.5,390 622.5,383"><title>Self-GRPO OPD (multi-teacher): 25.5% (base, = joint GRPO start)</title></polygon>
+          <polygon points="638,271 645,278 638,285 631,278"><title>Self-GRPO OPD (multi-teacher): 33.0%</title></polygon>
+          <polygon points="649,173 656,180 649,187 642,180"><title>Self-GRPO OPD (multi-teacher): 40.0%</title></polygon>
+          <polygon points="661,103 668,110 661,117 654,110"><title>Self-GRPO OPD (multi-teacher): 45.0%</title></polygon>
+          <polygon points="678.5,62.4 685.5,69.4 678.5,76.4 671.5,69.4"><title>Self-GRPO OPD (multi-teacher): 47.9%</title></polygon>
+        </g>
+        <text class="val-lbl" x="615" y="100" text-anchor="end" style="fill:var(--good)">Self-GRPO OPD (multi-teacher)</text>
+        <text class="val-sub" x="615" y="122" text-anchor="end">up to 47.9% · above joint GRPO</text>
+        <!-- -31.6% FLOPs marker: joint GRPO's plateau reached at the summed-FLOP mark -->
+        <line x1="657.6" y1="129.6" x2="889.8" y2="129.6" style="stroke:var(--ink);stroke-width:1.2;stroke-dasharray:5 4;opacity:0.55"/>
+        <g class="mark"><circle cx="657.6" cy="129.6" r="6" style="fill:var(--ink);stroke:var(--surface);stroke-width:2"/><title>Self-GRPO OPD reaches joint GRPO's final 43.6% here, just past the summed-specialist budget</title></g>
+        <text class="val-lbl" x="790" y="192" text-anchor="middle">&minus;31.6% FLOPs</text>
+        <text class="ax-lbl" x="100" y="166" style="fill:var(--good)">&#8598; better</text>
+      </svg>
+      </div>
+      </div>
+      <p class="fig-cap"><b>Top strip:</b> grey = all specialists' FLOPs summed; green = extra self-GRPO OPD to reach the teacher average — just <b>+0.4 EFLOP (+4%)</b> on 2 domains and <b>+1.15 EFLOP (+8%)</b> on 4. The merged student's curve starts at that summed budget (dotted line) and passes joint GRPO's best almost immediately, ending at <b>41.5% vs. 37.4%</b> (2 domains) and <b>47.9% vs. 43.6%</b> (4 domains), still inside joint GRPO's FLOPs budget. A single external teacher is worst: it plateaus at ~27–30% on 2 domains, and on 4 the 4B stalls near 35% while the 8B <b>collapses to 6.3%</b> (▼, below the axis).</p>
+    </div>
+  </section>
+
+  <!-- ======================= TAKEAWAY ======================= -->
+  <section id="takeaway">
+    <div class="takeaway">
+      <div class="eyebrow">The takeaway</div>
+      <h2>OPD isn't a replacement for GRPO — it's the merge step</h2>
+      <p>Dense per-token supervision alone does not make on-policy distillation cheaper than GRPO. Its real, reproducible compute advantage appears when the teacher is a GRPO checkpoint of the student, and it pays off at the pipeline level: train per-domain GRPO specialists in parallel, then <b>consolidate them into a single generalist</b> with multi-teacher OPD — a model no individual specialist provides, at lower total compute than training everything jointly.</p>
+    </div>
+
+    <div class="scope">
+      <h3>Scope &amp; limitations</h3>
+      <p>Results concern the <b>vanilla reverse-KL OPD objective</b>; variants we don't sweep at matched FLOPs (hybrid outcome-reward objectives, alternative divergences, reshaped rollouts) may narrow the gap. The negative result is about this objective, not OPD in general.</p>
+    </div>
+  </section>
+
+  <!-- ======================= CITE ======================= -->
+  <section id="cite">
+    <div class="eyebrow">Citation</div>
+    <h2>Cite this work</h2>
+    <div class="copy-row">
+      <button class="copy-btn" id="copyBib">Copy BibTeX</button>
+      <span id="copyMsg" class="fig-cap" style="margin:0;" role="status" aria-live="polite"></span>
+    </div>
+<pre class="bib" id="bibtex">@article{opd_vs_grpo_2026,
+  title   = {Unpacking the Compute Efficiency of Strong-to-Weak
+             On-Policy Distillation against GRPO},
+  author  = {Liu, Zeyu Leo and Li, Yang and Pang, Bo and Acikgoz, Emre Can and
+             Nguyen, Xuan-Phi and Koul, Anurag and Bansal, Srijan and
+             Nijkamp, Erik and Joty, Shafiq and Yavuz, Semih},
+  journal = {arXiv preprint arXiv:2611.08453},
+  year    = {2026},
+  note    = {Under review},
+  eprint  = {2611.08453},
+  archivePrefix = {arXiv},
+  url     = {https://arxiv.org/abs/2611.08453}
+}</pre>
+  </section>
+
+</main>
+
+<footer>
+  <div class="foot-in">
+    <span>Unpacking the Compute Efficiency of Strong-to-Weak OPD against GRPO · 2026</span>
+    <span>Page highlights generated from the paper draft.</span>
+  </div>
+</footer>
+
+<script>
+  // ---- theme toggle (auto → light → dark) ----
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById('themeToggle');
+    var saved = null;
+    try { saved = localStorage.getItem('opd-theme'); } catch (e) {}
+    if (saved) root.setAttribute('data-theme', saved);
+    function label() {
+      var t = root.getAttribute('data-theme') || 'auto';
+      var txt = (t === 'dark' ? '☾ Dark' : t === 'light' ? '☀ Light' : '◐ Auto');
+      btn.textContent = txt;
+      btn.setAttribute('aria-label', 'Color theme: ' + txt.slice(2) + ' (click to change)');
+    }
+    label();
+    btn.addEventListener('click', function () {
+      var order = ['auto', 'light', 'dark'];
+      var cur = root.getAttribute('data-theme') || 'auto';
+      var next = order[(order.indexOf(cur) + 1) % order.length];
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('opd-theme', next); } catch (e) {}
+      label();
+    });
+  })();
+
+  // ---- scrollspy: highlight the nav link for the section in view ----
+  (function () {
+    var all = Array.prototype.slice.call(document.querySelectorAll('a[data-spy]'));
+    var hrefs = [];
+    all.forEach(function (a) { var h = a.getAttribute('href'); if (hrefs.indexOf(h) < 0) hrefs.push(h); });
+    var targets = hrefs.map(function (h) { return document.querySelector(h); });
+    var header = document.querySelector('header.nav');
+    var ticking = false;
+    function update() {
+      ticking = false;
+      var line = header.offsetHeight + window.innerHeight * 0.3;
+      var idx = -1;
+      for (var i = 0; i < targets.length; i++) {
+        if (targets[i] && targets[i].getBoundingClientRect().top <= line) idx = i;
+      }
+      // at the very bottom, the last section wins even if it is short
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) idx = targets.length - 1;
+      all.forEach(function (a) {
+        var on = idx >= 0 && a.getAttribute('href') === hrefs[idx];
+        a.classList.toggle('active', on);
+        if (on) a.setAttribute('aria-current', 'location'); else a.removeAttribute('aria-current');
+        // keep the active pill visible in the horizontally-scrolling top bar (narrow screens)
+        var nav = a.parentNode;
+        if (on && nav.classList.contains('nav-links') && nav.scrollWidth > nav.clientWidth) {
+          nav.scrollLeft = a.offsetLeft - (nav.clientWidth - a.offsetWidth) / 2;
+        }
+      });
+    }
+    function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    update();
+  })();
+
+  // ---- copy bibtex (guarded, with selection fallback) ----
+  (function () {
+    var btn = document.getElementById('copyBib');
+    var msg = document.getElementById('copyMsg');
+    var pre = document.getElementById('bibtex');
+    function flash(t) { msg.textContent = t; setTimeout(function () { msg.textContent = ''; }, 2400); }
+    function selectPre() {
+      try {
+        var r = document.createRange(); r.selectNodeContents(pre);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      } catch (e) {}
+    }
+    btn.addEventListener('click', function () {
+      var txt = pre.textContent;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(txt).then(
+          function () { flash('Copied to clipboard'); },
+          function () { selectPre(); flash('Press ⌘/Ctrl+C to copy'); }
+        );
+      } else {
+        selectPre(); flash('Press ⌘/Ctrl+C to copy');
+      }
+    });
+  })();
+</script>
+</body>
+</html>

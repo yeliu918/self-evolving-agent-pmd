@@ -592,6 +592,56 @@
                 </div>
 
                 <div class="paper-list" data-paper-list>
+                    <a href="papers/opd-grpo/index.html" class="box paper-card" data-published="2026-10-01" data-themes="distillation rl">
+                        <div class="paper-card-media">
+                            <img src="papers/opd-grpo/images/compute-frontier.png" alt="Accuracy versus training FLOPs on math and code for Qwen3-4B-Base. Self-GRPO OPD rises steeply once the per-domain GRPO runs finish and reaches joint GRPO's final 37.4% with 42% fewer FLOPs, then passes its self-GRPO teacher's 40.1% average; external-teacher OPD with 8B and 4B teachers stays below 30%.">
+                        </div>
+                        <div class="paper-card-body">
+                            <div class="paper-card-top">
+                                <span class="tag">Oct 2026</span>
+                                <span class="paper-id">arXiv:2611.08453</span>
+                            </div>
+                            <h3>OPD vs. GRPO</h3>
+                            <p class="paper-subtitle">Unpacking the Compute Efficiency of Strong-to-Weak On-Policy Distillation against GRPO</p>
+                            <p class="paper-blurb">
+                                At matched FLOPs, distilling from an external teacher loses to GRPO. OPD pays off only with the student’s own GRPO checkpoint as teacher — which makes it a cheap way to merge per-domain GRPO experts into one model.
+                            </p>
+                            <div class="stat-row">
+                                <div><b>50×</b><span>fewer distillation FLOPs</span></div>
+                                <div><b>−42%</b><span>FLOPs vs. joint GRPO</span></div>
+                                <div><b>5–8%</b><span>merge cost</span></div>
+                            </div>
+                            <div class="paper-meta">
+                                <span class="paper-authors">Zeyu Leo Liu, Yang Li, Bo Pang, Emre Can Acikgoz, Xuan-Phi Nguyen, Anurag Koul, Srijan Bansal, Erik Nijkamp, Shafiq Joty, Semih Yavuz</span>
+                                <span class="cta">Read the paper →</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="papers/synergy/index.html" class="box paper-card" data-published="2026-09-25" data-themes="distillation rl">
+                        <div class="paper-card-media">
+                            <img src="papers/synergy/images/figure1-paper.png" alt="Three post-training interactions: brief SFT improves student distillability, RLVR teacher adaptation improves transfer, and OPD prepares a stronger start for RLVR.">
+                        </div>
+                        <div class="paper-card-body">
+                            <div class="paper-card-top">
+                                <span class="tag">Sep 2026</span>
+                                <span class="paper-id">arXiv:2609.31900</span>
+                            </div>
+                            <h3>Post-Training Synergy</h3>
+                            <p class="paper-subtitle">Understanding the Synergy between SFT, RLVR, and OPD in LLM Post-Training</p>
+                            <p class="paper-blurb">Each training stage shapes how well the next can learn. Adapt the teacher with RLVR, briefly warm the student with SFT, then distill with OPD.</p>
+                            <div class="stat-row">
+                                <div><b>29.2% → 43.8%</b><span>average OPD accuracy</span></div>
+                                <div><b>+14.6 pts</b><span>combined recipe</span></div>
+                                <div><b>9</b><span>student–teacher pairs</span></div>
+                            </div>
+                            <div class="paper-meta">
+                                <span class="paper-authors">Emre Can Acikgoz · Yang Li · Zeyu Leo Liu · Srijan Bansal · Dilek Hakkani-Tür · Shafiq Joty · Semih Yavuz</span>
+                                <span class="cta">Read the paper →</span>
+                            </div>
+                        </div>
+                    </a>
+
                     <a href="papers/jitmem/index.html" class="box paper-card" data-published="2026-09-23" data-themes="memory">
                         <div class="paper-card-media">
                             <img src="papers/jitmem/images/figure1-paper.png" alt="Figure 1 from the JitMem paper, showing its inference and training pipelines">

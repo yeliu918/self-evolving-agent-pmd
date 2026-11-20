@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post-Training Synergy - Self-Evolving Agents</title>
+    <meta name="description" content="Understanding how SFT, RLVR, and on-policy distillation interact: each post-training stage shapes how well the next stage can learn.">
+    <meta name="author" content="Emre Can Acikgoz, Yang Li, Zeyu Leo Liu, Srijan Bansal, Dilek Hakkani-Tür, Shafiq Joty, Semih Yavuz">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Understanding the Synergy between SFT, RLVR, and OPD in LLM Post-Training">
+    <meta property="og:description" content="Align the student, strengthen the teacher, and prepare a better start for RLVR. A controlled study of post-training composition.">
+    <meta property="og:image" content="https://self-evolving-agents.salesforceresearch.ai/papers/synergy/images/figure1-paper.png">
+    <link rel="icon" type="image/jpeg" href="../../shared/assets/salesforce-official.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../shared/css/styles.css?v=62">
+    <link rel="stylesheet" href="../../shared/css/blog.css">
+    <link rel="stylesheet" href="synergy.css">
+</head>
+<body class="synergy">
+    <nav class="top-nav" aria-label="Main navigation">
+        <div class="nav-container">
+            <a href="../../index.html#vision" class="nav-brand"><img src="../../shared/assets/salesforce-official.jpg" alt="Salesforce">Self-Evolving Agents</a>
+            <div class="nav-links">
+                <a href="../../index.html#vision" class="nav-link">Vision</a>
+                <a href="../../index.html#playground" class="nav-link">Evolution Playground</a>
+                <a href="../../index.html#publications" class="nav-link is-active">Publications</a>
+            </div>
+        </div>
+    </nav>
+    <main>
+    <article class="blog">
+        <header class="blog-hero">
+            <div class="container">
+                <span class="tag">LLM post-training</span>
+                <h1>Understanding the Synergy between SFT, RLVR, and OPD in LLM Post-Training</h1>
+                <p class="blog-lede">A better model today does not always make a better student tomorrow. We study how supervised fine-tuning, reinforcement learning, and on-policy distillation prepare a model for the stage that comes next.</p>
+                <p class="blog-authors">Emre Can Acikgoz<sup>1,2,*</sup>, Yang Li<sup>1,*</sup>, Zeyu Leo Liu<sup>1</sup>, Srijan Bansal<sup>1</sup>, Dilek Hakkani-Tür<sup>2</sup>, Shafiq Joty<sup>1</sup>, Semih Yavuz<sup>1</sup></p>
+                <p class="blog-authors"><sup>1</sup> Salesforce AI Research · <sup>2</sup> UIUC · * Equal contribution. Emre’s work was done during an internship at Salesforce AI Research.</p>
+                <div class="blog-actions">
+                    <a class="btn btn-primary" href="https://arxiv.org/pdf/2609.31900v1" target="_blank" rel="noopener">Read the PDF</a>
+                    <a class="btn btn-secondary" href="https://arxiv.org/abs/2609.31900" target="_blank" rel="noopener">arXiv abstract</a>
+                    <a class="btn btn-secondary" href="../../index.html#publications">← Publications</a>
+                </div>
+            </div>
+        </header>
+        <div class="container blog-body">
+
+            <!-- ============ 1. The three tools ============ -->
+            <h2>Three tools, one pipeline</h2>
+            <p>Modern post-training stacks three tools. Each one learns from a different signal:</p>
+            <div class="tools" role="list">
+                <div class="tool tool-sft" role="listitem">
+                    <span class="stage-chip sft">SFT</span>
+                    <p class="tool-name">Supervised fine-tuning</p>
+                    <p>Learns from <strong>fixed expert demonstrations</strong>, token by token.</p>
+                </div>
+                <div class="tool tool-rlvr" role="listitem">
+                    <span class="stage-chip rlvr">RLVR</span>
+                    <p class="tool-name">RL with verifiable rewards</p>
+                    <p>Tries its <strong>own answers</strong> and learns from sparse outcome rewards.</p>
+                </div>
+                <div class="tool tool-opd" role="listitem">
+                    <span class="stage-chip opd">OPD</span>
+                    <p class="tool-name">On-policy distillation</p>
+                    <p>Tries its <strong>own answers</strong>; a teacher scores each sampled token.</p>
+                </div>
+            </div>
+            <p>These tools are usually studied one at a time. But in a real pipeline, each stage changes the model the next stage receives. That raises the <strong>composition problem</strong>: in what order should the stages run, for how long, and when should one hand off to the next?</p>
+
+            <!-- ============ 2. The composition map ============ -->
+            <h2>What we compose</h2>
+            <p>The main composition study uses one student–teacher pair and varies how the models are prepared. There are two lanes: the teacher can be adapted before teaching, and the student can be prepared for distillation or for a later RLVR stage. We study three handoffs in separate comparisons.</p>
+
+            <figure class="compose" aria-labelledby="compose-cap">
+                <div class="lane" aria-label="Teacher lane">
+                    <span class="lane-label">Teacher</span>
+                    <span class="node model">Qwen3-14B</span>
+                    <span class="arrow" aria-hidden="true"></span>
+                    <span class="slot">
+                        <span class="slot-n">2</span>
+                        <span class="slot-q">Strengthen the teacher first?</span>
+                        <span class="option"><span class="stage-chip rlvr">RLVR</span></span>
+                        <span class="option"><span class="stage-chip sft">STaR-style SFT</span></span>
+                    </span>
+                    <span class="arrow" aria-hidden="true"></span>
+                    <span class="node note">teaches the student ↓</span>
+                </div>
+                <div class="lane" aria-label="Student lane">
+                    <span class="lane-label">Student</span>
+                    <span class="node model">Qwen3-4B-Base</span>
+                    <span class="arrow" aria-hidden="true"></span>
+                    <span class="slot">
+                        <span class="slot-n">1</span>
+                        <span class="slot-q">Warm up the student first?</span>
+                        <span class="option"><span class="stage-chip sft">SFT</span></span>
+                        <span class="option"><span class="stage-chip rlvr">RLVR</span></span>
+                    </span>
+                    <span class="arrow" aria-hidden="true"></span>
+                    <span class="slot">
+                        <span class="slot-n">3</span>
+                        <span class="slot-q">Learn from the teacher by…</span>
+                        <span class="option"><span class="stage-chip opd">OPD</span></span>
+                        <span class="option"><span class="stage-chip sft">SFT</span></span>
+                    </span>
+                    <span class="arrow" aria-hidden="true"></span>
+                    <span class="node stage"><span class="stage-chip rlvr">RLVR</span><span class="dur">slot 3 test only</span></span>
+                </div>
+                <figcaption id="compose-cap">The main comparisons use a Qwen3-4B-Base student and a Qwen3-14B teacher on math and science reasoning. These are separate experiments, not one end-to-end run. Slots 1 and 2 vary student or teacher preparation while holding the downstream OPD recipe fixed within each comparison. Slot 3 compares SFT and OPD preparation followed by the same downstream GRPO procedure. Preparation methods use different trajectories; SFT also withholds a validation subset in slot 3. The final RLVR stage is used only in the slot 3 comparison.</figcaption>
+            </figure>
+
+            <p><strong>A bigger teacher is not automatically a better one.</strong> At the common 200-step comparison across nine student–teacher pairs (2× to 53× size ratios), the largest teacher (Qwen3-32B) gave none of the three students its highest accuracy. How well the student and teacher fit matters, not just teacher strength.</p>
+            <p><strong>Closer teacher matching does not guarantee higher accuracy.</strong> The student can keep getting closer to the teacher after its task accuracy has already peaked, so teacher matching alone is not a reliable way to choose when to stop.</p>
+            <p><strong>The reinforceable fraction helps assess student–teacher fit for OPD.</strong> The <em>reinforceable fraction</em> measures the share of the student’s own tokens that get a positive signal from the teacher at the start. It helps where reverse KL alone misses the difference, but it is a diagnostic, not a full explanation.</p>
+            <p>Since each stage reshapes that fit, the order of stages matters. Here is what we found at each handoff.</p>
+
+            <!-- ============ 3. The three handoffs ============ -->
+            <h2>What we found at each handoff</h2>
+            <div class="handoffs">
+                <section class="handoff" aria-labelledby="h1">
+                    <div class="handoff-head"><span class="slot-n">1</span><h3 id="h1">Brief SFT is a better OPD warm-up in this test</h3></div>
+                    <div class="vs">
+                        <div class="vs-side win">
+                            <p class="vs-label"><span class="stage-chip sft">SFT</span> warm-up, then OPD</p>
+                            <p class="vs-num">35.4%</p>
+                            <p class="vs-sub">OPD peak after 150 SFT warm-up steps, vs. 33.6% without warm-up; finishes at 35.3%</p>
+                        </div>
+                        <div class="vs-side">
+                            <p class="vs-label"><span class="stage-chip rlvr">RLVR</span> warm-up, then OPD</p>
+                            <p class="vs-num">38.5% → 28.4%</p>
+                            <p class="vs-sub">starts stronger, then ends at 28.4% after distilling from the same teacher</p>
+                        </div>
+                    </div>
+                    <p class="lesson">A stronger student is not always an easier one to teach. In this sweep, the benefit of SFT largely levels off after 75–150 warm-up steps. The first validation-loss plateau is a candidate signal of diminishing returns, not a universal stopping rule.</p>
+                </section>
+
+                <section class="handoff" aria-labelledby="h2">
+                    <div class="handoff-head"><span class="slot-n">2</span><h3 id="h2">Strengthen the teacher with RLVR</h3></div>
+                    <div class="vs">
+                        <div class="vs-side win">
+                            <p class="vs-label"><span class="stage-chip rlvr">RLVR</span>-adapted teacher</p>
+                            <p class="vs-num">38.5–43.7%</p>
+                            <p class="vs-sub">OPD peaks across adapted-teacher checkpoints, vs. 33.6% from the off-the-shelf teacher (student starts at 18.9%)</p>
+                        </div>
+                        <div class="vs-side">
+                            <p class="vs-label"><span class="stage-chip sft">STaR-style SFT</span> teacher</p>
+                            <p class="vs-num">little gain</p>
+                            <p class="vs-sub">barely improves the teacher and brings little downstream benefit</p>
+                        </div>
+                    </div>
+                    <p class="lesson">In this adaptation sweep, RLVR lifts the teacher from 42.1% to about 57%. Downstream OPD peak gains track those teacher gains and largely flatten once teacher accuracy plateaus. Some OPD runs still regress after their peak. The comparison does not establish that RLVR-trained capability transfers better than capability from other methods at matched teacher accuracy.</p>
+                </section>
+
+                <section class="handoff" aria-labelledby="h3">
+                    <div class="handoff-head"><span class="slot-n">3</span><h3 id="h3">OPD gives RLVR a stronger start in this comparison</h3></div>
+                    <div class="vs">
+                        <div class="vs-side win">
+                            <p class="vs-label"><span class="stage-chip opd">OPD</span> then <span class="stage-chip rlvr">RLVR</span></p>
+                            <p class="vs-num">38.5–43.1%</p>
+                            <p class="vs-sub">after 260 RLVR steps, and still improving</p>
+                        </div>
+                        <div class="vs-side">
+                            <p class="vs-label"><span class="stage-chip sft">SFT</span> then <span class="stage-chip rlvr">RLVR</span></p>
+                            <p class="vs-num">33.4–36.8%</p>
+                            <p class="vs-sub">after 260 RLVR steps, from a similar starting accuracy</p>
+                        </div>
+                    </div>
+                    <p class="lesson">The gap widens over the studied 260-step RLVR horizon. Initial policy entropies overlap despite different outcomes, so scalar entropy alone is insufficient to choose the initialization. Among the tested OPD checkpoints, the highest-accuracy one (step 50) also gives the best RLVR endpoint (43.1%). This supports handing off near the observed task-accuracy peak, but the reported peak comparisons are retrospective rather than checkpoints chosen on an independent validation set.</p>
+                </section>
+            </div>
+
+            <figure class="blog-figure">
+                <a href="images/figure1-paper.png" target="_blank" rel="noopener" aria-label="Open Figure 1 at full resolution"><img src="images/figure1-paper.png" width="1502" height="633" alt="Figure 1: an RLVR-prepared student regresses during OPD while an SFT-prepared student improves; RLVR teacher adaptation improves student accuracy; OPD initialization outperforms SFT initialization during downstream RLVR."></a>
+                <figcaption>The training curves behind the three handoffs (Figure 1 from our paper; panels a, b, c match handoffs 1, 2, 3). Select the figure to view it at full resolution.</figcaption>
+            </figure>
+
+            <!-- ============ 4. The recipe ============ -->
+            <h2>Putting it together: a simple recipe</h2>
+            <p>Handoffs 1 and 2 give the core of our recipe: <strong>strengthen the teacher with RLVR, warm the student briefly with SFT, then distill.</strong></p>
+
+            <figure class="recipe" aria-labelledby="recipe-cap">
+                <div class="lane" aria-label="Teacher lane of the recipe">
+                    <span class="lane-label">Teacher</span>
+                    <span class="node model">Qwen3-14B</span>
+                    <span class="arrow" aria-hidden="true"></span>
+                    <span class="node stage"><span class="stage-chip rlvr">RLVR</span><span class="dur">200 steps</span></span>
+                    <span class="arrow" aria-hidden="true"></span>
+                    <span class="node model">adapted teacher</span>
+                </div>
+                <div class="lane" aria-label="Student lane of the recipe">
+                    <span class="lane-label">Student</span>
+                    <span class="node model">Qwen3-4B-Base</span>
+                    <span class="arrow" aria-hidden="true"></span>
+                    <span class="node stage"><span class="stage-chip sft">SFT</span><span class="dur">75 steps on the adapted teacher’s answers</span></span>
+                    <span class="arrow" aria-hidden="true"></span>
+                    <span class="node stage"><span class="stage-chip opd">OPD</span><span class="dur">200 steps, from the adapted teacher</span></span>
+                    <span class="arrow" aria-hidden="true"></span>
+                    <span class="node result">43.8% avg.</span>
+                </div>
+                <figcaption id="recipe-cap">The combined recipe. The adapted teacher both writes the SFT warm-up data and gives feedback during OPD.</figcaption>
+            </figure>
+
+            <div class="results" aria-labelledby="results-cap">
+                <p class="results-title" id="results-cap">Average accuracy after 200 OPD steps</p>
+                <div class="result" title="Vanilla OPD: 29.2%"><span class="result-label">Vanilla OPD</span><span class="result-track"><span class="result-bar" style="--value:58.4%"></span></span><strong>29.2%</strong></div>
+                <div class="result" title="SFT student warm-up: 35.3%"><span class="result-label">+ SFT student warm-up</span><span class="result-track"><span class="result-bar" style="--value:70.6%"></span></span><strong>35.3%</strong></div>
+                <div class="result" title="RLVR teacher adaptation: 42.2%"><span class="result-label">+ RLVR teacher</span><span class="result-track"><span class="result-bar" style="--value:84.4%"></span></span><strong>42.2%</strong></div>
+                <div class="result" title="Both combined: 43.8%"><span class="result-label">Both combined</span><span class="result-track"><span class="result-bar" style="--value:87.6%"></span></span><strong>43.8%</strong></div>
+                <div class="result result-axis" aria-hidden="true"><span></span><span class="axis-ticks"><span>0%</span><span>10%</span><span>20%</span><span>30%</span><span>40%</span><span>50%</span></span><span></span></div>
+            </div>
+            <p>Together they add <strong>14.6 points</strong> over vanilla OPD, a <strong>50% relative gain</strong>. Most of it comes from the stronger teacher; the student warm-up adds another 1.6 points. All four settings use the same 200 OPD steps, but the prepared runs also spend extra training before OPD, so this is <strong>not</strong> a comparison at equal total compute.</p>
+            <p class="fine">Accuracy is the unweighted average of seven benchmark mean@4 scores, where mean@4 averages correctness over four sampled responses: AIME 2024, AIME 2025, AMC 2023, MATH-500, Minerva Math, OlympiadBench, and GPQA-Diamond. These are values at the 200-step endpoint, so they differ from the peak values quoted in the handoffs above.</p>
+
+            <!-- ============ 5. Good practices ============ -->
+            <h2>Good practices</h2>
+            <p>These are practical lessons from the tested settings, rather than a universal ordering or stopping rule.</p>
+            <ul class="practices">
+                <li><span class="p-tag">Any stage</span><span>Judge a stage by two things: what it adds now, and what it leaves for the next stage.</span></li>
+                <li><span class="p-tag">Pairing</span><span>Don’t assume a bigger teacher is better. Check how well the student and teacher fit.</span></li>
+                <li><span class="p-tag"><span class="stage-chip rlvr">RLVR</span> teacher</span><span>In the teacher-adaptation sweep, RLVR improves downstream OPD. Monitor teacher accuracy for diminishing returns, then choose a checkpoint using downstream OPD validation; a high peak may not persist.</span></li>
+                <li><span class="p-tag"><span class="stage-chip sft">SFT</span> student</span><span>For the studied pair, try a brief SFT warm-up. Use the first validation-loss plateau as a candidate point to check whether more SFT still helps downstream OPD.</span></li>
+                <li><span class="p-tag">Before <span class="stage-chip opd">OPD</span></span><span>For this tested pair, brief SFT is a better OPD preparation than RLVR: the RLVR-prepared student loses accuracy when distilled from the same fixed teacher.</span></li>
+                <li><span class="p-tag"><span class="stage-chip opd">OPD</span> → <span class="stage-chip rlvr">RLVR</span></span><span>In the main Qwen3-4B comparison, OPD checkpoints outperform SFT checkpoints under subsequent RLVR despite similar initial accuracy. Check task accuracy when choosing the handoff; closer teacher matching alone is insufficient.</span></li>
+            </ul>
+
+            <div class="blog-callout">
+                <h3>Takeaway</h3>
+                <p><strong>Strengthen the teacher with RLVR, briefly warm the student with SFT, then distill with OPD.</strong> This raises accuracy from <strong>29.2% to 43.8%</strong> for our main Qwen3 pair on math and science. Separate experiments favor OPD over SFT as preparation for further RLVR. Generalization to larger models, other domains, and longer training remains open.</p>
+            </div>
+
+            <h2>Cite this work</h2>
+            <pre class="blog-cite"><code>@misc{acikgoz2026synergy,
+  title={Understanding the Synergy between SFT, RLVR, and OPD in LLM Post-Training},
+  author={Emre Can Acikgoz and Yang Li and Zeyu Leo Liu and Srijan Bansal
+          and Dilek Hakkani-T{\"u}r and Shafiq Joty and Semih Yavuz},
+  year={2026},
+  eprint={2609.31900},
+  archivePrefix={arXiv},
+  primaryClass={cs.LG},
+  url={https://arxiv.org/abs/2609.31900}
+}</code></pre>
+            <p class="blog-source"><a href="../../index.html#publications">Explore all publications →</a></p>
+        </div>
+    </article>
+    </main>
+</body>
+</html>
